@@ -3,7 +3,7 @@ const dotenv = require('dotenv').config();
 const dbconnection = require('./Config/dbConnection');
 
 dbconnection();
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 3001
 const app = express();
 
 app.use(express.json());
