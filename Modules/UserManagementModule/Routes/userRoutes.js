@@ -5,8 +5,7 @@ const {getCurrentUser,
        deleteUser, 
        registerUser, 
        loginUser } = require('../Controllers/userController');
-
-router.get('/',validateTokenLevel2, getUsers);       
+     
 router.get('/',validateTokenLevel1, getCurrentUser);
 router.post('/register', registerUser);
 router.post('/login', loginUser);

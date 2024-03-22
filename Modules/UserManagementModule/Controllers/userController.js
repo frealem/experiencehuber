@@ -2,7 +2,9 @@ const asyncHandler = require('express-async-handler');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../Models/User');
-const Account = requrie('../Models/Account');
+const Account = require('../Models/Account');
+const Role = require('../../SystemMonitoringModule/Models/Role');
+const ACCESSLEVEL = require('../../../Constants/accessLevel');
 
 
 
@@ -20,8 +22,8 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 
 //@desc create new user
 //@route 
-//@accesslevel public
-const registerUser = asyncHandler(async (req, res) => {
+//@accesslevel inaccessible
+const createUser = asyncHandler(async (req, res) => {
     const {firstName = null, lastName = null, userName, email, password, role} = req.body;
     if(!userName || !email || !password || !role){
         res.status(400);
@@ -105,5 +107,14 @@ const loginUser = asyncHandler(async (req, res) => {
         throw new Error("Acces is not authorized!");
     }
 });
+
+//@desc to register a normal user
+//@route
+//@accesslevel public
+const registerUser = asyncHandler(async(req, res) => {
+    const role = Role.find({accessLevel: ACCESSLEVEL.NORMALUSER});
+    req.body.role = role.id;
+    createUser();
+}); 
 
 module.exports = {getCurrentUser, updateUser, deleteUser, registerUser, loginUser};
