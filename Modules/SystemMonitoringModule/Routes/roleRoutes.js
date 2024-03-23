@@ -6,7 +6,7 @@ const{getRoles,
       updateRole, 
       deleteRole} = require('../Controllers/roleController');
 
-router.use(validateTokenLevel3);
+//router.use(validateTokenLevel3);
       
 router.route('/').get(getRoles).post(createRole);
 router.route('/:id').get(getRole).put(updateRole).delete(deleteRole);
