@@ -1,4 +1,4 @@
-const asyncHanler = require('expres-async-handler');
+const asyncHanler = require('express-async-handler');
 const Account = require('../Models/Account');
 
 //@desc get all accounts

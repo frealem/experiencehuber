@@ -1,5 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const User = require('../Models/User');
+const Post = require('../../PostManagmentModule/Models/Post');
+const Report = require('../../ReportManagementModule/Models/Report');
 
 //@desc get all users
 //@route 
@@ -9,4 +11,11 @@ const getUsers = asyncHandler(async (req, res) => {
     res.status(200).json(user);
 });
 
-module.exports = {getUsers}
+//@desc get all users
+//@route 
+//@accesslevel 2
+const getSystemSummary = asyncHandler(async (req, res) => {
+    
+});
+
+module.exports = {getUsers, getSystemSummary}
