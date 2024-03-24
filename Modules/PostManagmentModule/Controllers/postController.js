@@ -4,15 +4,17 @@ const Post = require('../Models/Post');
 
 //@desc get all posts craeted by the owner
 //@route 
-//@access public
+//@access level 2
 const getPosts = asyncHanler(async (req, res) => {
     const post = await Post.find();
     res.status(200).json(post);
 });
 
+
+
 //@desc get all posts craeted by the owner
 //@route 
-//@access public
+//@access level 1
 const getPostsByOwner = asyncHanler(async (req, res) => {
     const post = await Post.find({ownerId: req.user.id});
     res.status(200).json(post);
@@ -32,16 +34,16 @@ const getPost = asyncHanler(async (req, res) => {
 
 //@desc create new post
 //@route 
-//@access public
+//@access level 1
 const createPost = asyncHanler(async (req, res) => {
     const {posterId, 
            title, 
            description, 
-           like, 
-           dislike, 
-           share, 
-           rating, 
-           imageURL,
+           like = 0, 
+           dislike = 0, 
+           share = 0, 
+           rating = 0, 
+           imageURL = null,
            tags,
            location,} = req.body;
     if(!posterId || !title || !description){
@@ -65,7 +67,7 @@ const createPost = asyncHanler(async (req, res) => {
 
 //@desc update a post
 //@route 
-//@access public
+//@access level 1
 const updatePost = asyncHanler(async (req, res) => {
     const post = await Post.findById(req.params.id);
     if(!post){
@@ -84,7 +86,7 @@ const updatePost = asyncHanler(async (req, res) => {
 
 //@desc delete a post
 //@route 
-//@access public
+//@access level 1
 const deletePost = asyncHanler(async (req, res) => {
     const post = await Post.findById(req.params.id);
     if(!post){

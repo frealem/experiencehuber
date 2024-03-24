@@ -12,8 +12,8 @@ const ACCESSLEVEL = require('../../../Constants/accessLevel');
 //@route 
 //@accesslevel 1
 const getCurrentUser = asyncHandler(async (req, res) => {
-    const user = await User.findById(req.user.id);
-    if(!user){
+    const user = await User.findById();
+    if(!user){req.user.id
         res.status(404);
         throw new Error("User not found!");
     }
@@ -24,6 +24,7 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 //@route 
 //@accesslevel inaccessible
 const createUser = asyncHandler(async (req, res) => {
+    console.log(req.body);
     const {firstName = null, lastName = null, userName, email, password, role} = req.body;
     if(!userName || !email || !password || !role){
         res.status(400);
@@ -112,9 +113,9 @@ const loginUser = asyncHandler(async (req, res) => {
 //@route
 //@accesslevel public
 const registerUser = asyncHandler(async(req, res) => {
-    const role = Role.find({accessLevel: ACCESSLEVEL.NORMALUSER});
-    req.body.role = role.id;
-    createUser();
+    const role = await Role.findOne({accessLevel: 1});
+    req.body.role = role._id;
+    createUser(req, res);
 }); 
 
 module.exports = {getCurrentUser, updateUser, deleteUser, registerUser, loginUser};

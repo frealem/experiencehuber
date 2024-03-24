@@ -26,7 +26,7 @@ const getRole = asyncHandler(async (req, res) => {
 //@access private
 const createRole = asyncHandler(async (req, res) => {
     console.log(req.body);
-    const {name, description, accessLevel = 0} = req.body;
+    const {name, description, accessLevel} = req.body;
     if(!name || !description){
         res.status(400);
         throw new Error("Mandatory fields are not filled!");
