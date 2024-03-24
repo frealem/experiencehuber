@@ -8,7 +8,7 @@ import Layout from "./components/Layout";
 import AuthPage from "./pages/authPage";
 import FeedPage from "./pages/HomePage/feedPage";
 function App() {
-  const mode = useSelector((state) => state.global.mode);
+  const mode = useSelector((state) => state.theme.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
   return (
     <div className="app">
