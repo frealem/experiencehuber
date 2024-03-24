@@ -9,7 +9,7 @@ import {
 } from "@mui/icons-material";
 import FlexBetween from "./Flexbetween";
 import { useDispatch } from "react-redux";
-import { setMode } from "./States/states";
+import { setMode } from "./States/themeSlice";
 import profileImage from "../assets/images/chatapp.jpeg";
 import {
   AppBar,
