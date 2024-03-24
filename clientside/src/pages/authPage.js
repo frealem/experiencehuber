@@ -56,23 +56,49 @@ const AuthPage = () => {
   const [open, setOpen] = useState(true);
   const [signUp, setSignUp] = useState(false);
   const userRef = useRef();
+  const errRef=useRef();
   const navigate = useNavigate();
   const [login, { isLoading }] = useLoginMutation();
   const dispatch = useDispatch();
-
+  const [user,setUser]=useState('');
+  const [email,setEmail]=useState('');
+  const [password,setPassword]=useState('');
+  const [errMsg,setErrMsg]=useState('');
 
   useEffect(()=>{
     useRef.current.focus()
   },[])
 
   useEffect(()=>{
-// for errror
+setErrMsg('')
+  },[email,password]) //user,password
 
-  },[]) //user,password
   //handle submit
-  const handleSubmitLogin = () => {
-    console.log("user logged in");
-  };
+  const handleSubmitLogin =async (e) => {
+    e.preventDefault();
+    try{
+      const userData=await login({email,password}).unwrap()
+      dispatch(setLogin({...userData,email}))
+      setEmail('');
+      setPassword('');
+      console.log("successful login!");
+      navigate('/')
+    }
+    catch(err){
+      if (!err?.originalStatus) {
+        // isLoading: true until timeout occurs
+        setErrMsg('No Server Response');
+    } else if (err.originalStatus === 400) {
+        setErrMsg('Missing Username or Password');
+    } else if (err.originalStatus === 401) {
+        setErrMsg('Unauthorized');
+    } else {
+        setErrMsg('Login Failed');
+    }
+    errRef.current.focus();
+}
+    }
+
 
   const handleSubmitSignup = () => {
     console.log("user signed up");
@@ -144,6 +170,11 @@ const AuthPage = () => {
                       variant="outlined"
                       label="Email"
                       name="email"
+                      id="username"
+                    ref={userRef}
+                    value={email}
+                    onChange={(e)=>e.target.value}
+                    autoComplete="off"
                     />
                     <Field
                       as={TextField}
@@ -151,6 +182,11 @@ const AuthPage = () => {
                       label="Password"
                       name="password"
                       type="password"
+                      id="username"
+                    ref={userRef}
+                    value={password}
+                    onChange={(e)=>e.target.value}
+                    autoComplete="off"
                     />
                     <Button
                       type="submit"
