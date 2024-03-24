@@ -15,7 +15,7 @@ import { createSlice } from "@reduxjs/toolkit";
         },
         setLogout:(state,action)=>{
             state.user=null
-            state.user=null
+            state.token=null
         },
     }
  })

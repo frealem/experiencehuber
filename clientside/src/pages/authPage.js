@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useRef,useEffect, useState } from "react";
 import {
   Button,
   Checkbox,
@@ -20,6 +20,8 @@ import Dropzone from 'react-dropzone';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import PhoneInputField from "../components/phoneInput";
+
+
 //client side validation
 
 const registerSchema=yup.object().shape({
@@ -52,7 +54,8 @@ const AuthPage = () => {
   const theme = useTheme();
   const [open, setOpen] = useState(true);
   const [signUp, setSignUp] = useState(false);
-
+const userRef=useRef();
+const navigate=useNavigate();
   //handle submit
 const handleSubmitLogin=()=>{
   console.log('user logged in');
@@ -61,48 +64,7 @@ const handleSubmitLogin=()=>{
 const handleSubmitSignup=()=>{
   console.log('user signed up');
 }
-
-// const register = async (values, onSubmitProps) => {
-//   // this allows us to send form info with image
-//   const formData = new FormData();
-//   for (let value in values) {
-//     formData.append(value, values[value]);
-//   }
-//   formData.append("picturePath", values.picture.name);
-
-//   const savedUserResponse = await fetch(
-//     "http://localhost:3001/auth/register",
-//     {
-//       method: "POST",
-//       body: formData,
-//     }
-//   );
-//   const savedUser = await savedUserResponse.json();
-//   onSubmitProps.resetForm();
-
-//   if (savedUser) {
-//     setPageType("login");
-//   }
-// };
-
-// const login = async (values, onSubmitProps) => {
-//   const loggedInResponse = await fetch("http://localhost:3001/auth/login", {
-//     method: "POST",
-//     headers: { "Content-Type": "application/json" },
-//     body: JSON.stringify(values),
-//   });
-//   const loggedIn = await loggedInResponse.json();
-//   onSubmitProps.resetForm();
-//   if (loggedIn) {
-//     dispatch(
-//       setLogin({
-//         user: loggedIn.user,
-//         token: loggedIn.token,
-//       })
-//     );
-//     navigate("/home");
-//   }
-// };
+ 
 
   const openDialog = () => {
     setOpen(true);
