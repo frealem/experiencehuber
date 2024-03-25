@@ -49,13 +49,13 @@ const updateRole = asyncHandler(async (req, res) => {
         throw new Error("Role not ound");
     }
 
-    const updateRole = await Role.findByIdAndUpdate(
+    const updatedRole = await Role.findByIdAndUpdate(
         req.params.id,
         req.body,
         {new: true}
     );
 
-    res.status(200).json(updateRole);
+    res.status(200).json(updatedRole);
 });
 
 //@desc delete a role

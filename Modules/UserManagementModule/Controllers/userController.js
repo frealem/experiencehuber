@@ -12,7 +12,7 @@ const ACCESSLEVEL = require('../../../Constants/accessLevel');
 //@route 
 //@accesslevel 1
 const getCurrentUser = asyncHandler(async (req, res) => {
-    const user = await User.findById();
+    const user = await User.find(req.user.id);
     if(!user){req.user.id
         res.status(404);
         throw new Error("User not found!");

@@ -34,6 +34,11 @@ const PostSchema = mongoose.Schema({
     tags:{
         type: [String],
     },
+    categoryId:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'Category',
+        required: [true, "The category is not specified"],
+    },
     location:{
         name: String,
         longitude: String,
@@ -43,5 +48,8 @@ const PostSchema = mongoose.Schema({
 },{
     timestamps: true,
 });
+
+// Create a text index on the "title" and "description" fields
+PostSchema.index({ title: 'text', description: 'text' });
 
 module.exports = mongoose.model('Post', PostSchema);

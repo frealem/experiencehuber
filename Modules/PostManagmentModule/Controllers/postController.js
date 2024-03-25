@@ -39,11 +39,11 @@ const createPost = asyncHanler(async (req, res) => {
     const {posterId, 
            title, 
            description, 
-           like = 0, 
-           dislike = 0, 
-           share = 0, 
-           rating = 0, 
-           imageURL = null,
+           like, 
+           dislike, 
+           share , 
+           rating, 
+           imageURL,
            tags,
            location,} = req.body;
     if(!posterId || !title || !description){

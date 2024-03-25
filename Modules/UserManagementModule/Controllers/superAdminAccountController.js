@@ -9,9 +9,9 @@ const Account = require('../Models/Account');
 //@route
 //@access level 3
 const createAdmin = asyncHandler( async(req, res) => {
-   const role = Role.find({accessLevel: ACCESSLEVEL.ADMIN});
-   req.body.role = role.id;
-   createUser();
+   const role = await Role.findOne({accessLevel: 2});
+   req.body.role = role._id;
+   createUser(req, res);
 });
 
 //@desc delete existing admin
@@ -27,6 +27,6 @@ const deleteAdmin = asyncHandler( async(req, res) => {
    await User.findByIdAndRemove(userId);
    await Account.findOneAndRemove({ownerId: userId});
    res.json(user);
-})
+});
 
 module.exports = {createAdmin, deleteAdmin}
