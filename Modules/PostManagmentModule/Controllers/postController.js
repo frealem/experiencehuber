@@ -1,8 +1,8 @@
 const asyncHanler = require('expres-async-handler');
 const Post = require('../Models/Post');
+const History = require('../../SystemMonitoringModule/Models/History');
 
-
-//@desc get all posts craeted by the owner
+//@desc get all posts created by the owner
 //@route 
 //@access level 2
 const getPosts = asyncHanler(async (req, res) => {
@@ -16,7 +16,7 @@ const getPosts = asyncHanler(async (req, res) => {
 //@route 
 //@access level 1
 const getPostsByOwner = asyncHanler(async (req, res) => {
-    const post = await Post.find({ownerId: req.user.id});
+    const post = await Post.find({ownerId: req.params.id});
     res.status(200).json(post);
 });
 
@@ -29,6 +29,7 @@ const getPost = asyncHanler(async (req, res) => {
         res.status(404);
         throw new Error("Post not found!");
     }
+    await History.create({userId: req.user.id, postId: req.params.id});    
     res.status(200).json(post);
 });
 
@@ -50,7 +51,7 @@ const createPost = asyncHanler(async (req, res) => {
         res.status(400);
         throw new Error("Mandatory fields are not filled!");
     }
-    const post = await Post.Create({
+    const post = await Post.create({
            posterId, 
            title, 
            description, 

@@ -18,7 +18,13 @@ const getAccount = asyncHanler(async (req, res) => {
         res.status(404);
         throw new Error("Account not found!");
     }
-    res.status(200).json(account);
+    const accountToSend = {
+        _id: account._id,
+        ownerId: account.ownerId,
+        profilePictuerURL: account.profilePictuerURL,
+        theme: account.theme,
+    }
+    res.status(200).json(accountToSend);
 });
 
 //@desc create new account

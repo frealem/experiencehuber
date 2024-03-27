@@ -1,12 +1,17 @@
 const asyncHanler = require('expres-async-handler');
 const Report = require('../Models/Report');
+const paginate = require('../../../Common/pagination');
 
 //@desc get all reports
 //@route 
 //@access public
 const getReports = asyncHanler(async (req, res) => {
-    const report = await Report.find({ownerId: req.user.id});
-    res.status(200).json(report);
+    const page = req.query.page;
+    const pageSize = req.query.pageSize;
+    const filter = {ownerId: req.user.id};
+
+    const reports = await paginate( Report , page, pageSize, filter); 
+    res.status(200).json(reports);
 });
 
 //@desc get a report by id

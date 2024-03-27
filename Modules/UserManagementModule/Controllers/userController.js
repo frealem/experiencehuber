@@ -9,7 +9,7 @@ const ACCESSLEVEL = require('../../../Constants/accessLevel');
 
 
 //@desc get a user by id
-//@route 
+//@route GET api/user/
 //@accesslevel 1
 const getCurrentUser = asyncHandler(async (req, res) => {
     const user = await User.find(req.user.id);
@@ -21,7 +21,7 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 });
 
 //@desc create new user
-//@route 
+//@route none
 //@accesslevel inaccessible
 const createUser = asyncHandler(async (req, res) => {
     console.log(req.body);
@@ -50,7 +50,7 @@ const createUser = asyncHandler(async (req, res) => {
 });
 
 //@desc update a user
-//@route 
+//@route PUT api/user/:id
 //@accesslevel 1
 const updateUser = asyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id);
@@ -69,7 +69,7 @@ const updateUser = asyncHandler(async (req, res) => {
 });
 
 //@desc delete a user
-//@route 
+//@route DELETE api/user/:id
 //@accesslevel 1
 const deleteUser = asyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id);
@@ -84,7 +84,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 });
 
 //@desc login a user
-//@route 
+//@route POST api/user/login
 //@accesslevel public
 const loginUser = asyncHandler(async (req, res) => {
     const {email, password} = req.body;
@@ -110,7 +110,7 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 //@desc to register a normal user
-//@route
+//@route POST api/user/register
 //@accesslevel public
 const registerUser = asyncHandler(async(req, res) => {
     const role = await Role.findOne({accessLevel: 1});

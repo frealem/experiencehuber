@@ -1,11 +1,15 @@
 const asyncHandler = require('express-async-handler');
 const Role = require('../Models/Role');
+const paginate = require('../../../Common/pagination');
 
 //@desc get all roles
 //@route 
 //@access private
 const getRoles = asyncHandler(async (req, res) => {
-    const role = await Role.find();
+    const page = 1;
+    const pageSize = 2;
+    const filter = {};
+    const role = await paginate(Role, page, pageSize, filter);
     res.status(200).json(role);
 });
 
