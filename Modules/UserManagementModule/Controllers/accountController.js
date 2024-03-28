@@ -1,18 +1,18 @@
-const asyncHanler = require('express-async-handler');
+const asyncHandler = require('express-async-handler');
 const Account = require('../Models/Account');
 
 //@desc get all accounts
 //@route 
-//@access public
-const getAccounts = asyncHanler(async (req, res) => {
+//@access level 2
+const getAccounts = asyncHandler(async (req, res) => {
     const account = await Account.find();
     res.status(200).json(account);
 });
 
 //@desc get a account by id
 //@route 
-//@access public
-const getAccount = asyncHanler(async (req, res) => {
+//@access level 1
+const getAccount = asyncHandler(async (req, res) => {
     const account = await Account.find({ownerId: req.user.id});
     if(!account){
         res.status(404);
@@ -29,12 +29,12 @@ const getAccount = asyncHanler(async (req, res) => {
 
 //@desc create new account
 //@route 
-//@access public
-const createAccount = asyncHanler(async (req, res) => {
+//@access level 1
+const createAccount = asyncHandler(async (req, res) => {
     const {ownerId, 
-           profilePictuerURL = null, 
+           profilePictuerURL, 
            theme = 0, 
-           preferedCategories = null, 
+           preferedCategories, 
            likedPosts = null, 
            previousPosts = null,
            followings = null,} = req.body;
@@ -56,27 +56,38 @@ const createAccount = asyncHanler(async (req, res) => {
 
 //@desc update a account
 //@route 
-//@access public
-const updateAccount = asyncHanler(async (req, res) => {
+//@access level 1
+const updateAccount = asyncHandler(async (req, res) => {
     const account = await Account.findById(req.params.id);
     if(!account){
         res.status(404);
         throw new Error("Account not ound");
     }
+    account.profilePictuerURL = req.body.profilePictuerURL;
+    account.theme = req.body.theme? req.body.theme : 0;
+    if (req.body.preferedCategories) {
+        account.preferedCategories.push(...req.body.preferedCategories);
+    }
 
-    const updateAccount = await Account.findByIdAndUpdate(
-        req.params.id,
-        req.body,
-        {new: true}
-    );
+    if (req.body.likedPosts) {
+        account.likedPosts.push(...req.body.likedPosts);
+    }
 
-    res.status(200).json(updateAccount);
+    if (req.body.previousPosts) {
+        account.previousPosts.push(...req.body.previousPosts);
+    }
+
+    if (req.body.followings) {
+        account.followings.push(...req.body.followings);
+    }
+    const updatedAccount = await account.save();
+    res.status(200).json(updatedAccount);
 });
 
 //@desc delete a account
 //@route 
-//@access public
-const deleteAccount = asyncHanler(async (req, res) => {
+//@access level 1
+const deleteAccount = asyncHandler(async (req, res) => {
     const account = await Account.findById(req.params.id);
     if(!account){
         res.status(404);

@@ -3,8 +3,8 @@ const Role = require('../Models/Role');
 const paginate = require('../../../Common/pagination');
 
 //@desc get all roles
-//@route 
-//@access private
+//@route GET /api/role
+//@access level 3
 const getRoles = asyncHandler(async (req, res) => {
     const page = 1;
     const pageSize = 2;
@@ -14,8 +14,8 @@ const getRoles = asyncHandler(async (req, res) => {
 });
 
 //@desc get a role by id
-//@route 
-//@access private
+//@route GET /api/role/:id
+//@access level 3
 const getRole = asyncHandler(async (req, res) => {
     const role = await Role.findById(req.params.id);
     if(!role){
@@ -26,8 +26,8 @@ const getRole = asyncHandler(async (req, res) => {
 });
 
 //@desc create new role
-//@route 
-//@access private
+//@route POST /api/role
+//@access level 3
 const createRole = asyncHandler(async (req, res) => {
     console.log(req.body);
     const {name, description, accessLevel} = req.body;
@@ -44,8 +44,8 @@ const createRole = asyncHandler(async (req, res) => {
 });
 
 //@desc update a role
-//@route 
-//@access private
+//@route PUT /api/role/:id
+//@access level 3
 const updateRole = asyncHandler(async (req, res) => {
     const role = await Role.findById(req.params.id);
     if(!role){
@@ -63,8 +63,8 @@ const updateRole = asyncHandler(async (req, res) => {
 });
 
 //@desc delete a role
-//@route 
-//@access private
+//@route DELETE /api/role/:id
+//@access level 3
 const deleteRole = asyncHandler(async (req, res) => {
     const role = await Role.findById(req.params.id);
     if(!role){

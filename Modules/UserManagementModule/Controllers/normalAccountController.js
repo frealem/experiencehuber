@@ -1,4 +1,4 @@
-const asyncHanler = require('express-async-handler');
+const asyncHandler = require('express-async-handler');
 const Account = require('../Models/Account');
 const Post = require('../../PostManagmentModule/Models/Post');
 const Category = require('../../SystemMonitoringModule/Models/Category');
@@ -7,19 +7,19 @@ const paginate = require('../../../Common/pagination');
 //@dec get theliked posts
 //@route
 //@access level 1
-const getLikedPosts = asyncHanler( async(req, res) => {
-    const {page, pageSize} = req.query;
+const getLikedPosts = asyncHandler( async(req, res) => {
+    const postId = req.params.id;
     const account = Account.find({ownerId: req.user.id});
-    const postIds = [...account.likedPosts];
-    const filter = {_id: {$in: postIds}};
-    const likedPosts = await paginate(Post, page, pageSize, filter);
-    res.status(200).json(likedPosts);
+    const postIds = [...account.likedPosts, postId];
+    account.llikedPost = postIds;
+    await Account.
+    res.status(200).json(postId);
 });
 
 //@dec get the liked posts
 //@route
 //@access level 1
-const getPreferedCategories = asyncHanler( async(req, res) => {    
+const getPreferedCategories = asyncHandler( async(req, res) => {    
     const account = Account.find({ownerId: req.user.id});
     if(!account || !account.preferedCategories){
         res.status(201);
@@ -61,4 +61,4 @@ const getFollwings = asyncHandler( async(req, res) => {
 });
 
 
-module.exports = {getLikedPosts};
+module.exports = {getLikedPosts, getFollwings, getPreferedCategories, getPreviousPostes};
