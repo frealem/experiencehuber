@@ -1,6 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv').config();
-const soketio = require('soket.io');
+const socketio = require('socket.io');
 const http = require('http');
 
 const dbconnection = require('./Config/dbConnection');
@@ -11,10 +11,9 @@ const app = express();
 
 app.use(express.json());
 app.use('/api', require('./Routes/generalRoutes'));
-app.use(soketio);
 const server = app.listen(port, () => {
     console.log(`server listening to port ${port}`);
 })
 
-const io = soketio(server);
+const io = socketio(server);
 module.exports = io;
