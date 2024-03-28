@@ -14,15 +14,14 @@ import {
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import { Field, Form, Formik } from "formik";
 import * as yup from "yup";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Dropzone from "react-dropzone";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import PhoneInputField from "../components/phoneInput";
-import { setLogin } from "../components/States/authSlice";
-import { useLoginMutation } from "../components/States/authApiSlice";
-
+import { useAuth } from "../hooks/useAuth";
+import { useForm } from 'react-hook-form';
 //client side validation
 
 const registerSchema = yup.object().shape({
@@ -30,7 +29,7 @@ const registerSchema = yup.object().shape({
   phone: yup.string().required("required"),
   password: yup.string().required("required"),
   email: yup.string().email("invalid email").required("required"),
-  address: yup.string().required("required"),
+  userName: yup.string().required("required"),
 });
 
 const loginSchema = yup.object().shape({
@@ -46,7 +45,7 @@ const initialValuesLogin = {
 const initialValuesSignup = {
   email: "",
   phone: "",
-  address: "",
+  userName: "",
   fullName: "",
   password: "",
 };
@@ -55,54 +54,9 @@ const AuthPage = () => {
   const theme = useTheme();
   const [open, setOpen] = useState(true);
   const [signUp, setSignUp] = useState(false);
-  const userRef = useRef();
-  const errRef=useRef();
-  const navigate = useNavigate();
-  const [login, { isLoading }] = useLoginMutation();
   const dispatch = useDispatch();
-  const [user,setUser]=useState('');
   const [email,setEmail]=useState('');
   const [password,setPassword]=useState('');
-  const [errMsg,setErrMsg]=useState('');
-
-  useEffect(()=>{
-    useRef.current.focus()
-  },[])
-
-  useEffect(()=>{
-setErrMsg('')
-  },[email,password]) //user,password
-
-  //handle submit
-  const handleSubmitLogin =async (e) => {
-    e.preventDefault();
-    try{
-      const userData=await login({email,password}).unwrap()
-      dispatch(setLogin({...userData,email}))
-      setEmail('');
-      setPassword('');
-      console.log("successful login!");
-      navigate('/')
-    }
-    catch(err){
-      if (!err?.originalStatus) {
-        // isLoading: true until timeout occurs
-        setErrMsg('No Server Response');
-    } else if (err.originalStatus === 400) {
-        setErrMsg('Missing Username or Password');
-    } else if (err.originalStatus === 401) {
-        setErrMsg('Unauthorized');
-    } else {
-        setErrMsg('Login Failed');
-    }
-    errRef.current.focus();
-}
-    }
-
-
-  const handleSubmitSignup = () => {
-    console.log("user signed up");
-  };
 
   const openDialog = () => {
     setOpen(true);
@@ -117,6 +71,40 @@ setErrMsg('')
 
   const handleSignInClick = () => {
     setSignUp(false);
+  };
+
+  const {
+    handleSubmit,
+    register,
+    getValues,
+    formState: { errors },
+  } = useForm();
+
+  const navigate = useNavigate();
+  const { user, login } = useAuth();
+  const [params] = useSearchParams();
+  const returnUrl = params.get('returnUrl');
+  const auth = useAuth();
+  useEffect(() => {
+    if (!user) return;
+
+    returnUrl ? navigate(returnUrl) : navigate('/');
+  }, [user,navigate,returnUrl]); //check navigate and url
+
+  const submitLogin = async ({ email, password }) => {
+    await login(email, password);
+navigate('/');
+  };
+
+  //regsteration
+
+  useEffect(() => {
+    if (!user) return;
+    returnUrl ? navigate(returnUrl) : navigate('/');
+  }, [user,navigate,returnUrl]);
+ 
+  const submitRegister = async data => {
+    await auth.register(data);
   };
 
   return (
@@ -148,46 +136,29 @@ setErrMsg('')
             </IconButton>
           </DialogTitle>
           <DialogContent>
-            <Formik
-              initialValues={initialValuesLogin}
-              onSubmit={handleSubmitLogin}
-              validationSchema={loginSchema}
-            >
-              {({
-                values,
-                errors,
-                touched,
-                handleBlur,
-                handChange,
-                handleSubmit,
-                setFieldValue,
-                resetForm,
-              }) => (
-                <Form>
-                  <Stack spacing={2} margin={2}>
-                    <Field
-                      as={TextField}
-                      variant="outlined"
-                      label="Email"
-                      name="email"
-                      id="username"
-                    ref={userRef}
-                    value={email}
-                    onChange={(e)=>e.target.value}
-                    autoComplete="off"
-                    />
-                    <Field
-                      as={TextField}
-                      variant="outlined"
-                      label="Password"
-                      name="password"
-                      type="password"
-                      id="username"
-                    ref={userRef}
-                    value={password}
-                    onChange={(e)=>e.target.value}
-                    autoComplete="off"
-                    />
+          <form onSubmit={handleSubmit(submitLogin)} noValidate>
+          <Stack spacing={2} margin={2}>
+          <input
+            type="email"
+            placeholder="email"
+            {...register('email', {
+              required: true,
+              pattern: {
+                value: /^[\w-.]+@([\w-]+\.)+[\w-]{2,63}$/i,
+                message: 'Email Is Not Valid',
+              },
+            })}
+            error={errors.email}
+          />
+
+          <input
+            type="password"
+            placeholder="Password"
+            {...register('password', {
+              required: true,
+            })}
+            error={errors.password}
+          />
                     <Button
                       type="submit"
                       backgroundColor={theme.palette.secondary.light}
@@ -199,9 +170,7 @@ setErrMsg('')
                       I don't have an account, Sign Up
                     </a>
                   </Stack>
-                </Form>
-              )}
-            </Formik>
+            </form>
           </DialogContent>
         </Dialog>
       ) : (
@@ -231,29 +200,83 @@ setErrMsg('')
             </IconButton>
           </DialogTitle>
           <DialogContent>
-            <Formik
-              initialValues={initialValuesSignup}
-              onSubmit={handleSubmitSignup}
-              validationSchema={registerSchema}
-            >
-              {({
-                values,
-                errors,
-                touched,
-                handleBlur,
-                handChange,
-                handleSubmit,
-                setFieldValue,
-                resetForm,
-              }) => (
-                <Form>
-                  <Stack spacing={2} margin={2}>
-                    <Field
-                      as={TextField}
-                      variant="outlined"
-                      name="fullName"
-                      placeholder="Enter your full name"
-                    />
+          <form onSubmit={handleSubmit(submitRegister)} noValidate>
+          <input
+            type="text"
+            placeholder="Name"
+            {...register('name', {
+              required: true,
+              minLength: 6,
+            })}
+            error={errors.name}
+          />
+
+            <input
+            type="text"
+            placeholder="phone"
+            {...register('phone', {
+              required: true,
+              minLength: 8,
+            })}
+            error={errors.phone}
+          />
+            <input
+            type="text"
+            placeholder="userName"
+            {...register('userName', {
+              required: true,
+              minLength: 6,
+            })}
+            error={errors.userName}
+           
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            {...register('email', {
+              required: true,
+              pattern: {
+                value: /^[\w-.]+@([\w-]+\.)+[\w-]{2,63}$/i,
+                message: 'Email Is Not Valid',
+              },
+            })}
+            error={errors.email}
+          />
+
+          <input
+            type="password"
+            placeholder="Password"
+            {...register('password', {
+              required: true,
+              minLength: 5,
+            })}
+            error={errors.password}
+          />
+
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            {...register('password', {
+              required: true,
+              validate: value =>
+                value !== getValues('password')
+                  ? 'Passwords Do No Match'
+                  : true,
+            })}
+            error={errors.confirmPassword}
+          />
+          
+
+          <button type="submit" >Sign Up</button>
+
+          <div>
+            I have already an account? &nbsp;
+            <Link to={`/login${returnUrl ? '?returnUrl=' + returnUrl : ''}`}>
+              Login
+            </Link>
+          </div>
+        </form>
+                    {/*
                     <Field
                       as={TextField}
                       variant="outlined"
@@ -262,33 +285,7 @@ setErrMsg('')
                       inputStyle={{ width: "100%", outerHeight: "100%" }} // Set the width of the phone input field
                       containerStyle={{ width: "100%", outerHeight: "100%" }}
                     />
-                    <Field
-                      as={TextField}
-                      variant="outlined"
-                      name="address"
-                      placeholder="Enter your address"
-                    />
-                    <Field
-                      as={TextField}
-                      variant="outlined"
-                      name="email"
-                      placeholder="Enter your email"
-                    />
-                    <Field
-                      as={TextField}
-                      variant="outlined"
-                      name="password"
-                      type="password"
-                      placeholder="Enter new password"
-                    />
-                    <Field
-                      as={TextField}
-                      variant="outlined"
-                      name="confirmPassword"
-                      type="password"
-                      placeholder="confirm your password"
-                    />
-                    <FormControlLabel
+                     <FormControlLabel
                       control={
                         <Field
                           as={Checkbox}
@@ -297,21 +294,7 @@ setErrMsg('')
                         />
                       }
                       label="Accept All Agreement And Submit"
-                    />
-                    <Button
-                      type="submit"
-                      backgroundColor={theme.palette.secondary.light}
-                      variant="contained"
-                    >
-                      Sign Up
-                    </Button>
-                    <a onClick={handleSignInClick}>
-                      I already have an account, Sign In
-                    </a>
-                  </Stack>
-                </Form>
-              )}
-            </Formik>
+                    /> */}
           </DialogContent>
         </Dialog>
       )}

@@ -8,7 +8,6 @@ export const store=configureStore({
         auth:authReducer,
         theme:themeReducer,
     },
-    middleware:getDefaultMiddleware=>
-    getDefaultMiddleware().concat(apiSlice.middleware),
+    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(apiSlice.middleware),
     devTools:true
 })
