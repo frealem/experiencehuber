@@ -36,6 +36,9 @@ import BookmarkAddOutlinedIcon from '@mui/icons-material/BookmarkAddOutlined';
            <Box display="flex" alignItems="center" gap="0.3rem">
       <UserImage />
       <Typography variant="body1">Gelila Girma</Typography>
+      <Typography variant="body2" color="textSecondary">
+      Addis Ababa 6 hours ago
+    </Typography>
     </Box>
          <Box>
               <IconButton>

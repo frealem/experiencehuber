@@ -12,18 +12,17 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import DynamicFeedOutlinedIcon from '@mui/icons-material/DynamicFeedOutlined';
-import SettingsOutlined from '@mui/icons-material/SettingsOutlined';
-import ChevronRightOutlined from '@mui/icons-material/ChevronRightOutlined';
-import ChevronLeft from '@mui/icons-material/ChevronLeft';
-import EventOutlinedIcon from '@mui/icons-material/EventOutlined';
-import MessageOutlinedIcon from '@mui/icons-material/MessageOutlined';
-import PostAddOutlinedIcon from '@mui/icons-material/PostAddOutlined';
-import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
-import FormatShapesOutlinedIcon from '@mui/icons-material/FormatShapesOutlined';
-import DraftsOutlinedIcon from '@mui/icons-material/DraftsOutlined';
-import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
-
+import DynamicFeedOutlinedIcon from "@mui/icons-material/DynamicFeedOutlined";
+import SettingsOutlined from "@mui/icons-material/SettingsOutlined";
+import ChevronRightOutlined from "@mui/icons-material/ChevronRightOutlined";
+import ChevronLeft from "@mui/icons-material/ChevronLeft";
+import EventOutlinedIcon from "@mui/icons-material/EventOutlined";
+import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
+import PostAddOutlinedIcon from "@mui/icons-material/PostAddOutlined";
+import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
+import FormatShapesOutlinedIcon from "@mui/icons-material/FormatShapesOutlined";
+import DraftsOutlinedIcon from "@mui/icons-material/DraftsOutlined";
+import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -42,7 +41,7 @@ const navItems = [
   },
   {
     text: "Your Posts",
-    icon: < PostAddOutlinedIcon />,
+    icon: <PostAddOutlinedIcon />,
   },
   {
     text: "Events",
@@ -62,7 +61,7 @@ const navItems = [
   },
   {
     text: "Message",
-    icon: <MessageOutlinedIcon/>,
+    icon: <MessageOutlinedIcon />,
   },
   {
     text: "See More",
@@ -99,9 +98,15 @@ const Sidebar = ({
             "& .MuiDrawer-paper": {
               color: theme.palette.grey[50],
               backgroundColor: theme.palette.background.alt,
-              boxSixing: "border-box",
+              boxSizing: "border-box",
               borderWidth: isNonMobile ? 0 : "2px",
               width: drawerWidth,
+              overflowY: "hidden",
+              scrollbarWidth: "none", // Firefox
+              "-ms-overflow-style": "none", // Internet Explorer 10+
+              "&::-webkit-scrollbar": {
+                display: "none", // WebKit
+              },
             },
           }}
         >
@@ -110,7 +115,16 @@ const Sidebar = ({
               <FlexBetween color={theme.palette.secondary.main}>
                 <Box display="flex" alignItems="center" gap="0.5rem">
                   <Typography variant="h3" fontWeight="bold">
-                  experience<span style={{backgroundColor:"#000000",marginRight:"10px",borderWidth:"8px"}}>HUB</span>
+                    experience
+                    <span
+                      style={{
+                        backgroundColor: "#000000",
+                        marginRight: "10px",
+                        borderWidth: "8px",
+                      }}
+                    >
+                      HUB
+                    </span>
                   </Typography>
                 </Box>
                 {!isNonMobile && (
@@ -119,7 +133,9 @@ const Sidebar = ({
                   </IconButton>
                 )}
               </FlexBetween>
-            <Box pt={5}><UserWidget/></Box> 
+              <Box pt={5}>
+                <UserWidget />
+              </Box>
             </Box>
             <List>
               {navItems.map(({ text, icon }) => {
