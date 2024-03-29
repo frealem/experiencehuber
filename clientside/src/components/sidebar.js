@@ -109,7 +109,7 @@ const Sidebar = ({
             <Box m="1.5rem 2rem 2rem 3rem">
               <FlexBetween color={theme.palette.secondary.main}>
                 <Box display="flex" alignItems="center" gap="0.5rem">
-                  <Typography variant="h4" fontWeight="bold">
+                  <Typography variant="h3" fontWeight="bold">
                   experience<span style={{backgroundColor:"#000000",marginRight:"10px",borderWidth:"8px"}}>HUB</span>
                   </Typography>
                 </Box>
@@ -119,7 +119,7 @@ const Sidebar = ({
                   </IconButton>
                 )}
               </FlexBetween>
-            <FlexBetween><Box pt={5}><UserWidget/></Box></FlexBetween> 
+            <Box pt={5}><UserWidget/></Box> 
             </Box>
             <List>
               {navItems.map(({ text, icon }) => {

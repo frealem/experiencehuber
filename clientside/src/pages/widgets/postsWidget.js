@@ -1,6 +1,6 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setPosts } from "../../components/States/states";
+// import { useEffect } from "react";
+// import { useDispatch, useSelector } from "react-redux";
+// import { setPosts } from "../../components/States/states";
 import PostWidget from "./postWidget";
 import { posts } from "../../fakeData";
 
@@ -42,29 +42,8 @@ const PostsWidget = ({ userId, isProfile = false }) => {
   return (
     <>
       {posts.map(
-        ({
-          _id,
-          userId,
-          fullName,
-          description,
-          location,
-          picturePath,
-          userPicturePath,
-          likes,
-          comments,
-        }) => (
-          <PostWidget
-            key={_id}
-            postId={_id}
-            postUserId={userId}
-            name={`${fullName}`}
-            description={description}
-            address={address}
-            picturePath={picturePath}
-            userPicturePath={userPicturePath}
-            likes={likes}
-            comments={comments}
-          />
+        () => (
+          <PostWidget />
         )
       )}
     </>

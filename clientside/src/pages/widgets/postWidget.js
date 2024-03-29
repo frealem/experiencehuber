@@ -5,107 +5,75 @@ import {
     ShareOutlined,
   } from "@mui/icons-material";
   import { Box, Divider, IconButton, Typography, useTheme } from "@mui/material";
-  import FlexBetween from "components/FlexBetween";
-  import Friend from "components/Friend";
-  import WidgetWrapper from "components/WidgetWrapper";
-  import { useState } from "react";
-  import { useDispatch, useSelector } from "react-redux";
-  import { setPost } from "state";
-  
-  const PostWidget = ({
-    postId,
-    postUserId,
-    name,
-    description,
-    address,
-    picturePath,
-    userPicturePath,
-    likes,
-    comments,
-  }) => {
-    const [isComments, setIsComments] = useState(false);
-    // const dispatch = useDispatch();
-    // const token = useSelector((state) => state.token);
-    // const loggedInUserId = useSelector((state) => state.user._id);
-    // const isLiked = Boolean(likes[loggedInUserId]);
-    // const likeCount = Object.keys(likes).length;
-  
+  // import Friend from "components/Friend";
+  // import { useState } from "react";
+  // import { useDispatch, useSelector } from "react-redux";
+  // import { setPost } from "state";
+  import postImage from "../../assets/images/pizza1.jpg"
+  import StarIcon from '@mui/icons-material/Star';
+import UserImage from "../../components/userImage";
+import FlexBetween from "../../components/Flexbetween";
+import WidgetWrapper from "../../components/widgetWrapper";
+import BookmarkAddOutlinedIcon from '@mui/icons-material/BookmarkAddOutlined';
+  const PostWidget = () => {
     const { palette } = useTheme();
     const main = palette.neutral.main;
     const primary = palette.primary.main;
-  
-    // const patchLike = async () => {
-    //   const response = await fetch(`http://localhost:3001/posts/${postId}/like`, {
-    //     method: "PATCH",
-    //     headers: {
-    //       Authorization: `Bearer ${token}`,
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({ userId: loggedInUserId }),
-    //   });
-    //   const updatedPost = await response.json();
-    //   dispatch(setPost({ post: updatedPost }));
-    // };
-  
+
     return (
       <WidgetWrapper m="2rem 0">
-        <Friend
-          friendId={postUserId}
-          name={name}
-          subtitle={address}
-          userPicturePath={userPicturePath}
-        />
-        <Typography color={main} sx={{ mt: "1rem" }}>
-          {description}
-        </Typography>
-        {picturePath && (
+        <Typography variant="h3" fontWeight={900}>This is the title of the review has to be one line</Typography>
+        <Typography sx={{ mt: "1rem" }} variant="h6">
+          this description is for the review and experience.this description is for the review and experience.
+          this description is for the review and experience. this description is for the review and experience.</Typography>
           <img
             width="100%"
             height="auto"
             alt="post"
             style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
-            src={`http://localhost:3001/assets/${picturePath}`}
+            src={postImage}
           />
-        )}
+           <Box display="flex" alignItems="center" gap="0.3rem">
+      <UserImage />
+      <Typography variant="body1">Gelila Girma</Typography>
+    </Box>
+         <Box>
+              <IconButton>
+                <StarIcon sx={{color:"yellow"}}/>
+                <StarIcon sx={{color:"yellow"}}/>
+                <StarIcon sx={{color:"yellow"}}/>
+                <StarIcon sx={{color:"yellow"}}/>
+                <StarIcon sx={{color:"yellow"}}/>
+              </IconButton>
+            </Box>
+
         <FlexBetween mt="0.25rem">
           <FlexBetween gap="1rem">
             <FlexBetween gap="0.3rem">
               <IconButton>
-                {/* {isLiked ? ( */}
-                  <FavoriteOutlined sx={{ color: primary }} />
-                {/* ) : ( */}
-                  {/* <FavoriteBorderOutlined /> */}
-                {/* )} */}
+                <FavoriteBorderOutlined />
               </IconButton>
-              <Typography>{likes}</Typography>
+              <Typography>26</Typography>
             </FlexBetween>
-  
+            
             <FlexBetween gap="0.3rem">
-              <IconButton onClick={() => setIsComments(!isComments)}>
+              <IconButton>
                 <ChatBubbleOutlineOutlined />
               </IconButton>
-              <Typography>{comments.length}</Typography>
+              <Typography>45</Typography>
             </FlexBetween>
-          </FlexBetween>
-  
-          <IconButton>
+            <FlexBetween gap="0.3rem">
+            <IconButton>
             <ShareOutlined />
           </IconButton>
+            </FlexBetween>
+            <FlexBetween gap="0.3rem">
+            <IconButton>
+            <BookmarkAddOutlinedIcon />
+          </IconButton>
+            </FlexBetween>
+          </FlexBetween>
         </FlexBetween>
-        {/* {isComments && (
-          <Box mt="0.5rem">
-            {comments.map((comment, i) => (
-              <Box key={`${name}-${i}`}>
-                <Divider />
-                <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
-                  {comment}
-                </Typography>
-              </Box>
-            ))}
-            <Divider />
-          </Box>
-        )} */}
-        {comments}
       </WidgetWrapper>
     );
   };
