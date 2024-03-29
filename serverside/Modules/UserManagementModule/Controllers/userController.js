@@ -9,11 +9,11 @@ const ACCESSLEVEL = require('../../../Constants/accessLevel');
 
 
 //@desc get a user by id
-//@route 
+//@route GET api/user/
 //@accesslevel 1
 const getCurrentUser = asyncHandler(async (req, res) => {
-    const user = await User.findById(req.user.id);
-    if(!user){
+    const user = await User.find(req.user.id);
+    if(!user){req.user.id
         res.status(404);
         throw new Error("User not found!");
     }
@@ -21,9 +21,10 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 });
 
 //@desc create new user
-//@route 
+//@route none
 //@accesslevel inaccessible
 const createUser = asyncHandler(async (req, res) => {
+    console.log(req.body);
     const {firstName = null, lastName = null, userName, email, password, role} = req.body;
     if(!userName || !email || !password || !role){
         res.status(400);
@@ -49,7 +50,7 @@ const createUser = asyncHandler(async (req, res) => {
 });
 
 //@desc update a user
-//@route 
+//@route PUT api/user/:id
 //@accesslevel 1
 const updateUser = asyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id);
@@ -68,7 +69,7 @@ const updateUser = asyncHandler(async (req, res) => {
 });
 
 //@desc delete a user
-//@route 
+//@route DELETE api/user/:id
 //@accesslevel 1
 const deleteUser = asyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id);
@@ -83,7 +84,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 });
 
 //@desc login a user
-//@route 
+//@route POST api/user/login
 //@accesslevel public
 const loginUser = asyncHandler(async (req, res) => {
     const {email, password} = req.body;
@@ -109,12 +110,12 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 //@desc to register a normal user
-//@route
+//@route POST api/user/register
 //@accesslevel public
 const registerUser = asyncHandler(async(req, res) => {
-    const role = Role.find({accessLevel: ACCESSLEVEL.NORMALUSER});
-    req.body.role = role.id;
-    createUser();
+    const role = await Role.findOne({accessLevel: 1});
+    req.body.role = role._id;
+    createUser(req, res);
 }); 
 
 module.exports = {getCurrentUser, updateUser, deleteUser, registerUser, loginUser};

@@ -1,20 +1,22 @@
 const asyncHanler = require('expres-async-handler');
 const Post = require('../Models/Post');
+const History = require('../../SystemMonitoringModule/Models/History');
 
-
-//@desc get all posts craeted by the owner
+//@desc get all posts created by the owner
 //@route 
-//@access public
+//@access level 2
 const getPosts = asyncHanler(async (req, res) => {
     const post = await Post.find();
     res.status(200).json(post);
 });
 
+
+
 //@desc get all posts craeted by the owner
 //@route 
-//@access public
+//@access level 1
 const getPostsByOwner = asyncHanler(async (req, res) => {
-    const post = await Post.find({ownerId: req.user.id});
+    const post = await Post.find({ownerId: req.params.id});
     res.status(200).json(post);
 });
 
@@ -27,19 +29,20 @@ const getPost = asyncHanler(async (req, res) => {
         res.status(404);
         throw new Error("Post not found!");
     }
+    await History.create({userId: req.user.id, postId: req.params.id});    
     res.status(200).json(post);
 });
 
 //@desc create new post
 //@route 
-//@access public
+//@access level 1
 const createPost = asyncHanler(async (req, res) => {
     const {posterId, 
            title, 
            description, 
            like, 
            dislike, 
-           share, 
+           share , 
            rating, 
            imageURL,
            tags,
@@ -48,7 +51,7 @@ const createPost = asyncHanler(async (req, res) => {
         res.status(400);
         throw new Error("Mandatory fields are not filled!");
     }
-    const post = await Post.Create({
+    const post = await Post.create({
            posterId, 
            title, 
            description, 
@@ -65,7 +68,7 @@ const createPost = asyncHanler(async (req, res) => {
 
 //@desc update a post
 //@route 
-//@access public
+//@access level 1
 const updatePost = asyncHanler(async (req, res) => {
     const post = await Post.findById(req.params.id);
     if(!post){
@@ -84,7 +87,7 @@ const updatePost = asyncHanler(async (req, res) => {
 
 //@desc delete a post
 //@route 
-//@access public
+//@access level 1
 const deletePost = asyncHanler(async (req, res) => {
     const post = await Post.findById(req.params.id);
     if(!post){

@@ -9,6 +9,8 @@ const CategorySchema = mongoose.Schema({
         type: String,
         required: [true, "please enter category description"],
     },
+},{
+    timestamps: true,
 });
 
 module.exports = mongoose.model('Category', CategorySchema);
