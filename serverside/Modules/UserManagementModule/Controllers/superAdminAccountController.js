@@ -7,8 +7,8 @@ const {createUser} = require('../Controllers/userController');
 //@route
 //@access
 const createAdmin = asyncHandler( async(req, res) => {
-   const role = Role.find({accessLevel: ACCESSLEVEL.ADMIN});
-   req.body.role = role.id;
+   const role = Role.find({accessLevel: 2});
+   req.body.role = role._id;
    createUser();
 });
 

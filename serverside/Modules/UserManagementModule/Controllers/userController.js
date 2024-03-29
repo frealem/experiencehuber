@@ -24,7 +24,7 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 //@route 
 //@accesslevel inaccessible
 const createUser = asyncHandler(async (req, res) => {
-    const {firstName = null, lastName = null, userName, email, password, role} = req.body;
+    const {fullName, userName, phone, email, password, role} = req.body;
     if(!userName || !email || !password || !role){
         res.status(400);
         throw new Error("Mandatory fields are not filled!");
@@ -112,9 +112,9 @@ const loginUser = asyncHandler(async (req, res) => {
 //@route
 //@accesslevel public
 const registerUser = asyncHandler(async(req, res) => {
-    const role = Role.find({accessLevel: ACCESSLEVEL.NORMALUSER});
-    req.body.role = role.id;
-    createUser();
+    const role = Role.find({accessLevel: 1});
+    req.body.role = role._id;
+    createUser(req, res);
 }); 
 
 module.exports = {getCurrentUser, updateUser, deleteUser, registerUser, loginUser};
