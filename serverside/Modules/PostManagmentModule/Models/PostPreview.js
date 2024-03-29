@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const PostSchema = mongoose.Schema({
+const PostPreviewSchema = mongoose.Schema({
     // refers to the account by which this post is posted
     posterId:{
         type: mongoose.Schema.Types.ObjectId,
@@ -15,18 +15,6 @@ const PostSchema = mongoose.Schema({
         type: String,
         required: [true, "Please enter the description of the post!"],
     },
-    like:{
-        type: Number,
-    },
-    disLike:{
-        type: Number,
-    },
-    share:{
-        type: Number,
-    },
-    rating:{
-        type: Number,
-    },
     imageURL:{
         type: String,
         required: [true, "The image is required!"],
@@ -34,22 +22,12 @@ const PostSchema = mongoose.Schema({
     tags:{
         type: [String],
     },
-    categoryId:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref:'Category',
-        required: [true, "The category is not specified"],
-    },
     location:{
         name: String,
         longitude: String,
         latitude: String,
         zoom: Number,
     }
-},{
-    timestamps: true,
 });
 
-// Create a text index on the "title" and "description" fields
-PostSchema.index({ title: 'text', description: 'text' });
-
-module.exports = mongoose.model('Post', PostSchema);
+module.exports = mongoose.model('PostPreview', PostPreviewSchema);

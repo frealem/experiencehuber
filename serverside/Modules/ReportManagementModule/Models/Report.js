@@ -24,7 +24,7 @@ const ReportSchema = mongoose.Schema({
     },
     // shows the current status of the report(handled or not)
     status: {
-        type: Int16Array,
+        type: Number,
     }
 },{
     timestamps: true,
