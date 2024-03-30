@@ -62,7 +62,7 @@ const handleNewPost = () => {
        <PostsWidget/>
         </Box>
         {isNonMobileScreens && (
-          <Box flexBasis="30%">
+          <Box flexBasis="35%">
           <LeftFeedWidget/>
           </Box>
         )}
