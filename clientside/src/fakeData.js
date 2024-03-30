@@ -55,3 +55,74 @@ export const posts = [
       comments: 22,
     },
   ];
+
+  export const adverts=[
+    {
+      "id": 1,
+      "title": "Haile Resort offers a luxurious getaway for a memorable weekend",
+      "link": "www.haileresort.com"
+      },
+      
+      {
+      "id": 2,
+      "title": "Experience tranquility and relaxation at Haile Resort",
+      "link": "www.haileresort.com"
+      }
+      ,
+      {
+      "id": 3,
+      "title": "Unwind and rejuvenate at Haile Resort - the ultimate weekend destination",
+      "link": "www.haileresort.com"
+      }
+      ,
+      {
+      "id": 4,
+      "title": "Escape to Haile Resort for an unforgettable weekend retreat",
+      "link": "www.haileresort.com"
+      }
+      ,
+      {
+      "id": 5,
+      "title": "Discover the hidden gem of Haile Resort for a perfect weekend getaway",
+      "link": "www.haileresort.com"
+      }
+      ,
+      {
+      "id": 6,
+      "title": "Indulge in luxury and serenity at Haile Resort - your ideal weekend escape",
+      "link": "www.haileresort.com"
+      }
+]
+
+export const highRate=[
+  {
+    "id": 1,
+    "title": "Haile Resort offers a luxurious getaway for a memorable weekend",
+    "rate": 3
+  },
+  {
+    "id": 2,
+    "title": "Experience the beauty of nature at Haile Resort",
+    "rate": 4
+  },
+  {
+    "id": 3,
+    "title": "Indulge in culinary delights at Haile Resort's restaurants",
+    "rate": 5
+  },
+  {
+    "id": 4,
+    "title": "Unwind and relax with spa treatments at Haile Resort",
+    "rate": 2
+  },
+  {
+    "id": 5,
+    "title": "Enjoy thrilling outdoor activities at Haile Resort",
+    "rate": 4
+  },
+  {
+    "id": 6,
+    "title": "Experience the ultimate luxury at Haile Resort's penthouse suites",
+    "rate": 5
+  }
+]

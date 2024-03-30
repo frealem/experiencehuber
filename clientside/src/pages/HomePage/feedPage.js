@@ -6,6 +6,7 @@ import MyButton from "../../components/myButton";
 import PostsWidget from "../widgets/postsWidget";
 import ArrowUpwardOutlinedIcon from '@mui/icons-material/ArrowUpwardOutlined';
 import { useState } from "react";
+import LeftFeedWidget from "../widgets/leftFeedWidget";
 // import MyPostWidget from "scenes/widgets/MyPostWidget";
 // import PostsWidget from "scenes/widgets/PostsWidget";
 // import AdvertWidget from "scenes/widgets/AdvertWidget";
@@ -62,9 +63,7 @@ const handleNewPost = () => {
         </Box>
         {isNonMobileScreens && (
           <Box flexBasis="30%">
-            {/* <AdvertWidget /> */} advertisement/sponsored post
-            <Box m="2rem 0" />
-            {/* <RightFeed/> */}top rated post
+          <LeftFeedWidget/>
           </Box>
         )}
       </Box>
