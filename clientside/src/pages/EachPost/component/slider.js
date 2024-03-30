@@ -1,17 +1,17 @@
 import React from 'react';
-
-import { Box, Divider, Typography ,Carousel} from '@mui/material'
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 const Slider = ({ images }) => {
-  return (
-    <Carousel>
-      {images.map((image, index) => (
-        <Box key={index}>
-          <img src={image} alt={`Slide ${index}`} style={{ width: '100%' }} />
-        </Box>
-      ))}
-    </Carousel>
-  );
-};
-
-export default Slider;
+    return (
+      <Carousel autoPlay infiniteLoop>
+        {images.map((image, index) => (
+          <div key={index}>
+            <img src={image} alt={`Slide ${index}`} />
+          </div>
+        ))}
+      </Carousel>
+    );
+  };
+  
+  export default Slider;

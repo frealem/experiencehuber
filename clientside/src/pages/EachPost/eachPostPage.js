@@ -1,8 +1,10 @@
 import React from 'react'
+import Slider from './component/slider'
+import { images } from '../../fakeData'
 
 const EachPostPage = () => {
   return (
-    <div>EachPostPage</div>
+    <><Slider images={images}/></>
   )
 }
 

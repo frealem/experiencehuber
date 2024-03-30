@@ -20,9 +20,9 @@ function App() {
           <Route element={<Layout />}>
 <Route path="/" element={<Navigate to="/feedpage" replace/>}/>
 <Route path="/feedpage" element={<FeedPage/>}/>
-<Route path="/eachpost" element={<EachPostPage/>}/>
 <Route path="/authpage" element={<AuthPage/>}/>
           </Route>
+          <Route path="/eachpost" element={<EachPostPage/>}/>
         </Routes>
       </ThemeProvider>
       </BrowserRouter>
