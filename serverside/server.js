@@ -1,7 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv').config();
 const socketio = require('socket.io');
-const http = require('http');
 
 const dbconnection = require('./Config/dbConnection');
 

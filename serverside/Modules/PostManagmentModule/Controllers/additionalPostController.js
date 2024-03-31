@@ -15,7 +15,7 @@ const getPostsByPreference = asyncHanler(async (req, res) => {
     const ids = [...account.preferedCategories];
     const categories = await Category.find().where(_id).in(ids).exec();
     const categoryIds = categories.map(category => category._id);
-    const filter = {categoryId: {$in : categoryIds }};
+    const filter = {categoryId: {$in : categoryIds }, special: false};
 
     const posts = await paginate(Post, page, pageSize, filter);
 
@@ -45,6 +45,28 @@ const getPostsByFilter = asyncHanler(async (req, res) => {
         tags: {$in: tags},
         rating: {$gte: ratings},
     };
+
+    const posts = await paginate(Post, page, pageSize, filter);
+    res.status(200).json(posts);
+});
+
+//@desc get special posts by date(latest)
+//@route 
+//@access public
+const getSpecialPosts = asyncHanler(async (req, res) => {
+    const {page, pageSize} = req.query;
+    const filter = {special: true};
+
+    const posts = await paginate(Post, page, pageSize, filter);
+    res.status(200).json(posts);
+});
+
+//@desc get non posts by date(latest)
+//@route 
+//@access public
+const getLatestPosts = asyncHanler(async (req, res) => {
+    const {page, pageSize} = req.query;
+    const filter = {};
 
     const posts = await paginate(Post, page, pageSize, filter);
     res.status(200).json(posts);
