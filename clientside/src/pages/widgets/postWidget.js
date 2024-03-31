@@ -34,7 +34,7 @@ import BookmarkAddOutlinedIcon from '@mui/icons-material/BookmarkAddOutlined';
             src={postImage}
           />
            <Box display="flex" alignItems="center" gap="0.3rem">
-      <UserImage />
+      <UserImage size={40}/>
       <Typography variant="body1">Gelila Girma</Typography>
       <Typography variant="body2" color="textSecondary">
       Addis Ababa 6 hours ago
