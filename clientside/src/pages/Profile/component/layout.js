@@ -1,5 +1,6 @@
 import React from "react";
 import {
+    AppBar,
   Box,
   Divider,
   Drawer,
@@ -9,129 +10,119 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Toolbar,
   Typography,
+  useMediaQuery,
   useTheme,
 } from "@mui/material";
-import DynamicFeedOutlinedIcon from "@mui/icons-material/DynamicFeedOutlined";
 import SettingsOutlined from "@mui/icons-material/SettingsOutlined";
 import ChevronRightOutlined from "@mui/icons-material/ChevronRightOutlined";
-import ChevronLeft from "@mui/icons-material/ChevronLeft";
-import EventOutlinedIcon from "@mui/icons-material/EventOutlined";
 import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
 import PostAddOutlinedIcon from "@mui/icons-material/PostAddOutlined";
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
-import FormatShapesOutlinedIcon from "@mui/icons-material/FormatShapesOutlined";
-import DraftsOutlinedIcon from "@mui/icons-material/DraftsOutlined";
-import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
-
+import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
+import SecurityOutlinedIcon from '@mui/icons-material/SecurityOutlined';
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import FlexBetween from "./Flexbetween";
-import profileImage from "../assets/images/chatapp.jpeg";
-import UserWidget from "../pages/widgets/userWidget";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { DarkModeOutlined, LightModeOutlined } from "@mui/icons-material";
+import { useDispatch } from "react-redux";
+import { setMode } from "../../../components/States/themeSlice";
+
 
 const navItems = [
   {
-    text: "Your feeds",
-    icon: <DynamicFeedOutlinedIcon />,
+    text: "Edit Profile",
+    icon: <ModeEditOutlineOutlinedIcon />,
   },
   {
-    text: "Menu",
-    icon: null,
-  },
-  {
-    text: "Your Posts",
+    text: "My Posts",
     icon: <PostAddOutlinedIcon />,
   },
   {
-    text: "Events",
-    icon: <EventOutlinedIcon />,
-  },
-  {
-    text: "Favorites",
-    icon: <FavoriteOutlinedIcon />,
-  },
-  {
-    text: "Drafted Posts",
-    icon: <DraftsOutlinedIcon />,
-  },
-  {
-    text: "Ads Manager",
-    icon: <FormatShapesOutlinedIcon />,
-  },
-  {
-    text: "Message",
+    text: "Notification",
     icon: <MessageOutlinedIcon />,
   },
   {
-    text: "See More",
-    icon: <ExpandMoreOutlinedIcon />,
+    text: "Favorite List",
+    icon: <FavoriteOutlinedIcon />,
   },
+  {
+    text: "Password and Security",
+    icon: <SecurityOutlinedIcon/>,
+  },
+  {
+    text: "Setting",
+    icon: <SettingsOutlined/>,
+  },
+ 
 ];
 
-const Sidebar = ({
-  user,
-  drawerWidth,
-  isSidebarOpen,
-  setIsSidebarOpen,
-  isNonMobile,
-}) => {
+const ProfileLayout = ({text}) => {
   const { pathname } = useLocation();
   const [active, setActive] = useState("");
   const navigate = useNavigate();
   const theme = useTheme();
+  const isNonMobile = useMediaQuery("(min-width: 600px)");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const dispatch=useDispatch();
 
   useEffect(() => {
     setActive(pathname.substring(1));
   }, [pathname]);
-
-  return (
-    <Box component="nav">
-      {isSidebarOpen && (
-        <Box
+  return (<>
+   <Box display="flex">
+        <AppBar
+          sx={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            boxShadow: "none",
+            borderBottom: "1px solid ",
+            borderColor:theme.palette.secondary[300],
+    zIndex: 9999,
+          }}
+        >
+          <Toolbar sx={{ justifyContent: "space-between" }}>
+          <Typography>
+              Poster Profile
+            </Typography>
+          <Typography>
+              ExperienceHub
+            </Typography>
+            <IconButton onClick={() => dispatch(setMode())}>
+              {theme.palette.mode === "dark" ? (
+                <DarkModeOutlined sx={{ fontSize: "25px" }} />
+              ) : (
+                <LightModeOutlined sx={{ fontSize: "25px" }} />
+              )}
+            </IconButton>
+            
+          </Toolbar>
+        </AppBar>
+        <Outlet/>
+        <Drawer
           open={isSidebarOpen}
           onClose={() => setIsSidebarOpen(false)}
           variant="persistent"
           anchor="left"
           sx={{
-            width: drawerWidth,
-            "& .MuiDrawer-paper": {
-              color: theme.palette.grey[50],
-              backgroundColor: theme.palette.background.alt,
-              boxSizing: "border-box",
-              borderWidth: isNonMobile ? 0 : "2px",
-            },
+            width: "400px",
           }}
         >
-          <Box width="100%">
-            <Box m="1.5rem 2rem 2rem 3rem">
-              <FlexBetween color={theme.palette.secondary.main}>
-                <Box display="flex" alignItems="center" gap="0.5rem">
-                  <FlexBetween>
-                    <Typography
-                      variant="h3"
-                      fontWeight={900}
-                      color={theme.palette.secondary[100]}
-                    >
-                      ExperienceHub
-                    </Typography>
-                  </FlexBetween>
-                </Box>
-                {!isNonMobile && (
-                  <IconButton onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
-                    <ChevronLeft />
-                  </IconButton>
-                )}
-              </FlexBetween>
-              <Box pt={5}>
-                <UserWidget />
-              </Box>
-            </Box>
+          <Toolbar />
+          <Box
+            sx={{
+              width: "100%",
+              paddingTop: "0",
+              borderWidth: isNonMobile ? 0 : "2px",
+            }}
+          >
             <List>
               {navItems.map(({ text, icon }) => {
                 if (!icon) {
                   return (
-                    <Typography key={text} sx={{ m: "2.25rem 0 1rem 3rem" }}>
+                    <Typography key={text} sx={{ m: "2.25rem 0 1rem 3rem" ,fontWeight:"bold"}}>
                       {text}
                     </Typography>
                   );
@@ -146,6 +137,7 @@ const Sidebar = ({
                         setActive(lcText);
                       }}
                       sx={{
+                        marginBottom:"15px",
                         backgroundColor:
                           active === lcText
                             ? theme.palette.secondary[300]
@@ -163,6 +155,7 @@ const Sidebar = ({
                             active === lcText
                               ? theme.palette.primary[600]
                               : theme.palette.secondary[200],
+                              fontSize:"32px"
                         }}
                       >
                         {icon}
@@ -177,10 +170,12 @@ const Sidebar = ({
               })}
             </List>
           </Box>
-        </Box>
-      )}
+        </Drawer>
     </Box>
+    
+    
+    </>
   );
 };
 
-export default Sidebar;
+export default ProfileLayout;

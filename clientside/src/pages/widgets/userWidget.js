@@ -54,7 +54,7 @@ import image from '../../assets/images/chatapp.jpeg'
           onClick={() => navigate(`/profile/${userId}`)}
         >
           <FlexBetween gap="1rem">
-            <UserImage image={image} />
+            <UserImage size={50} />
             <Box>
               <Typography
                 variant="h4"

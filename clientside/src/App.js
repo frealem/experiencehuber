@@ -8,6 +8,9 @@ import Layout from "./components/Layout";
 import AuthPage from "./pages/authPage";
 import FeedPage from "./pages/HomePage/feedPage";
 import EachPostPage from "./pages/EachPost/eachPostPage";
+import ProfilePage from "./pages/Profile/profilePage";
+import ProfileLayout from "./pages/Profile/component/layout";
+
 function App() {
   const mode = useSelector((state) => state.theme.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
@@ -23,6 +26,9 @@ function App() {
 <Route path="/authpage" element={<AuthPage/>}/>
           </Route>
           <Route path="/eachpost" element={<EachPostPage/>}/>
+          <Route  element={<ProfileLayout />} >
+          <Route path="/profilepage" element={<ProfilePage/>}/>
+          </Route>
         </Routes>
       </ThemeProvider>
       </BrowserRouter>

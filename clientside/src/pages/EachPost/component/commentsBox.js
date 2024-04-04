@@ -1,4 +1,4 @@
-import { Box, Divider, Typography, useTheme } from "@mui/material";
+import { Box, Button, Divider, TextField, Typography, useTheme } from "@mui/material";
 import React from "react";
 import CommentBox from "./commentBox";
 
@@ -62,6 +62,21 @@ const CommentsBox = () => {
           <CommentBox key={comment.id} comment={comment} />
         ))}
       </Box>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '20px' }}>
+      <TextField
+        style={{ marginRight: '10px' }}
+        variant="outlined"
+        borderColor='secondary'
+        
+      />
+      <Button
+        style={{ marginLeft: '10px' }}
+        variant="contained"
+        color='secondary'
+      >
+        Send
+      </Button>
+    </div>
     </Box>
   );
 };
