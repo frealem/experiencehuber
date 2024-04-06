@@ -77,27 +77,24 @@ const ProfileLayout = ({text}) => {
   }
  
   return (<>
-  <Box display={isNonMobile ? "flex" : "block"} width="100%" height="100%">
-   <Box display="flex">
-      <AppBar
-        position="fixed"
-        top={0}
-        left={0}
-        width="100%"
-        boxShadow="none"
-        borderBottom="none"
-        // borderColor={theme.palette.secondary[300]}
-        zIndex={!isMobile ? "999px" :null}
-      >
+  <Box display={isNonMobile ? "flex" : "block"} width="100%" height="100%" boxShadow="none">
+   <Box display="flex"  boxShadow="none">
+   <Box
+  position="fixed"
+  top={0}
+  left={0}
+  width="100%"
+  boxShadow="none"
+>
         <Toolbar sx={{ justifyContent: "space-between" }}>
           {isMobile ? (
             <IconButton onClick={handleDrawerToggle}>
               <MenuOutlined />
             </IconButton>
           ) : (
-            <Typography>Poster Profile</Typography>
+          <Typography color={theme.palette.secondary[300]} fontWeight={400} >Poster Profile</Typography>
           )}
-          <Typography>ExperienceHub</Typography>
+          <Typography color={theme.palette.secondary[300]} fontWeight={600} fontSize={24} >ExperienceHub</Typography>
           <IconButton onClick={() => dispatch(setMode())}>
             {theme.palette.mode === "dark" ? (
               <DarkModeOutlined sx={{ fontSize: "25px" }} />
@@ -106,7 +103,7 @@ const ProfileLayout = ({text}) => {
             )}
           </IconButton>
         </Toolbar>
-      </AppBar>
+      </Box>
       </Box>
         <Outlet/>
         
@@ -133,6 +130,7 @@ const ProfileLayout = ({text}) => {
               
             }}
           >
+          <Typography color={theme.palette.secondary[300]} fontWeight={600} fontSize={24} marginTop={-5.5} marginLeft={6}marginBottom={3}>Poster Profile</Typography>
             <List>
               {navItems.map(({ text, icon }) => {
                 if (!icon) {

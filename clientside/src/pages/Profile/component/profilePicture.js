@@ -28,6 +28,7 @@ const ModalButton = styled(Button)(({ theme }) => ({
 function Profile() {
   const [open, setOpen] = useState(false);
   const [profilePicture, setProfilePicture] = useState(null);
+  const [isHovered, setIsHovered] = useState(false);
   const handleIconClick = () => {
     setOpen(true);
   };
@@ -35,26 +36,35 @@ function Profile() {
   const handleClose = () => {
     setOpen(false);
   };
+ 
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
 
   const handleTakePicture = async () => {
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
-  
+
       const video = document.createElement('video');
       const canvas = document.createElement('canvas');
       const context = canvas.getContext('2d');
-  
+
       video.srcObject = mediaStream;
       video.addEventListener('loadedmetadata', () => {
         video.play();
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
-  
+
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
-  
+
         const dataURL = canvas.toDataURL('image/jpeg');
         setProfilePicture(dataURL);
-  
+
         mediaStream.getTracks().forEach((track) => track.stop());
         video.remove();
         canvas.remove();
@@ -66,11 +76,21 @@ function Profile() {
 
   return (
     <Box align="center">
-      
-      {profilePicture && <UserImage size={80} profilePicture={profilePicture} />}
-      <EditIconButton onClick={handleIconClick} marginTop='-20px'>
-        <ModeEditIcon />
-      </EditIconButton>
+    <Box position="relative"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}>
+      <UserImage size={80} profilePicture={profilePicture} />
+      {isHovered && (
+        <IconButton
+          style={{ position: 'absolute', right: 190, bottom: 0 }}
+          size="medium"
+          onClick={handleIconClick}
+          color="primary"
+        >
+          <ModeEditIcon />
+        </IconButton>
+      )}
+      </Box>
       <Modal open={open} onClose={handleClose}>
         <ModalContainer>
           <ModalButton variant="contained" onClick={handleTakePicture}>

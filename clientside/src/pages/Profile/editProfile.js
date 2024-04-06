@@ -33,16 +33,12 @@ const isMobile = useMediaQuery(theme.breakpoints.down('md'));
     >
       <Box>
       <Box align="center">
-      {/* <ModeEditIcon sx={{
-        marginBottom:"-15px",
-        marginLeft:"40px",
-      }}/>
-      <UserImage size={80} /> */}
-     <Profile/>
-      </Box>
-        <Typography variant="h3" align="center" fontWeight="600" color={theme.palette.secondary.main}>
+      <Typography variant="h4" align="center" fontWeight="400" color={theme.palette.secondary.main}marginBottom={3}>
           Edit Profile
         </Typography>
+     <Profile/>
+      </Box>
+      
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2} justifyContent="center">
             <Grid item xs={12} md={6} marginTop={2}>
