@@ -24,7 +24,7 @@ import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutl
 import SecurityOutlinedIcon from '@mui/icons-material/SecurityOutlined';
 import { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { DarkModeOutlined, LightModeOutlined } from "@mui/icons-material";
+import { CloseOutlined, DarkModeOutlined, LightModeOutlined, MenuBookOutlined, MenuOpenOutlined, MenuOutlined } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { setMode } from "../../../components/States/themeSlice";
 
@@ -63,51 +63,65 @@ const ProfileLayout = ({text}) => {
   const navigate = useNavigate();
   const theme = useTheme();
   const isNonMobile = useMediaQuery("(min-width: 600px)");
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const [isOpen, setIsOpen] = useState(!isMobile);
   const dispatch=useDispatch();
 
   useEffect(() => {
     setActive(pathname.substring(1));
-  }, [pathname]);
+    setIsOpen(!isMobile);
+  }, [pathname, isMobile]);
+
+  const handleDrawerToggle = () => {
+    setIsOpen(!isOpen);
+  }
+ 
   return (<>
+  <Box display={isNonMobile ? "flex" : "block"} width="100%" height="100%">
    <Box display="flex">
-        <AppBar
-          sx={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            boxShadow: "none",
-            borderBottom: "1px solid ",
-            borderColor:theme.palette.secondary[300],
-    zIndex: 9999,
-          }}
-        >
-          <Toolbar sx={{ justifyContent: "space-between" }}>
-          <Typography>
-              Poster Profile
-            </Typography>
-          <Typography>
-              ExperienceHub
-            </Typography>
-            <IconButton onClick={() => dispatch(setMode())}>
-              {theme.palette.mode === "dark" ? (
-                <DarkModeOutlined sx={{ fontSize: "25px" }} />
-              ) : (
-                <LightModeOutlined sx={{ fontSize: "25px" }} />
-              )}
+      <AppBar
+        position="fixed"
+        top={0}
+        left={0}
+        width="100%"
+        boxShadow="none"
+        borderBottom="none"
+        // borderColor={theme.palette.secondary[300]}
+        zIndex={!isMobile ? "999px" :null}
+      >
+        <Toolbar sx={{ justifyContent: "space-between" }}>
+          {isMobile ? (
+            <IconButton onClick={handleDrawerToggle}>
+              <MenuOutlined />
             </IconButton>
-            
-          </Toolbar>
-        </AppBar>
+          ) : (
+            <Typography>Poster Profile</Typography>
+          )}
+          <Typography>ExperienceHub</Typography>
+          <IconButton onClick={() => dispatch(setMode())}>
+            {theme.palette.mode === "dark" ? (
+              <DarkModeOutlined sx={{ fontSize: "25px" }} />
+            ) : (
+              <LightModeOutlined sx={{ fontSize: "25px" }} />
+            )}
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+      </Box>
         <Outlet/>
-        <Drawer
-          open={isSidebarOpen}
-          onClose={() => setIsSidebarOpen(false)}
+        
+         <Drawer
+         open={isOpen} onClose={handleDrawerToggle}
+         onClick={isMobile ? handleDrawerToggle:null}
           variant="persistent"
           anchor="left"
           sx={{
             width: "400px",
+            "& .MuiDrawer-paper": {
+              color: theme.palette.grey[50],
+              boxSizing: "border-box",
+              borderWidth: isNonMobile ? 0 : "2px",
+            },
           }}
         >
           <Toolbar />
@@ -116,6 +130,7 @@ const ProfileLayout = ({text}) => {
               width: "100%",
               paddingTop: "0",
               borderWidth: isNonMobile ? 0 : "2px",
+              
             }}
           >
             <List>
@@ -171,6 +186,7 @@ const ProfileLayout = ({text}) => {
             </List>
           </Box>
         </Drawer>
+       
     </Box>
     
     
