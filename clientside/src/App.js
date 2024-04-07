@@ -10,6 +10,7 @@ import FeedPage from "./pages/HomePage/feedPage";
 import EachPostPage from "./pages/EachPost/eachPostPage";
 import ProfilePage from "./pages/Profile/profilePage";
 import ProfileLayout from "./pages/Profile/component/layout";
+import EditProfile from "./pages/Profile/editProfile";
 
 function App() {
   const mode = useSelector((state) => state.theme.mode);
@@ -27,7 +28,7 @@ function App() {
           </Route>
           <Route path="/eachpost" element={<EachPostPage/>}/>
           <Route  element={<ProfileLayout />} >
-          <Route path="/profilepage" element={<ProfilePage/>}/>
+          <Route path="/editprofile" element={<EditProfile/>}/>
           </Route>
         </Routes>
       </ThemeProvider>

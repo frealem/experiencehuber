@@ -33,26 +33,32 @@ const navItems = [
   {
     text: "Edit Profile",
     icon: <ModeEditOutlineOutlinedIcon />,
+    link:"editprofile"
   },
   {
     text: "My Posts",
     icon: <PostAddOutlinedIcon />,
+    link:"myposts"
   },
   {
     text: "Notification",
     icon: <MessageOutlinedIcon />,
+    link:"notification"
   },
   {
     text: "Favorite List",
     icon: <FavoriteOutlinedIcon />,
+    link:"favoritelist"
   },
   {
     text: "Password and Security",
     icon: <SecurityOutlinedIcon/>,
+    link:"security"
   },
   {
     text: "Setting",
     icon: <SettingsOutlined/>,
+    link:"setting"
   },
  
 ];
@@ -132,7 +138,7 @@ const ProfileLayout = ({text}) => {
           >
           <Typography color={theme.palette.secondary[300]} fontWeight={600} fontSize={24} marginTop={-5.5} marginLeft={6}marginBottom={3}>Poster Profile</Typography>
             <List>
-              {navItems.map(({ text, icon }) => {
+              {navItems.map(({ text, icon,link }) => {
                 if (!icon) {
                   return (
                     <Typography key={text} sx={{ m: "2.25rem 0 1rem 3rem" ,fontWeight:"bold"}}>
@@ -140,10 +146,10 @@ const ProfileLayout = ({text}) => {
                     </Typography>
                   );
                 }
-                const lcText = text.toLowerCase();
+                const lcText = link.toLowerCase();
 
                 return (
-                  <ListItem key={text} disablePadding>
+                  <ListItem key={link} disablePadding>
                     <ListItemButton
                       onClick={() => {
                         navigate(`/${lcText}`);

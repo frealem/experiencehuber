@@ -25,6 +25,7 @@ const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   };
 
   return (
+    <Box mt={10} marginLeft={!isMobile ? "400px":"10px"} marginRight={isMobile ? "10px":null}>
     <Box
       display="block"
       justifyContent="center"
@@ -81,6 +82,7 @@ const isMobile = useMediaQuery(theme.breakpoints.down('md'));
           </Grid>
         </form>
       </Box>
+    </Box>
     </Box>
   );
 };
