@@ -5,6 +5,7 @@ import StyledInput from "../../components/input";
 import MyButton from "../../components/myButton";
 import Profile from "./component/profilePicture";
 
+
 const EditProfile = () => {
   const { register, handleSubmit, control } = useForm();
   const theme = useTheme();
