@@ -83,7 +83,7 @@ const ProfileLayout = ({text}) => {
   }
  
   return (<>
-  <Box display={isNonMobile ? "flex" : "block"} width="100%" height="100%" boxShadow="none">
+  <Box display={isNonMobile ? "flex" : "block"} width="100%" height="100%" boxShadow="none" backgroundColor={theme.palette.primary}>
    <Box display="flex"  boxShadow="none">
    <Box
   position="fixed"

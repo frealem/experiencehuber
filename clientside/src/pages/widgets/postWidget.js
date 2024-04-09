@@ -22,7 +22,7 @@ import BookmarkAddOutlinedIcon from '@mui/icons-material/BookmarkAddOutlined';
 
     return (
       <WidgetWrapper m="2rem 0">
-        <Typography variant="h3" fontWeight={900}>This is the title of the review has to be one line</Typography>
+        <Typography variant="h3" fontWeight={600}>This is the title of the review has to be one line</Typography>
         <Typography sx={{ mt: "1rem" }} variant="h6">
           this description is for the review and experience.this description is for the review and experience.
           this description is for the review and experience. this description is for the review and experience.</Typography>

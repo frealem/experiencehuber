@@ -7,7 +7,7 @@ const MyPost = () => {
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
    
   return (
-    <Box mt={10} marginLeft={!isMobile ? "400px":"10px"} marginRight={isMobile ? "10px":null}>
+    <Box mt={10} marginLeft={!isMobile ? "400px":"10px"} marginRight={isMobile ? "10px":null} align="center">
      <Typography
               variant="h4"
               align="center"
