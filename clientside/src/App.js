@@ -12,6 +12,8 @@ import ProfileLayout from "./pages/Profile/component/layout";
 import EditProfile from "./pages/Profile/editProfile";
 import MyPost from "./pages/Profile/component/myPost";
 import { Notification } from "./pages/Profile/Notification";
+import FavoritePost from "./pages/Profile/favoritePost";
+import PasswordSecurity from "./pages/Profile/PasswordAndSecurity";
 
 
 function App() {
@@ -33,6 +35,8 @@ function App() {
           <Route path="/editprofile" element={<EditProfile/>}/>
           <Route path="/myposts" element={<MyPost/>}/>
           <Route path="/notification" element={<Notification/>}/>
+          <Route path="/favoritelist" element={<FavoritePost/>}/>
+          <Route path="/security" element={<PasswordSecurity/>}/>
           </Route>
         </Routes>
       </ThemeProvider>
