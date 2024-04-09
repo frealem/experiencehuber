@@ -1,42 +1,76 @@
-import React from 'react'
+import React from "react";
 import { Grid, Box, Typography, useTheme, useMediaQuery } from "@mui/material";
-
+import MyButton from "../../components/myButton";
+import StyledInput from "../../components/input";
+import { useForm } from "react-hook-form";
 const PasswordSecurity = () => {
-    const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-   
-  return (
-    <Box mt={10} marginLeft={!isMobile ? "400px":"10px"} marginRight={isMobile ? "10px":null} align="center">
-    <Box>
-     <Typography
-              variant="h4"
-              align="center"
-              fontWeight="400"
-              color={theme.palette.secondary.main}
-              marginBottom={3}
-            >
-              Change Password 
-            </Typography>
-            </Box>
-            <Box>
-                the form
-            </Box>
-            <Box>
-            <Typography
-              variant="h4"
-              align="center"
-              fontWeight="400"
-              color={theme.palette.secondary.main}
-              marginBottom={3}
-            >
-              Security and Privacy 
-            </Typography>
-            </Box>
-            <Box>
-                the password and security part
-            </Box>
-    </Box>
-  )
-}
+  const { register, handleSubmit, control } = useForm();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const onSubmit = (data) => {
+    // Handle form submission logic here
+    console.log(data);
+  };
 
-export default PasswordSecurity
+  return (
+    <Box
+      mt={10}
+      marginLeft={!isMobile ? "400px" : "10px"}
+      marginRight={isMobile ? "10px" : null}
+      align="center"
+    >
+      <Box>
+        <Typography
+          variant="h4"
+          align="center"
+          fontWeight="400"
+          color={theme.palette.secondary.main}
+          marginBottom={3}
+        >
+          Change Password
+        </Typography>
+      </Box>
+      <Box>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Grid container spacing={2} justifyContent="center">
+            <Grid item xs={12} md={6} marginTop={2}>
+              <StyledInput
+                control={control}
+                name="newPassword"
+                placeholder="New Password"
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12} md={6} marginTop={2}>
+              <StyledInput
+                control={control}
+                name="confirmPassword"
+                placeholder="Confirm The New Password"
+                fullWidth
+              />
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              md={6}
+              marginTop={2}
+              align="center"
+              marginLeft={!isMobile ? "-20px" : 0}
+            >
+              <MyButton
+                type="submit"
+                variant="contained"
+                color="primary"
+                width="300px"
+              >
+                Submit
+              </MyButton>
+            </Grid>
+          </Grid>
+        </form>
+      </Box>
+    </Box>
+  );
+};
+
+export default PasswordSecurity;
