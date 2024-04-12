@@ -1,37 +1,59 @@
 import React, { useState } from "react";
-import { withGoogleMap, GoogleMap, Marker } from "react-google-maps";
+import { Button, Card, CardContent, Grid }  from "@mui/material";
+import { MapContainer, TileLayer } from "react-leaflet";
 
 const MapComponent = ({ onSelectLocation }) => {
-  const [selectedLocation, setSelectedLocation] = useState(null);
+  const [currentLocation, setCurrentLocation] = useState(null);
+  const [placeName, setPlaceName] = useState("");
 
-  const handleMapClick = (event) => {
-    const { latLng } = event;
-    const latitude = latLng.lat();
-    const longitude = latLng.lng();
-    setSelectedLocation({ latitude, longitude });
+  const handleGetCurrentLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        setCurrentLocation({ latitude, longitude });
+        fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`)
+          .then((response) => response.json())
+          .then((data) => setPlaceName(data.display_name));
+      }, (error) => {
+        console.error(error);
+      });
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+    }
   };
 
   const handleConfirmLocation = () => {
-    onSelectLocation(selectedLocation);
+    onSelectLocation({ ...currentLocation, placeName });
   };
 
   return (
-    <GoogleMap
-      defaultZoom={12}
-      defaultCenter={{ lat: 0, lng: 0 }}
-      onClick={handleMapClick}
-    >
-      {selectedLocation && (
-        <Marker
-          position={{
-            lat: selectedLocation.latitude,
-            lng: selectedLocation.longitude,
-          }}
-        />
+    <Grid container spacing={2}>
+      <Grid item xs={12}>
+        <Card>
+          <CardContent>
+            <Button variant="contained" color="primary" onClick={handleGetCurrentLocation}>
+              Get Current Location
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+      {currentLocation && (
+        <Grid item xs={12}>
+          <Card>
+            <CardContent>
+              <MapContainer center={[currentLocation.latitude, currentLocation.longitude]} zoom={15} style={{ height: "300px", width: "100%" }}>
+                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+              </MapContainer>
+              <Button variant="contained" color="primary" onClick={handleConfirmLocation}>
+                Confirm Location
+              </Button>
+            </CardContent>
+          </Card>
+        </Grid>
       )}
-      <button onClick={handleConfirmLocation}>Confirm Location</button>
-    </GoogleMap>
+    </Grid>
   );
 };
 
-export default withGoogleMap(MapComponent);
+export default MapComponent;
