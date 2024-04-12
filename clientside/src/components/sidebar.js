@@ -23,11 +23,9 @@ import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import FormatShapesOutlinedIcon from "@mui/icons-material/FormatShapesOutlined";
 import DraftsOutlinedIcon from "@mui/icons-material/DraftsOutlined";
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
-
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import FlexBetween from "./Flexbetween";
-import profileImage from "../assets/images/chatapp.jpeg";
 import UserWidget from "../pages/widgets/userWidget";
 
 const navItems = [

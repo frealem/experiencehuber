@@ -65,7 +65,7 @@ const navItems = [
     link: "security",
   },
   {
-    text: "Setting",
+    text: "Setting and Privacy",
     icon: <SettingsOutlined />,
     link: "setting",
   },
@@ -235,31 +235,6 @@ const ProfileLayout = ({ text }) => {
                     {
                       (link==="setting") ? (
                         <Box>
-                          <IconButton
-                          aria-controls="dropdown-menu"
-        aria-haspopup="true"
-        onClick={handleClick}
-        variant="outlined">
-                        <KeyboardArrowDownOutlinedIcon/>
-                          </IconButton>
-                          <StyledMenu
-        id="dropdown-menu"
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
-      >
-        <MenuItem onClick={handleClose}>Option 1 Option 1 Option 1 </MenuItem>
-        <MenuItem onClick={handleClose}>Option 2</MenuItem>
-        <MenuItem onClick={handleClose}>Option 3</MenuItem>
-      </StyledMenu>
                         </Box>):null
                     }
                   </ListItem>

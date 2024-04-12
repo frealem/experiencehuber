@@ -63,7 +63,7 @@ const PasswordSecurity = () => {
                 color="primary"
                 width="300px"
               >
-                Submit
+                Change Password
               </MyButton>
             </Grid>
           </Grid>
