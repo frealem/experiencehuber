@@ -113,11 +113,10 @@ const ProfileLayout = ({ text }) => {
         width="100%"
         height="100%"
         boxShadow="none"
-        backgroundColor={theme.palette.primary}
       >
         <Box display="flex" boxShadow="none">
-          <Box position="fixed" top={0} left={0} width="100%" boxShadow="none">
-            <Toolbar sx={{ justifyContent: "space-between" }}>
+          <Box position="fixed" top={0} left={0} width="100%" boxShadow="none" backgroundColor={theme.palette.background.paper} zIndex={999}>
+            <Toolbar sx={{ justifyContent: "space-between" }} >
               {isMobile ? (
                 <IconButton onClick={handleDrawerToggle}>
                   <MenuOutlined />

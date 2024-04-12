@@ -15,6 +15,7 @@ import { Notification } from "./pages/Profile/Notification";
 import FavoritePost from "./pages/Profile/favoritePost";
 import PasswordSecurity from "./pages/Profile/PasswordAndSecurity";
 import Setting from "./pages/Profile/Setting";
+import CreatePost from "./pages/createPost/createPost";
 
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
           <Route path="/security" element={<PasswordSecurity/>}/>
           <Route path="/setting" element={<Setting/>}/>
           </Route>
+          <Route path="/createpost" element={<CreatePost/>}/>
         </Routes>
       </ThemeProvider>
       </BrowserRouter>
