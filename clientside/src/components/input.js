@@ -36,15 +36,22 @@ const StyledInputWithValidation = ({ control, name, placeholder, rules, ...rest 
     defaultValue: '',
   });
 
+
   return (
     <StyledInput
-      {...field}
-      {...rest}
-      placeholder={placeholder}
-      variant="outlined"
-      error={!!error}
-      helperText={error ? error.message : ''}
-    />
+    {...field}
+    {...rest}
+    placeholder={placeholder}
+    variant="outlined"
+    error={!!error}
+    helperText={error ? error.message : ''}
+    style={{
+          width: '250px',
+          '@media (min-width: 768px)': {
+            width: '350px',
+          },
+        }}
+  />
   );
 };
 
