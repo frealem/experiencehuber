@@ -48,13 +48,14 @@ navigate("/authpage")
     >
       <Toolbar sx={{ justifyContent: "space-between" }}>
         {/* LEFT SIDE */}
-      <FlexBetween>{(!isSidebarOpen)&&
-        <Typography variant="h4" fontWeight="bold">
-                  experience<span style={{backgroundColor:"#7812C8",fontWeight:"bold",marginRight:"10px"}}>HUB</span>
-                  </Typography>}
+      <FlexBetween gap="3rem" padding="2rem 6%">{(!isSidebarOpen)&&
+        <FlexBetween>
+        <Typography variant="h3" fontWeight={900} color={theme.palette.secondary[100]}>
+                 ExperienceHub
+                  </Typography></FlexBetween>}
           <FlexBetween
-            backgroundColor={theme.palette.background.alt}
-            borderRadius="9px"
+            backgroundColor={theme.palette.secondary[900]}
+            borderRadius={15}
             gap="3rem"
             p="0.1rem 1.5rem"
           >

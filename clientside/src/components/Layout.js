@@ -15,6 +15,7 @@ const Layout = () => {
 
   return (
     <Box display={isNonMobile ? "flex" : "block"} width="100%" height="100%">
+     <box sx={{overflowY: 'auto' ,scrollbarWidth: 'none', '-ms-overflow-style': 'none'}}>
       <Sidebar
        user={{}}
         isNonMobile={isNonMobile}
@@ -22,6 +23,7 @@ const Layout = () => {
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
       />
+      </box>
       <Box flexGrow={1}>
         <Navbar
           user={{}}
