@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { type } = require('os');
 
 const PostSchema = mongoose.Schema({
     // refers to the account by which this post is posted
@@ -28,11 +29,15 @@ const PostSchema = mongoose.Schema({
         type: Number,
     },
     imageURL:{
-        type: String,
+        type: [String],
         required: [true, "The image is required!"],
     },
     tags:{
         type: [String],
+    },
+    special:{
+        type: Boolean,
+
     },
     categoryId:{
         type: mongoose.Schema.Types.ObjectId,

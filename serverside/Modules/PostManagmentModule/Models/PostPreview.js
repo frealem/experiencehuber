@@ -16,7 +16,7 @@ const PostPreviewSchema = mongoose.Schema({
         required: [true, "Please enter the description of the post!"],
     },
     imageURL:{
-        type: String,
+        type: [String],
         required: [true, "The image is required!"],
     },
     tags:{

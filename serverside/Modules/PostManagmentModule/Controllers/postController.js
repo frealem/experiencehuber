@@ -88,7 +88,7 @@ const updatePost = asyncHanler(async (req, res) => {
 });
 
 //@desc delete a post
-//@route 
+//@route DELETE /api/post/:id
 //@access level 1
 const deletePost = asyncHanler(async (req, res) => {
     const post = await Post.findById(req.params.id);
