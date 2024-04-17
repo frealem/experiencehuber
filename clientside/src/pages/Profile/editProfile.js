@@ -38,36 +38,36 @@ const EditProfile = () => {
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={2} justifyContent="center">
-              <Grid item xs={12} md={6} marginTop={2}>
+              <Grid item xs={12} md={6} marginTop={2} marginX={4}>
                 <StyledInput
                   control={control}
                   name="name"
                   placeholder="Full name"
-                  fullWidth
+                  style={{ display: 'block'}}
                 />
               </Grid>
-              <Grid item xs={12} md={6} marginTop={2}>
+              <Grid item xs={12} md={6} marginTop={2} marginX={4}>
                 <StyledInput
                   control={control}
                   name="username"
                   placeholder="Username"
-                  fullWidth
+                  style={{ display: 'block'}}
                 />
               </Grid>
-              <Grid item xs={12} md={6} marginTop={2}>
+              <Grid item xs={12} md={6} marginTop={2} marginX={4}>
                 <StyledInput
                   control={control}
                   name="address"
                   placeholder="Address"
-                  fullWidth
+                  style={{ display: 'block'}}
                 />
               </Grid>
-              <Grid item xs={12} md={6} marginTop={2}>
+              <Grid item xs={12} md={6} marginTop={2} marginX={4}>
                 <StyledInput
                   control={control}
                   name="bio"
                   placeholder="Bio"
-                  fullWidth
+                  style={{ display: 'block'}}
                 />
               </Grid>
               <Grid
@@ -75,14 +75,14 @@ const EditProfile = () => {
                 xs={12}
                 md={6}
                 marginTop={2}
-                align="center"
-                marginLeft={!isMobile ? "-20px" : 0}
+                marginX={4}
               >
                 <MyButton
                   type="submit"
                   variant="contained"
                   color="primary"
-                  width="300px"
+                  margin={4}
+                  width="250px"
                 >
                   Submit
                 </MyButton>

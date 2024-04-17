@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Grid, Input, Typography, Dialog, DialogTitle, DialogContent, DialogActions,IconButton } from "@mui/material";
 import Webcam from "react-webcam";
 import axios from "axios";
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+
+
 const ImageUploaderComponent = () => {
   const [images, setImages] = useState([]);
   const [openCaptureDialog, setOpenCaptureDialog] = useState(false);
@@ -73,6 +75,7 @@ const ImageUploaderComponent = () => {
   const removeImage = (index) => {
     setImages((prevImages) => prevImages.filter((_, i) => i !== index));
   };
+
   return (
     <div>
       <Button variant="contained" color="primary" onClick={openCaptureDialogHandler}>
@@ -86,7 +89,7 @@ const ImageUploaderComponent = () => {
       <Dialog open={openCaptureDialog} onClose={closeCaptureDialogHandler}>
         <DialogTitle>Capture Image</DialogTitle>
         <DialogContent>
-          <Webcam audio={false} ref={webcamRef} screenshotFormat="image/jpeg" />
+          <Webcam audio={false} ref={webcamRef} screenshotFormat="image/jpeg" capture="environment"/>
         </DialogContent>
         <DialogActions>
           <Button variant="contained" color="primary" onClick={capture}>
