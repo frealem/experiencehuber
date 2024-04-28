@@ -27,8 +27,9 @@ import {
 } from "@mui/material";
 import AuthPage from "../pages/authPage";
 import { Link, useNavigate, useNavigation } from "react-router-dom";
+import SearchComponent from "./Search";
 
-const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
+const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const theme = useTheme();
@@ -40,6 +41,11 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
   const handleClose = () => setAnchorEl(null);
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [openSearch, setOpenSearch] = useState(null);
+  const [activeSearch, setActiveSearch] = useState(null);
+
+  const handleActiveSearchClose=()=>{
+    setActiveSearch(false)
+  }
   const handleAuth = () => {
     navigate("/authpage");
   };
@@ -53,7 +59,8 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
       }}
     ><Toolbar sx={{ justifyContent: "space-between" }}>
       {!isMobile ? (
-        <Box >
+        <>
+        <FlexBetween gap="9rem">
           {/* LEFT SIDE */}
           <FlexBetween gap="3rem" padding="2rem 6%">
             {!isSidebarOpen && (
@@ -72,16 +79,18 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
               borderRadius={15}
               gap="3rem"
               p="0.1rem 1.5rem"
+              onClick={activeSearch}
             >
               <InputBase placeholder="Search..." />
               <IconButton>
                 <Search />
               </IconButton>
+              
             </FlexBetween>
           </FlexBetween>
 
           {/* RIGHT SIDE */}
-          <FlexBetween gap="1.5rem">
+          <FlexBetween gap="1.3rem">
             <IconButton>
               <NotificationAddOutlined />
             </IconButton>
@@ -145,7 +154,9 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
               </Menu>
             </FlexBetween>
           </FlexBetween>
-        </Box>
+          </FlexBetween>
+        </>
+        
       ) : (
           <Box>
             <FlexBetween gap="3rem" padding="2rem 4%">
@@ -200,6 +211,7 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
           </Box>
         )
       }
+      {activeSearch ? <SearchComponent onClose={handleActiveSearchClose}/>:null}
       </Toolbar>
     </AppBar>
   );

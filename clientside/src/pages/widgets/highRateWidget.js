@@ -2,6 +2,7 @@ import React from 'react'
 import sponsorImage from '../../assets/images/chatapp.jpeg'
 import { highRate } from '../../fakeData'
 import { Box, Divider, Typography } from '@mui/material'
+import RatingComponent from '../../components/Rating'
 
 const HighRateWidget = () => {
   return (
@@ -18,7 +19,7 @@ const HighRateWidget = () => {
         <img alt="sponsor board" src={sponsorImage} style={{ width: '120px', height: '90px' ,borderRadius:8}} />
         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           <Typography fontWeight={600}>{title}</Typography>
-          <Typography>{rate}</Typography>
+          <RatingComponent/>
         </div>
       </div>
     ))}

@@ -9,7 +9,7 @@ import Sidebar from "./sidebar";
 
 const Layout = () => {
   const isNonMobile = useMediaQuery("(min-width: 600px)");
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const userId = useSelector((state) => state.auth.token?.user);
   // const { data } = useGetUserQuery(userId);
 

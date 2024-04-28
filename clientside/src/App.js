@@ -22,6 +22,7 @@ import FavoritePost from "./pages/Profile/favoritePost";
 import PasswordSecurity from "./pages/Profile/PasswordAndSecurity";
 import Setting from "./pages/Profile/Setting";
 import CreatePost from "./pages/createPost/createPost";
+import CommentModal from "./pages/HomePage/component/feedComment";
 
 function App() {
   const mode = useSelector((state) => state.theme.mode);
@@ -35,6 +36,7 @@ function App() {
             <Route element={<Layout />}>
               <Route path="/" element={<Navigate to="/feedpage" replace />} />
               <Route path="/feedpage" element={<FeedPage />} />
+              
               <Route path="/authpage" element={<AuthPage />} />
             </Route>
             <Route path="/eachpost" element={<EachPostPage />} />
@@ -47,6 +49,7 @@ function App() {
               <Route path="/setting" element={<Setting />} />
             </Route>
             <Route path="/createpost" element={<CreatePost />} />
+            <Route path="/comment" element={<CommentModal />} />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>
