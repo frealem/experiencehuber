@@ -7,6 +7,7 @@ import {
   SettingsOutlined,
   ArrowDropDownOutlined,
   NotificationAddOutlined,
+  Notifications,
 } from "@mui/icons-material";
 import FlexBetween from "./Flexbetween";
 import { useDispatch } from "react-redux";
@@ -28,6 +29,9 @@ import {
 import AuthPage from "../pages/authPage";
 import { Link, useNavigate, useNavigation } from "react-router-dom";
 import SearchComponent from "./Search";
+import MessagePage from "../pages/messagePage/message";
+import MessageOutlined from "@mui/icons-material/MessageOutlined";
+
 
 const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen}) => {
   const dispatch = useDispatch();
@@ -42,13 +46,26 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen}) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [openSearch, setOpenSearch] = useState(null);
   const [activeSearch, setActiveSearch] = useState(null);
-
+  const [messageOpen, setMessageOpen] = useState(false);
   const handleActiveSearchClose=()=>{
     setActiveSearch(false)
+  }
+  const handleMessageOpen=()=>{
+    setMessageOpen(true)
+  }
+  const handleMessageClose=()=>{
+    setMessageOpen(false)
   }
   const handleAuth = () => {
     navigate("/authpage");
   };
+
+  // const handleOpenMessage=()=>{
+  //   setMessageOpen(true)
+  // }
+  // const handleCloseMessage=()=>{
+  //   setMessageOpen(false)
+  // }
 
   return (
     <AppBar
@@ -91,9 +108,13 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen}) => {
 
           {/* RIGHT SIDE */}
           <FlexBetween gap="1.3rem">
-            <IconButton>
-              <NotificationAddOutlined />
+          <IconButton onClick={()=>{navigate('/notification')}}>
+              <Notifications/>
             </IconButton>
+            <IconButton onClick={handleMessageOpen}>
+              <MessageOutlined/>
+            </IconButton>
+<MessagePage  open={messageOpen} onClose={handleMessageClose}/>
             <IconButton onClick={() => dispatch(setMode())}>
               {theme.palette.mode === "dark" ? (
                 <DarkModeOutlined sx={{ fontSize: "25px" }} />
