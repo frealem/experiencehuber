@@ -18,13 +18,14 @@ import {
 } from "@mui/material";
 import SettingsOutlined from "@mui/icons-material/SettingsOutlined";
 import ChevronRightOutlined from "@mui/icons-material/ChevronRightOutlined";
-import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
 import PostAddOutlinedIcon from "@mui/icons-material/PostAddOutlined";
-import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
-import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
-import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import BarChartOutlinedIcon from '@mui/icons-material/BarChartOutlined';
+import ConnectWithoutContactOutlinedIcon from '@mui/icons-material/ConnectWithoutContactOutlined';
+import ReportOutlinedIcon from '@mui/icons-material/ReportOutlined';
 import { useEffect, useState } from "react";
+
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
   CloseOutlined,
@@ -33,6 +34,7 @@ import {
   MenuBookOutlined,
   MenuOpenOutlined,
   MenuOutlined,
+  NotificationsOutlined,
 } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { setMode } from "../../../components/States/themeSlice";
@@ -41,33 +43,38 @@ import { styled } from "@mui/system";
 const navItems = [
   {
     text: "Overview",
-    icon: <ModeEditOutlineOutlinedIcon />,
+    icon: <BarChartOutlinedIcon/>,
     link: "overview",
   },
   {
     text: "User Management",
-    icon: <PostAddOutlinedIcon />,
-    link: "myposts",
+    icon: <PersonOutlineOutlinedIcon/>,
+    link: "usermanagement",
+  },
+  {
+    text: "Admin Management",
+    icon: <PersonOutlineOutlinedIcon/>,
+    link: "adminmanagement",
   },
   {
     text: "Post Management",
-    icon: <MessageOutlinedIcon />,
-    link: "notification",
+    icon: <PostAddOutlinedIcon />,
+    link: "postmanagement",
   },
   {
     text: "Report Management",
-    icon: <FavoriteOutlinedIcon />,
-    link: "favoritelist",
+    icon: <ReportOutlinedIcon/>,
+    link: "reportmanagement",
   },
   {
     text: "Social Media Analytics",
-    icon: <FavoriteOutlinedIcon />,
-    link: "favoritelist",
+    icon: <ConnectWithoutContactOutlinedIcon />,
+    link: "social",
   },
   {
     text: "Notification and Alerts",
-    icon: <FavoriteOutlinedIcon />,
-    link: "favoritelist",
+    icon: <NotificationsOutlined />,
+    link: "notification",
   },
   {
     text: "Security",
@@ -118,7 +125,7 @@ const DashboardLayout = ({ text }) => {
 
   return (
     <>
-      <Box
+        <Box
         display={isNonMobile ? "flex" : "block"}
         width="100%"
         height="100%"

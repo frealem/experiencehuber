@@ -23,6 +23,9 @@ import PasswordSecurity from "./pages/Profile/PasswordAndSecurity";
 import Setting from "./pages/Profile/Setting";
 import CreatePost from "./pages/createPost/createPost";
 import CommentModal from "./pages/HomePage/component/feedComment";
+import DashboardLayout from "./Dashboard/component/dashboardLayout";
+import Overview from "./Dashboard/pages/Overview";
+import UserManagement from "./Dashboard/pages/UserManagement";
 
 function App() {
   const mode = useSelector((state) => state.theme.mode);
@@ -50,6 +53,10 @@ function App() {
             </Route>
             <Route path="/createpost" element={<CreatePost />} />
             <Route path="/comment" element={<CommentModal />} />
+            <Route element={<DashboardLayout />}>
+              <Route path="/overview" element={<Overview/>} />
+              <Route path="/usermanagement" element={<UserManagement/>} />
+            </Route>
           </Routes>
         </ThemeProvider>
       </BrowserRouter>
