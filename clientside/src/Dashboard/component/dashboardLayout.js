@@ -24,6 +24,7 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import BarChartOutlinedIcon from '@mui/icons-material/BarChartOutlined';
 import ConnectWithoutContactOutlinedIcon from '@mui/icons-material/ConnectWithoutContactOutlined';
 import ReportOutlinedIcon from '@mui/icons-material/ReportOutlined';
+import SupervisorAccountOutlinedIcon from '@mui/icons-material/SupervisorAccountOutlined';
 import { useEffect, useState } from "react";
 
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
@@ -37,8 +38,8 @@ import {
   NotificationsOutlined,
 } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
-import { setMode } from "../../../components/States/themeSlice";
 import { styled } from "@mui/system";
+import { setMode } from "../../components/States/themeSlice";
 
 const navItems = [
   {
@@ -53,7 +54,7 @@ const navItems = [
   },
   {
     text: "Admin Management",
-    icon: <PersonOutlineOutlinedIcon/>,
+    icon: <SupervisorAccountOutlinedIcon/>,
     link: "adminmanagement",
   },
   {
@@ -69,22 +70,22 @@ const navItems = [
   {
     text: "Social Media Analytics",
     icon: <ConnectWithoutContactOutlinedIcon />,
-    link: "social",
+    link: "socialmedia",
   },
   {
     text: "Notification and Alerts",
     icon: <NotificationsOutlined />,
-    link: "notification",
+    link: "notificationalert",
   },
   {
-    text: "Security",
+    text: "System Security",
     icon: <SecurityOutlinedIcon />,
-    link: "security",
+    link: "systemsecurity",
   },
   {
     text: "System Setting",
     icon: <SettingsOutlined />,
-    link: "setting",
+    link: "systemsetting",
   },
 ];
 
@@ -143,7 +144,7 @@ const DashboardLayout = ({ text }) => {
                   color={theme.palette.secondary[300]}
                   fontWeight={400}
                 >
-                  Poster Profile
+                  ExperienceHub
                 </Typography>
               )}
               <Typography
@@ -151,7 +152,7 @@ const DashboardLayout = ({ text }) => {
                 fontWeight={600}
                 fontSize={24}
               >
-                ExperienceHub
+                Dashboard
               </Typography>
               <IconButton onClick={() => dispatch(setMode())}>
                 {theme.palette.mode === "dark" ? (
