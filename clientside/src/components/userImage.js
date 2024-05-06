@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
-import image from '../../src/assets/images/chatapp.jpeg'
-const UserImage = ({ image, size = "60px" }) => {
+import userImage from '../../src/assets/images/young-beautiful-girl-posing-black-leather-jacket-park_1153-8104.jpg'
+const UserImage = ({ image, size = {size},profilePicture }) => {
   return (
     <Box width={size} height={size}>
       <img
@@ -8,8 +8,7 @@ const UserImage = ({ image, size = "60px" }) => {
         width={size}
         height={size}
         alt="user"
-        // src={`http://localhost:3001/assets/${image}`}
-        src={image}
+        src={profilePicture || userImage}
       />
     </Box>
   );

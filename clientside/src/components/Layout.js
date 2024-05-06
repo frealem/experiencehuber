@@ -9,12 +9,13 @@ import Sidebar from "./sidebar";
 
 const Layout = () => {
   const isNonMobile = useMediaQuery("(min-width: 600px)");
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const userId = useSelector((state) => state.auth.token?.user);
   // const { data } = useGetUserQuery(userId);
 
   return (
     <Box display={isNonMobile ? "flex" : "block"} width="100%" height="100%">
+     <box sx={{overflowY: 'auto' ,scrollbarWidth: 'none', '-ms-overflow-style': 'none'}}>
       <Sidebar
        user={{}}
         isNonMobile={isNonMobile}
@@ -22,6 +23,7 @@ const Layout = () => {
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
       />
+      </box>
       <Box flexGrow={1}>
         <Navbar
           user={{}}

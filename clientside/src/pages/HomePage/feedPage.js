@@ -1,14 +1,27 @@
 import { Box, useMediaQuery } from "@mui/material";
 import { useSelector } from "react-redux";
 import UserWidget from "../widgets/userWidget";
-// import MyPostWidget from "scenes/widgets/MyPostWidget";
-// import PostsWidget from "scenes/widgets/PostsWidget";
-// import AdvertWidget from "scenes/widgets/AdvertWidget";
-// import FriendListWidget from "scenes/widgets/FriendListWidget";
+import TopPostBox from "../../components/topPostBox";
+import MyButton from "../../components/myButton";
+import PostsWidget from "../widgets/postsWidget";
+import ArrowUpwardOutlinedIcon from "@mui/icons-material/ArrowUpwardOutlined";
+import { useState } from "react";
+import LeftFeedWidget from "../widgets/leftFeedWidget";
 
 const FeedPage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
-//   const { _id, picturePath } = useSelector((state) => state.user);
+  //   const { _id, picturePath } = useSelector((state) => state.user);
+  const [showOverlay, setShowOverlay] = useState(false);
+
+  const handleNewPost = () => {
+    // Logic to handle a new post being added
+    setShowOverlay(true);
+
+    // Simulating a delay before hiding the overlay
+    setTimeout(() => {
+      setShowOverlay(false);
+    }, 1000); // Adjust the duration as needed
+  };
 
   return (
     <Box>
@@ -19,23 +32,36 @@ const FeedPage = () => {
         gap="0.5rem"
         justifyContent="space-between"
       >
-        <Box flexBasis={isNonMobileScreens ? "26%" : undefined}>
-hello feed
-        </Box>
-        {/* <Box
-          flexBasis={isNonMobileScreens ? "42%" : undefined}
+        <Box
+          flexBasis={isNonMobileScreens ? "60%" : undefined}
           mt={isNonMobileScreens ? undefined : "2rem"}
         >
-          <MyPostWidget picturePath={picturePath} />
-          <PostsWidget userId={_id} />
+          <TopPostBox />
+          <Box position="relative">
+            {showOverlay && (
+              <Box
+                position="fixed"
+                top={0}
+                left={0}
+                right={0}
+                bottom={0}
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                zIndex={999}
+                backgroundColor="rgba(0, 0, 0, 0.5)" // Adjust the overlay background color and transparency
+              >
+                <MyButton onClick={handleNewPost}>New Post Overlay</MyButton>
+              </Box>
+            )}
+          </Box>
+          <PostsWidget />
         </Box>
         {isNonMobileScreens && (
-          <Box flexBasis="26%">
-            <AdvertWidget />
-            <Box m="2rem 0" />
-            <FriendListWidget userId={_id} />
+          <Box flexBasis="35%">
+            <LeftFeedWidget />
           </Box>
-        )} */}
+        )}
       </Box>
     </Box>
   );
