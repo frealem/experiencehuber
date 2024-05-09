@@ -26,6 +26,12 @@ import CommentModal from "./pages/HomePage/component/feedComment";
 import DashboardLayout from "./Dashboard/component/dashboardLayout";
 import Overview from "./Dashboard/pages/Overview";
 import UserManagement from "./Dashboard/pages/UserManagement";
+import AdminManagement from "./Dashboard/pages/AdminManagement";
+import PostManagement from "./Dashboard/pages/PostManagement";
+import ReportManagement from "./Dashboard/pages/ReportManagement";
+import SocialMedia from "./Dashboard/pages/SocialMedia";
+import NotificationAlert from "./Dashboard/pages/NotificationAlert";
+import SystemSecurity from "./Dashboard/pages/SystemSecurity";
 
 function App() {
   const mode = useSelector((state) => state.theme.mode);
@@ -56,6 +62,13 @@ function App() {
             <Route element={<DashboardLayout />}>
               <Route path="/overview" element={<Overview/>} />
               <Route path="/usermanagement" element={<UserManagement/>} />
+              <Route path="/adminmanagement" element={<AdminManagement/>} />
+              <Route path="/postmanagement" element={<PostManagement/>} />
+              <Route path="/social" element={<SocialMedia/>} />
+              <Route path="/reportmanagement" element={<ReportManagement/>} />
+              <Route path="/notificationalert" element={<NotificationAlert/>} />
+              <Route path="/systemsecurity" element={<SystemSecurity/>} />
+              <Route path="/systemsetting" element={<SystemSecurity/>} />
             </Route>
           </Routes>
         </ThemeProvider>

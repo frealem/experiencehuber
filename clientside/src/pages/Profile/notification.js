@@ -48,7 +48,7 @@ export const Notification = () => {
 
   return (
     <>
-      <Box mt={10} marginLeft={!isMobile ? "400px" : "10px"} marginRight={isMobile ? "10px" : null}>
+      <Box mt={5} marginLeft={!isMobile ? "400px" : "10px"} marginRight={isMobile ? "10px" : null}>
         <Box>
           <Typography
             variant="h4"

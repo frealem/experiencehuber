@@ -94,7 +94,7 @@ const CreatePost = () => {
               color={theme.palette.secondary.main}
               marginBottom={3}
             >
-              Edit Profile
+              Create Post
             </Typography>
   </Box>
   <Box display="flex" justifyContent="center" marginBottom="16px">

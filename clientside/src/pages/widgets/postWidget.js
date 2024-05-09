@@ -23,7 +23,7 @@ import { useState } from "react";
 import CommentModal from "../HomePage/component/feedComment";
 import ShareButtons from "../HomePage/component/feedShare";
 import ReportComponent from "../HomePage/component/report";
-const PostWidget = () => {
+const PostWidget = ({widthPost,heightPost}) => {
   const { palette } = useTheme();
   const main = palette.neutral.main;
   const primary = palette.primary.main;
@@ -65,7 +65,7 @@ const handleReportClose=()=>{
 
   return (
     <WidgetWrapper m="2rem 0">
-    <Box display="flex" gap={5} fontSize={32}>
+    <Box display="flex" gap={5} fontSize={32} >
       <Typography display="flex-start" variant="h3" fontWeight={600}>
         This is the title of the review has to be one line
       </Typography>
@@ -96,8 +96,8 @@ const handleReportClose=()=>{
         experience. this description is for the review and experience.
       </Typography>
       <img
-        width="100%"
-        height="auto"
+        width={widthPost||"100%"}
+        height={heightPost||"auto"}
         alt="post"
         style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
         src={postImage}
