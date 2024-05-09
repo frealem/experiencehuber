@@ -48,6 +48,11 @@ const navItems = [
     link: "overview",
   },
   {
+    text: "Geography",
+    icon: <BarChartOutlinedIcon/>,
+    link: "geography",
+  },
+  {
     text: "User Management",
     icon: <PersonOutlineOutlinedIcon/>,
     link: "usermanagement",
