@@ -32,7 +32,7 @@ import ReportManagement from "./Dashboard/pages/ReportManagement";
 import SocialMedia from "./Dashboard/pages/SocialMedia";
 import NotificationAlert from "./Dashboard/pages/NotificationAlert";
 import SystemSecurity from "./Dashboard/pages/SystemSecurity";
-import Geography from "./Dashboard/pages/Geography";
+import MessagePage from "./pages/messagePage/messagepage";
 
 function App() {
   const mode = useSelector((state) => state.theme.mode);
@@ -62,7 +62,6 @@ function App() {
             <Route path="/comment" element={<CommentModal />} />
             <Route element={<DashboardLayout />}>
               <Route path="/overview" element={<Overview/>} />
-              <Route path="/geography" element={<Geography/>} />
               <Route path="/usermanagement" element={<UserManagement/>} />
               <Route path="/adminmanagement" element={<AdminManagement/>} />
               <Route path="/postmanagement" element={<PostManagement/>} />
@@ -72,6 +71,7 @@ function App() {
               <Route path="/systemsecurity" element={<SystemSecurity/>} />
               <Route path="/systemsetting" element={<SystemSecurity/>} />
             </Route>
+            <Route path="/message" element={<MessagePage/>} />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

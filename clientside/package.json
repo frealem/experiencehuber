@@ -1,5 +1,5 @@
 {
-  "name": "client",
+  "name": "experience",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -35,6 +35,8 @@
     "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.22.2",
     "react-scripts": "5.0.1",
+    "react-simple-maps": "^3.0.0",
+    "react-tooltip": "^5.26.4",
     "react-webcam": "^7.2.0",
     "recharts": "^2.12.7",
     "redux-persist": "^6.0.0",
@@ -67,5 +69,9 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
-  }
+  },
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "main": "index.js",
+  "author": "f",
+  "license": "ISC"
 }

@@ -18,6 +18,7 @@ import {
 import { Send, AttachFile, EmojiEmotions } from "@mui/icons-material";
 import styled from "@mui/material/styles/styled";
 import EmojiPicker, { Emoji } from "emoji-picker-react";
+import ChatRoomNavbar from "./chatNav";
 
 const Container = styled("div")`
   display: flex;
@@ -32,13 +33,12 @@ const MessageList = styled(List)`
 `;
 
 const InputContainer = styled(Paper)(({ theme }) => ({
-  position: "fixed",
-  bottom: theme.spacing(6),
+  position: "sticky",
+  bottom: 0,
   display: "flex",
   alignItems: "center",
   padding: theme.spacing(1),
   zIndex: 1,
-  maxWidth:"90%"
 }));
 
 const ChatRoom = () => {
@@ -46,7 +46,8 @@ const ChatRoom = () => {
   const [messageText, setMessageText] = useState("");
   const [selectedEmojis, setSelectedEmojis] = useState([]);
   const [openEmojiBox, setOpenEmojiBox] = useState(false);
-  const theme=useTheme();
+  const theme = useTheme();
+  const inputRef = useRef(null);
 
   const handleSendMessage = () => {
     if (messageText.trim() !== "" || selectedEmojis.length > 0) {
@@ -82,116 +83,81 @@ const ChatRoom = () => {
 
   const handleEmojiClick = (emojiData) => {
     setSelectedEmojis([...selectedEmojis, emojiData.unified]);
+    inputRef.current.focus();
+    const currentValue = messageText;
+    const updatedValue = currentValue + emojiData.emoji;
+    setMessageText(updatedValue);
   };
 
   const handleRemoveEmoji = (emoji) => {
     const updatedEmojis = selectedEmojis.filter((e) => e !== emoji);
     setSelectedEmojis(updatedEmojis);
   };
-  const [isEmojiBoxDragging, setIsEmojiBoxDragging] = useState(false);
-  const [emojiBoxPosition, setEmojiBoxPosition] = useState({ x: 10, y: 10 });
-  const emojiBoxRef = useRef(null);
-  const initialPosition = useRef({ x: 0, y: 0 });
-
-  const handleEmojiBoxMouseDown = (event) => {
-    event.preventDefault();
-    setIsEmojiBoxDragging(true);
-    const { clientX, clientY } = event;
-    initialPosition.current = { x: clientX, y: clientY };
-  };
-
-  const handleEmojiBoxMouseMove = (event) => {
-    if (!isEmojiBoxDragging) {
-      return;
-    }
-    const { clientX, clientY } = event;
-    const dx = clientX - initialPosition.current.x;
-    const dy = clientY - initialPosition.current.y;
-    setEmojiBoxPosition((prevPosition) => ({
-      x: prevPosition.x + dx,
-      y: prevPosition.y + dy,
-    }));
-    initialPosition.current = { x: clientX, y: clientY };
-  };
-
-  const handleEmojiBoxMouseUp = () => {
-    setIsEmojiBoxDragging(false);
-  };
 
   return (
     <Container>
+    <ChatRoomNavbar/>
       <MessageList>
-      {messages.map((message, index) => (
-    <ListItem key={index} alignItems="flex-start">
-      <ListItemAvatar>
-        <Avatar alt="User Avatar" src="/avatar.png" />
-      </ListItemAvatar>
-      <ListItemText
-        primary={message.sender}
-        secondary={
-          <React.Fragment>
-            {message.content.emojis.length > 0 && (
-              <Box display="flex">
-                {message.content.emojis.map((emoji, index) => (
-                  <Box key={index} sx={{ marginRight: 5 }}>
-                    <Typography component="span" variant="body2">
-                      <img
-                        src={emoji.imageUrl}
-                        alt={emoji.name}
-                        style={{ width: "1em", height: "1em" }}
-                      />
-                    </Typography>
-                  </Box>
-                ))}
-              </Box>
-            )}
-            {message.content.text}
-          </React.Fragment>
-        }
-      />
-    </ListItem>
-  ))}
-        <Box> {openEmojiBox && (
-          <Box
-          ref={emojiBoxRef}
-  onMouseDown={handleEmojiBoxMouseDown}
-  onMouseMove={handleEmojiBoxMouseMove}
-  onMouseUp={handleEmojiBoxMouseUp}
-  isDragging={isEmojiBoxDragging}
-            sx={{
-              top: emojiBoxPosition.y,
-  left: emojiBoxPosition.x,
-              display: "flex",
-              alignItems: "flex-end",
-              justifyContent:"flex-end",
-              marginLeft: "auto",
-              marginRight: 5,
-              position: "relative",
-              zIndex: 2,
-            }}
-          >
-            {selectedEmojis.map((emoji, index) => (
-              <Emoji
-                key={index}
-                emoji={emoji}
-                size={30}
-                onClick={() => handleRemoveEmoji(emoji)}
-              />
-            ))}
-            <Box
-              sx={{
-                position: "absolute",
-                top: "-100%",
-                right: 0,
-                zIndex: 1,
-              }}
-            >
-              <EmojiPicker onEmojiClick={handleEmojiClick} />
-            </Box>
+        {messages.map((message, index) => (
+          <ListItem key={index} alignItems="flex-start">
+            <ListItemAvatar>
+              <Avatar alt="User Avatar" src="/avatar.png" />
+            </ListItemAvatar>
+            <ListItemText
+              primary={message.sender}
+              secondary={
+                <React.Fragment>
+                  {message.content.emojis.length > 0 && (
+                    <Box display="flex">
+                      {message.content.emojis.map((emoji, index) => (
+                        <Box key={index} sx={{ marginRight: 5 }}>
+                          <Typography component="span" variant="body2">
+                            <Emoji
+                              emoji={emoji}
+                              size={18}
+                              fallback={(emojiData) => (
+                                <span>{emojiData.emoji}</span>
+                              )}
+                            />
+                          </Typography>
+                        </Box>
+                      ))}
+                    </Box>
+                  )}
+                  {message.content.text}
+                </React.Fragment>
+              }
+            />
+          </ListItem>
+        ))}
+      </MessageList>
+      {openEmojiBox && (
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "flex-end",
+            justifyContent: "flex-end",
+            position: "sticky",
+            bottom: 0,
+            padding: theme.spacing(1),
+            zIndex: 1,
+          }}
+        >
+          {selectedEmojis.map((emoji, index) => (
+            <Emoji
+              key={index}
+              emoji={emoji}
+              size={24}
+              fallback={(emojiData) => <span>{emojiData.emoji}</span>}
+              onDoubleClick={() => handleRemoveEmoji(emoji)}
+            />
+          ))}
+          <Box sx={{ position: "relative", marginLeft: "auto" }}>
+            <EmojiPicker onEmojiClick={handleEmojiClick} />
           </Box>
-        )}</Box>
-      </MessageList><div>
-      <InputContainer component={Box} p={1} >
+        </Box>
+      )}
+      <InputContainer component={Box} p={1}>
         <IconButton onClick={handleAttachFile}>
           <AttachFile />
         </IconButton>
@@ -203,25 +169,20 @@ const ChatRoom = () => {
           onChange={handleFileChange}
           fullWidth
         />
-       
         <IconButton onClick={() => setOpenEmojiBox(!openEmojiBox)}>
           <EmojiEmotions />
         </IconButton>
         <TextField
+          placeholder="Type a message"
           value={messageText}
           onChange={handleInputChange}
-          onKeyDown={(event) => {
-            if (event.key === "Enter") {
-              handleSendMessage();
-            }
-          }}
-          placeholder="Type a message..."
+          inputRef={inputRef}
           fullWidth
         />
-        <IconButton onClick={handleSendMessage}>
+        <IconButton onClick={handleSendMessage} color="primary">
           <Send />
         </IconButton>
-      </InputContainer></div>
+      </InputContainer>
     </Container>
   );
 };

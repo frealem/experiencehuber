@@ -6,14 +6,11 @@ const DashBox = ({ title, value, increase, icon, description }) => {
   const theme = useTheme();
   return (
     <Box
-      gridColumn="span 2"
-      gridRow="span 1"
       display="flex"
       flexDirection="column"
       width="200px"
       justifyContent="space-between"
       p="1.25rem 1rem"
-      flex="1 1 100%"
       backgroundColor={theme.palette.background.alt}
       borderRadius="0.55rem"
     >
