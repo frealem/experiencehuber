@@ -18,11 +18,12 @@ import AddLocationAlt from "@mui/icons-material/AddLocationAlt";
 import StyledInputWithValidation from "../../components/input";
 import MyButton from "../../components/myButton";
 import { useForm } from "react-hook-form";
+import { createPostApi } from "../../components/States/postIntegration/postApi";
 // import ImageUploader from "./ImageUploader";
 
 const LocationField = () => {
   const [openMap, setOpenMap] = useState(false);
-  const [selectedLocation, setSelectedLocation] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState('');
 
   const handleOpenMap = () => {
     setOpenMap(true);
@@ -36,7 +37,9 @@ const LocationField = () => {
     setSelectedLocation(location);
     handleCloseMap();
   };
+
   const { register, handleSubmit, control } = useForm();
+
   return (
     <div>
       <StyledInputWithValidation
@@ -44,7 +47,7 @@ const LocationField = () => {
         value={selectedLocation.placeName}
         variant="outlined"
         control={control}
-         name="location"
+        name="location"
         margin="normal"
         InputProps={{
           endAdornment: (
@@ -71,12 +74,32 @@ const LocationField = () => {
 };
 
 const CreatePost = () => {
-  const onSubmit = (event) => {
-    event.preventDefault();
-    // Handle form submission logic here
+  const [capturedImages, setCapturedImages] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState('');
+
+  const onSubmit = async (data) => {
+    try {
+      const location = selectedLocation; // Get the selected location from the state of the LocationField component
+      const images = capturedImages; // Get the captured images from the state of the ImageUploaderComponent component
+
+      // Add location and images data to the form data
+      const postData = { ...data, location, images };
+
+      // Call the createPostApi function from postApi.js to create the post
+      const createdPost = await createPostApi(postData);
+      console.log('Created post:', createdPost);
+
+    } catch (error) {
+      console.error('Failed to create post:', error);
+    }
   };
+
+  const handleLocationSelect = (location) => {
+    setSelectedLocation(location);
+  };
+
   const { handleSubmit, control, setValue, watch } = useForm();
-  const theme=useTheme();
+  const theme = useTheme();
   const [inputHeight, setInputHeight] = useState('auto');
 
   const handleInputChange = (event) => {
@@ -147,10 +170,10 @@ const CreatePost = () => {
           />
         </Box>
         <Box marginBottom="16px">
-          <LocationField style={{ display: 'block' }} />
+          <LocationField onLocationSelect={handleLocationSelect} style={{ display: 'block' }} />
         </Box>
         <Box marginBottom="16px">
-          <ImageUploaderComponent style={{ display: 'block' }} />
+          <ImageUploaderComponent style={{ display: 'block' }} setCapturedImages={setCapturedImages}/>
         </Box>
         <Box>
           <MyButton type="submit" variant="contained" color="primary">

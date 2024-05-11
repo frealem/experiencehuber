@@ -1,13 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
-import {apiSlice} from "./Api"
-import authReducer from './authSlice'
-import themeReducer from './themeSlice'
+import themeReducer from './themeSlice';
+import authReducer from "./authIntegration/authSlice";
+import postReducer from "./postIntegration/postSlice";
+
 export const store=configureStore({
     reducer:{
-        [apiSlice.reducerPath]:apiSlice.reducer,
-        auth:authReducer,
         theme:themeReducer,
+        auth: authReducer,
+        post: postReducer,
     },
-    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(apiSlice.middleware),
-    devTools:true
 })

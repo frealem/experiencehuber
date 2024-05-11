@@ -1,34 +1,19 @@
-import React, { useRef, useEffect, useState } from "react";
-import {
-  Button,
-  Checkbox,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  FormControlLabel,
-  IconButton,
-  Stack,
-  TextField,
-  useTheme,
-} from "@mui/material";
+import React, { useState } from "react";
+import { Box, Button, Dialog, DialogContent, DialogTitle, IconButton, Stack, TextField, Typography } from "@mui/material";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
-import { Field, Form, Formik } from "formik";
 import * as yup from "yup";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useFormik } from "formik";
+import { loginApi, registerApi } from "../components/States/authIntegration/authApi";
+import { setUser } from "../components/States/authIntegration/authSlice";
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import Dropzone from "react-dropzone";
-import PhoneInput from "react-phone-input-2";
-import "react-phone-input-2/lib/style.css";
-import PhoneInputField from "../components/phoneInput";
-import { useAuth } from "../hooks/useAuth";
-import { useForm } from 'react-hook-form';
-//client side validation
 
+// Client-side validation schema
 const registerSchema = yup.object().shape({
   fullName: yup.string().required("required"),
-  phone: yup.string().required("required"),
+  phone: yup.string(),
   password: yup.string().required("required"),
-  email: yup.string().email("invalid email").required("required"),
+  email: yup.string(),
   userName: yup.string().required("required"),
 });
 
@@ -51,16 +36,14 @@ const initialValuesSignup = {
 };
 
 const AuthPage = () => {
-  const theme = useTheme();
   const [open, setOpen] = useState(true);
   const [signUp, setSignUp] = useState(false);
   const dispatch = useDispatch();
-  const [email,setEmail]=useState('');
-  const [password,setPassword]=useState('');
-
+const navigate=useNavigate();
   const openDialog = () => {
     setOpen(true);
   };
+
   const closeDialog = () => {
     setOpen(false);
   };
@@ -73,231 +56,164 @@ const AuthPage = () => {
     setSignUp(false);
   };
 
-  const {
-    handleSubmit,
-    register,
-    getValues,
-    formState: { errors },
-  } = useForm();
-
-  const navigate = useNavigate();
-  const { user, login } = useAuth();
-  const [params] = useSearchParams();
-  const returnUrl = params.get('returnUrl');
-  const auth = useAuth();
-  useEffect(() => {
-    if (!user) return;
-
-    returnUrl ? navigate(returnUrl) : navigate('/');
-  }, [user,navigate,returnUrl]); //check navigate and url
-
-  const submitLogin = async ({ email, password }) => {
-    await login(email, password);
-navigate('/');
+  const submitLogin = async (values) => {
+    try {
+      const { userName, password } = values;
+      const formData = { userName, password }; // Combine form values into a single object
+      dispatch(loginApi(formData));
+      console.log("Successful login");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  //regsteration
+  const submitRegister = async (values) => {
+    try {
+      const { email, password, fullName, phone, userName } = values;
+      const formData = { email, password, fullName, phone, userName };
+      const registeredUser = await registerApi(formData);
+      console.log("Successful registration");
 
-  useEffect(() => {
-    if (!user) return;
-    returnUrl ? navigate(returnUrl) : navigate('/');
-  }, [user,navigate,returnUrl]);
- 
-  const submitRegister = async data => {
-    await auth.register(data);
+      dispatch(setUser(registeredUser));
+      console.log("Successfully logged in!");
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
   };
-
+  
+  // Formik configuration
+  const formik = useFormik({
+    initialValues: signUp ? initialValuesSignup : initialValuesLogin,
+    validationSchema: signUp ? registerSchema : loginSchema,
+    onSubmit: (values) => {
+      signUp ? submitRegister(values) : submitLogin(values);
+    },
+  });
   return (
     <div style={{ textAlign: "center" }}>
-      {!signUp ? (
-        <Dialog
-          open={open}
-          onClose={closeDialog}
-          fullWidth
-          maxWidth="sm"
-          PaperProps={{
-            sx: {
-              borderRadius: 10, // Adjust the border radius as desired
-              marginLeft: "auto", // Align to the left when viewed on desktop
-              marginRight: "auto",
-              maxWidth: 600, // Adjust the max width as needed
-            },
-          }}
-        >
-          <DialogTitle>
-            Sign In
-            <IconButton
-              color="error"
-              variant="contained"
-              onClick={closeDialog}
-              style={{ float: "right" }}
-            >
-              <CloseOutlinedIcon />
-            </IconButton>
-          </DialogTitle>
-          <DialogContent>
-          <form onSubmit={handleSubmit(submitLogin)} noValidate>
-          <Stack spacing={2} margin={2}>
-          <input
-            type="email"
-            placeholder="email"
-            {...register('email', {
-              required: true,
-              pattern: {
-                value: /^[\w-.]+@([\w-]+\.)+[\w-]{2,63}$/i,
-                message: 'Email Is Not Valid',
-              },
-            })}
-            error={errors.email}
+      <Dialog
+        open={open}
+        onClose={closeDialog}
+        maxWidth="sm"
+        PaperProps={{
+          sx: {
+            borderRadius: 10,
+            marginLeft: "auto",
+            marginRight: "auto",
+            maxWidth: 600,
+          },
+        }}
+      >
+        <DialogTitle>
+          Sign In
+          <IconButton
+            color="error"
+            variant="contained"
+            onClick={closeDialog}
+            style={{ float: "right" }}
+          >
+            <CloseOutlinedIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+  <form onSubmit={formik.handleSubmit} noValidate>
+    <Stack spacing={2} margin={2}>
+      {signUp ? (
+        <React.Fragment>
+          <TextField
+            type="text"
+            placeholder="Full Name"
+            variant="outlined"
+            {...formik.getFieldProps("fullName")}
+            error={formik.touched.fullName && formik.errors.fullName}
+            helperText={formik.touched.fullName && formik.errors.fullName}
           />
 
-          <input
-            type="password"
-            placeholder="Password"
-            {...register('password', {
-              required: true,
-            })}
-            error={errors.password}
-          />
-                    <Button
-                      type="submit"
-                      backgroundColor={theme.palette.secondary.light}
-                      variant="contained"
-                    >
-                      Sign In
-                    </Button>
-                    <a onClick={handleSignUpClick}>
-                      I don't have an account, Sign Up
-                    </a>
-                  </Stack>
-            </form>
-          </DialogContent>
-        </Dialog>
-      ) : (
-        <Dialog
-          open={open}
-          onClose={closeDialog}
-          fullWidth
-          maxWidth="sm"
-          PaperProps={{
-            sx: {
-              borderRadius: 10, // Adjust the border radius as desired
-              marginLeft: "auto", // Align to the left when viewed on desktop
-              marginRight: "auto",
-              maxWidth: 400, // Adjust the max width as needed
-            },
-          }}
-        >
-          <DialogTitle>
-            Sign Up
-            <IconButton
-              color="error"
-              variant="contained"
-              onClick={closeDialog}
-              style={{ float: "right" }}
-            >
-              <CloseOutlinedIcon />
-            </IconButton>
-          </DialogTitle>
-          <DialogContent>
-          <form onSubmit={handleSubmit(submitRegister)} noValidate>
-          <input
+          <TextField
+            placeholder="Phone"
             type="text"
-            placeholder="Name"
-            {...register('name', {
-              required: true,
-              minLength: 6,
-            })}
-            error={errors.name}
+            {...formik.getFieldProps("phone")}
+            error={formik.touched.phone && formik.errors.phone}
+            helperText={formik.touched.phone && formik.errors.phone}
           />
 
-            <input
+          <TextField
             type="text"
-            placeholder="phone"
-            {...register('phone', {
-              required: true,
-              minLength: 8,
-            })}
-            error={errors.phone}
+            placeholder="Username"
+            variant="outlined"
+            {...formik.getFieldProps("userName")}
+            error={formik.touched.userName && formik.errors.userName}
+            helperText={formik.touched.userName && formik.errors.userName}
           />
-            <input
+          <TextField
             type="text"
-            placeholder="userName"
-            {...register('userName', {
-              required: true,
-              minLength: 6,
-            })}
-            error={errors.userName}
-           
-          />
-          <input
-            type="email"
             placeholder="Email"
-            {...register('email', {
-              required: true,
-              pattern: {
-                value: /^[\w-.]+@([\w-]+\.)+[\w-]{2,63}$/i,
-                message: 'Email Is Not Valid',
-              },
-            })}
-            error={errors.email}
+            variant="outlined"
+            {...formik.getFieldProps("email")}
+            error={formik.touched.email && formik.errors.email}
+            helperText={formik.touched.email && formik.errors.email}
           />
 
-          <input
+          <TextField
             type="password"
             placeholder="Password"
-            {...register('password', {
-              required: true,
-              minLength: 5,
-            })}
-            error={errors.password}
+            variant="outlined"
+            {...formik.getFieldProps("password")}
+            error={formik.touched.password && formik.errors.password}
+            helperText={formik.touched.password && formik.errors.password}
           />
 
-          <input
+          <TextField
             type="password"
             placeholder="Confirm Password"
-            {...register('password', {
-              required: true,
-              validate: value =>
-                value !== getValues('password')
-                  ? 'Passwords Do No Match'
-                  : true,
-            })}
-            error={errors.confirmPassword}
+            {...formik.getFieldProps("confirmPassword")}
+            error={formik.touched.confirmPassword && formik.errors.confirmPassword}
+            helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
           />
-          
+        </React.Fragment>
+      ) : (
+        <React.Fragment>
+        <TextField
+            type="text"
+            placeholder="Username"
+            variant="outlined"
+            {...formik.getFieldProps("userName")}
+            error={formik.touched.userName && formik.errors.userName}
+            helperText={formik.touched.userName && formik.errors.userName}
+          />
 
-          <button type="submit" >Sign Up</button>
-
-          <div>
-            I have already an account? &nbsp;
-            <Link to={`/login${returnUrl ? '?returnUrl=' + returnUrl : ''}`}>
-              Login
-            </Link>
-          </div>
-        </form>
-                    {/*
-                    <Field
-                      as={TextField}
-                      variant="outlined"
-                      name="phone"
-                      component={PhoneInputField}
-                      inputStyle={{ width: "100%", outerHeight: "100%" }} // Set the width of the phone input field
-                      containerStyle={{ width: "100%", outerHeight: "100%" }}
-                    />
-                     <FormControlLabel
-                      control={
-                        <Field
-                          as={Checkbox}
-                          color="primary"
-                          name="acceptAgreement"
-                        />
-                      }
-                      label="Accept All Agreement And Submit"
-                    /> */}
-          </DialogContent>
-        </Dialog>
+          <TextField
+            type="password"
+            placeholder="Password"
+            variant="outlined"
+            {...formik.getFieldProps("password")}
+            error={formik.touched.password && formik.errors.password}
+            helperText={
+              formik.touched.password && formik.errors.password
+            }
+          />
+        </React.Fragment>
       )}
+
+      <Button type="submit" variant="contained">
+        {signUp ? "Sign Up" : "Sign In"}
+      </Button>
+      <Box>
+        {!signUp ? (
+          <Typography onClick={handleSignUpClick}>
+            I don't have an account, Sign Up
+          </Typography>
+        ) : (
+          <Typography onClick={handleSignInClick}>
+            I already have an account, Login
+          </Typography>
+        )}
+      </Box>
+    </Stack>
+  </form>
+</DialogContent>
+      </Dialog>
     </div>
   );
 };

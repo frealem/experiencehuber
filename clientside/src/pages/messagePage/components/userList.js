@@ -166,7 +166,7 @@ const UserList = () => {
                   {user.name}
                   {user.onlineStatus && (
                     <span style={{ color: 'green', marginLeft: 4 }}>
-                      <CircleIcon fontSize="small" />
+                      <CircleIcon fontSize="0.2px" />
                     </span>
                   )}
                 </Typography>
