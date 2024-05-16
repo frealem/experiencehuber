@@ -1,3 +1,5 @@
+const User = require('./models/User');
+const Account = require('./models/Account');
 const io = require('socket.io')(8800, {
     cors: {
         origin: ""
@@ -15,7 +17,10 @@ io.on('connection', (socket)=> {
                 socketId: socket.id,
             });
         }
-        io.emit("getUsers", activeUsers);
+        const account = Account.find({ownerId: newUserId});
+        const freinds = [...account.followings];
+        const activeFreinds = activeUsers.filter((user) => freinds.includes(user.userId));
+        io.to(socket.id).emit("getActiveUsers", activeFreinds);
     })
 
     //send message
@@ -23,12 +28,13 @@ io.on('connection', (socket)=> {
         const {recieverId} = data;
         const user = activeUsers.find((user) => user.userId === recieverId);
         if(user){
-            io.to(user.socketId).emit('reciveMessage', data);
+            io.to(user.socketId).emit('recieveMessage', data);
         }
     })
 
     socket.on("disconnect", () => {
         activeUsers = activeUsers.filter((user) => user.socketId !== socket.id);
-        io.emit('getUsers', activeUsers); 
+        
+        io.emit('getUsers', activeUsers);
     })
 })

@@ -45,12 +45,19 @@ const createPost = asyncHanler(async (req, res) => {
            share ,
            special = false, 
            rating, 
-           imageURL,
            tags,
            location,} = req.body;
     if(!posterId || !title || !description){
         res.status(400);
         throw new Error("Mandatory fields are not filled!");
+    }
+    let imageURL = [];
+    if(req.files) {
+        let path = '';
+        req.files.forEach((file, index, arr) => {
+            path = path + file.path;
+            imageURL.push(path);
+        });        
     }
     const post = await Post.create({
            posterId, 

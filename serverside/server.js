@@ -8,8 +8,9 @@ const cors=require('cors')
 dbconnection();
 const port = process.env.PORT || 3001
 const app = express();
-app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
+app.use(cors());
 app.use(express.json());
+app.use('/uploads', express.static('Modules/PostManagmentModule/PostImages/'));
 app.use('/api', require('./Routes/generalRoutes'));
 const server = app.listen(port, () => {
     console.log(`server listening to port ${port}`);
