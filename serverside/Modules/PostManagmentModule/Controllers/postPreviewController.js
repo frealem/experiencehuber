@@ -28,8 +28,7 @@ const createPostPreview = asyncHanler(async (req, res) => {
     const {posterId, 
            title, 
            description, 
-           rating, 
-           imageURL,
+           rating,
            tags,
            location,} = req.body;
     if(!posterId || !title || !description){
@@ -39,6 +38,14 @@ const createPostPreview = asyncHanler(async (req, res) => {
     if((await PostPreview.countDocuments({posterId: req.user.id})) > 5){
         res.status(400);
         throw new Error("User cannot create Post previews more than 5!");
+    }
+    let imageURL = [];
+    if(req.files) {
+        let path = '';
+        req.files.forEach((file, index, arr) => {
+            path = path + file.path;
+            imageURL.push(path);
+        });        
     }
     const postpreview = await PostPreview.create({
            posterId, 

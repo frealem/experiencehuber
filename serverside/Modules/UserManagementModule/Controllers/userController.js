@@ -25,7 +25,7 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 //@accesslevel inaccessible
 const createUser = asyncHandler(async (req, res) => {
     console.log(req.body);
-    const {firstName = null, lastName = null, userName, email, password, role} = req.body;
+    const {fullName, phone, userName, email, password, role} = req.body;
     if(!userName || !email || !password || !role){
         res.status(400);
         throw new Error("Mandatory fields are not filled!");
@@ -39,8 +39,8 @@ const createUser = asyncHandler(async (req, res) => {
     //hash password
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({
-        firstName,
-        lastName,
+        fullName,
+        phone,
         userName,
         email,
         password: hashedPassword,
