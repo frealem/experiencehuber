@@ -42,7 +42,7 @@ const createAccount = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error("Mandatory fields are not filled!");
     }
-    const account = await Account.Create({
+    const account = await Account.create({
         ownerId, 
         profilePictuerURL, 
         theme, 
