@@ -6,7 +6,7 @@ const User = require('../Models/User');
 const Account = require('../Models/Account');
 
 //@desc create a new admin
-//@route
+//@route api/superadmin/admin/
 //@access level 3
 const createAdmin = asyncHandler( async(req, res) => {
    const role = await Role.findOne({accessLevel: 2});
@@ -15,7 +15,7 @@ const createAdmin = asyncHandler( async(req, res) => {
 });
 
 //@desc delete existing admin
-//@route
+//@route api/superadmin/admin/:id
 //@access level 3
 const deleteAdmin = asyncHandler( async(req, res) => {
    const userId = req.params.id;

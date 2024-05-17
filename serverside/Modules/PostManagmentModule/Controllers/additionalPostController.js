@@ -3,11 +3,12 @@ const PostPreview = require('../Models/PostPreview');
 const Account = require('../../UserManagementModule/Models/Account');
 const Category = require('../../SystemMonitoringModule/Models/Category');
 const paginate = require('../../../Common/pagination');
+const asyncHandler = require('express-async-handler');
 
 //@desc get posts by people prefrence
-//@route 
+//@route GET /api/post/preference
 //@access level 1
-const getPostsByPreference = asyncHanler(async (req, res) => {
+const getPostsByPreference = asyncHandler(async (req, res) => {
     const page = parseInt(req.query.page);
     const pageSize = parseInt(req.query.pageSize); 
 
@@ -24,9 +25,9 @@ const getPostsByPreference = asyncHanler(async (req, res) => {
 });
 
 //@desc get posts by search query
-//@route 
+//@route GET /api/post/query
 //@access level 1
-const getPostsByQuery = asyncHanler(async (req, res) => {
+const getPostsByQuery = asyncHandler(async (req, res) => {
     const { page, pageSize, search } = req.query;
     const filter = {
        $text: { $search: search },
@@ -37,9 +38,9 @@ const getPostsByQuery = asyncHanler(async (req, res) => {
 });
 
 //@desc get posts by filter
-//@route 
+//@route GET /api/post/filter
 //@access level 1
-const getPostsByFilter = asyncHanler(async (req, res) => {
+const getPostsByFilter = asyncHandler(async (req, res) => {
     const {page, pageSize, tags, categories, ratings} = req.query;
     const filter = {
         categoryId: {$in: categories},
@@ -52,9 +53,9 @@ const getPostsByFilter = asyncHanler(async (req, res) => {
 });
 
 //@desc get special posts by date(latest)
-//@route 
+//@route GET /api/post/special
 //@access public
-const getSpecialPosts = asyncHanler(async (req, res) => {
+const getSpecialPosts = asyncHandler(async (req, res) => {
     const {page, pageSize} = req.query;
     const filter = {special: true};
 
@@ -63,9 +64,9 @@ const getSpecialPosts = asyncHanler(async (req, res) => {
 });
 
 //@desc get non special posts by date(latest)
-//@route 
+//@route GET /api/post/special
 //@access public
-const getLatestPosts = asyncHanler(async (req, res) => {
+const getLatestPosts = asyncHandler(async (req, res) => {
     const {page, pageSize} = req.query;
     const filter = {};
 
@@ -73,4 +74,4 @@ const getLatestPosts = asyncHanler(async (req, res) => {
     res.status(200).json(posts);
 });
 
-module.exports = {getPostsByFilter, getPostsByPreference, getPostsByQuery}
+module.exports = {getPostsByFilter, getPostsByPreference, getPostsByQuery, getLatestPosts, getSpecialPosts}
