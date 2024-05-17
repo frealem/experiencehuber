@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const createPostApi = async (postData) => {
     try {
-      const response = await axios.post('/api/posts', postData);
+      const response = await axios.post('http://localhost:5000/api/post', postData);
       return response.data;
     } catch (error) {
       throw new Error('Failed to create post.');

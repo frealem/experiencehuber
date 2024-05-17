@@ -10,11 +10,11 @@ import { useDispatch } from "react-redux";
 
 // Client-side validation schema
 const registerSchema = yup.object().shape({
-  fullName: yup.string().required("required"),
-  phone: yup.string(),
-  password: yup.string().required("required"),
+  fullName: yup.string(),
+  password: yup.string(),
   email: yup.string(),
-  userName: yup.string().required("required"),
+  phone: yup.string(),
+  userName: yup.string(),
 });
 
 const loginSchema = yup.object().shape({
@@ -69,16 +69,17 @@ const navigate=useNavigate();
 
   const submitRegister = async (values) => {
     try {
-      const { email, password, fullName, phone, userName } = values;
-      const formData = { email, password, fullName, phone, userName };
+      const { email, password, fullName, userName ,phone} = values;
+      const formData = { email, password, fullName, userName,phone };
+      console.log(formData);
       const registeredUser = await registerApi(formData);
       console.log("Successful registration");
 
-      dispatch(setUser(registeredUser));
-      console.log("Successfully logged in!");
-      navigate("/");
+      // dispatch(setUser(registeredUser));
+      // console.log("Successfully logged in!");
+      // navigate("/");
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   };
   
@@ -131,20 +132,20 @@ const navigate=useNavigate();
           />
 
           <TextField
-            placeholder="Phone"
-            type="text"
-            {...formik.getFieldProps("phone")}
-            error={formik.touched.phone && formik.errors.phone}
-            helperText={formik.touched.phone && formik.errors.phone}
-          />
-
-          <TextField
             type="text"
             placeholder="Username"
             variant="outlined"
             {...formik.getFieldProps("userName")}
             error={formik.touched.userName && formik.errors.userName}
             helperText={formik.touched.userName && formik.errors.userName}
+          />
+           <TextField
+            type="text"
+            placeholder="phone"
+            variant="outlined"
+            {...formik.getFieldProps("phone")}
+            error={formik.touched.phone && formik.errors.phone}
+            helperText={formik.touched.phone && formik.errors.phone}
           />
           <TextField
             type="text"

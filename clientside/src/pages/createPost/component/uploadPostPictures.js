@@ -5,7 +5,7 @@ import axios from "axios";
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 
 
-const ImageUploaderComponent = () => {
+const ImageUploaderComponent = ({setCapturedImages}) => {
   const [images, setImages] = useState([]);
   const [openCaptureDialog, setOpenCaptureDialog] = useState(false);
   const [openBrowseDialog, setOpenBrowseDialog] = useState(false);
@@ -23,27 +23,10 @@ const ImageUploaderComponent = () => {
   const capture = () => {
     const imageSrc = webcamRef.current.getScreenshot();
     setImages((prevImages) => [...prevImages, imageSrc]);
+    setCapturedImages((prevImages) => [...prevImages, imageSrc]); 
   };
 
-  const uploadImages = async () => {
-    try {
-      const formData = new FormData();
-      images.forEach((image) => {
-        formData.append("images", image);
-      });
-
-      const response = await axios.post("http://localhost:5000/upload", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      console.log(response.data);
-      setImages([]); // Clear the captured images after successful upload
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  
 
   const handleFileInputChange = async (event) => {
     const files = Array.from(event.target.files);
@@ -55,6 +38,7 @@ const ImageUploaderComponent = () => {
     }
 
     setImages((prevImages) => [...prevImages, ...fileUrls]);
+    setCapturedImages((prevImages) => [...prevImages, ...fileUrls]);
   };
 
   const readFileAsDataURL = (file) => {
@@ -74,6 +58,7 @@ const ImageUploaderComponent = () => {
   };
   const removeImage = (index) => {
     setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+    setCapturedImages((prevImages) => prevImages.filter((_, i) => i !== index));
   };
 
   return (
@@ -121,9 +106,6 @@ const ImageUploaderComponent = () => {
         </Grid>
       ))}
     </Grid>
-    <Button variant="contained" color="primary" onClick={uploadImages} style={{ marginTop: 20 }}>
-      Upload Images
-    </Button>
   </div>
 ) : (
   <Typography variant="subtitle1" color="textSecondary" style={{ marginTop: 20 }}>

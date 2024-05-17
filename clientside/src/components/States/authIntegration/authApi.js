@@ -1,17 +1,21 @@
 import axios from "axios";
 
-export const registerApi = async (userData) => {
+export const registerApi = async (formData) => {
   try {
-    const response = await axios.post("/api/auth/register", userData);
+    const response = await axios.post("http://localhost:5000/api/user/register", formData);
     return response.data;
   } catch (error) {
-    throw new Error(error.response.data);
+    if (error.response && error.response.data) {
+      throw new Error(error.response.data);
+    } else {
+      throw new Error("An error occurred during registration.");
+    }
   }
 };
 
 export const loginApi = async (userData) => {
   try {
-    const response = await axios.post("/api/auth/login", userData);
+    const response = await axios.post("http://localhost:5000/api/user/login", userData);
     return response.data;
   } catch (error) {
     throw new Error(error.response.data);

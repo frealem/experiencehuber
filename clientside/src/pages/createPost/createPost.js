@@ -19,11 +19,10 @@ import StyledInputWithValidation from "../../components/input";
 import MyButton from "../../components/myButton";
 import { useForm } from "react-hook-form";
 import { createPostApi } from "../../components/States/postIntegration/postApi";
-// import ImageUploader from "./ImageUploader";
 
-const LocationField = () => {
+const LocationField = ({ onLocationChange }) => {
   const [openMap, setOpenMap] = useState(false);
-  const [selectedLocation, setSelectedLocation] = useState('');
+  const [selectedLocation, setSelectedLocation] = useState({ lat: "", lng: "", placeName: "" });
 
   const handleOpenMap = () => {
     setOpenMap(true);
@@ -34,7 +33,12 @@ const LocationField = () => {
   };
 
   const handleSelectLocation = (location) => {
-    setSelectedLocation(location);
+    setSelectedLocation({
+      lat: location.lat,
+      lng: location.lng,
+      placeName: location.placeName // Set the placeName property
+    });
+    onLocationChange(`${location.lat},${location.lng}`); // Pass the combined lat and lng as a string to the parent component
     handleCloseMap();
   };
 
@@ -42,21 +46,21 @@ const LocationField = () => {
 
   return (
     <div>
-      <StyledInputWithValidation
-        placeholder="Location"
-        value={selectedLocation.placeName}
-        variant="outlined"
-        control={control}
-        name="location"
-        margin="normal"
-        InputProps={{
-          endAdornment: (
-            <Button variant="text" color="secondary" onClick={handleOpenMap}>
-              <AddLocationAlt />
-            </Button>
-          ),
-        }}
-      />
+     <StyledInputWithValidation
+  placeholder="Location"
+  value={selectedLocation.placeName} // Display the placeName
+  variant="outlined"
+  control={control}
+  name="location"
+  margin="normal"
+  InputProps={{
+    endAdornment: (
+      <Button variant="text" color="secondary" onClick={handleOpenMap}>
+        <AddLocationAlt />
+      </Button>
+    ),
+  }}
+/>
 
       <Dialog open={openMap} onClose={handleCloseMap}>
         <DialogTitle>Select Location</DialogTitle>
@@ -69,32 +73,43 @@ const LocationField = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Hidden input fields to store lat and lng values */}
+      <input type="hidden" {...register("location.lat", { value: selectedLocation.lat })} />
+      <input type="hidden" {...register("location.lng", { value: selectedLocation.lng })} />
     </div>
   );
 };
 
+
 const CreatePost = () => {
   const [capturedImages, setCapturedImages] = useState([]);
-  const [selectedLocation, setSelectedLocation] = useState('');
+  const [selectedLocation, setSelectedLocation] = useState({lat:"",lng:"",placeName:""});
 
   const onSubmit = async (data) => {
     try {
-      const location = selectedLocation; // Get the selected location from the state of the LocationField component
-      const images = capturedImages; // Get the captured images from the state of the ImageUploaderComponent component
+      const location = {
+        lat: selectedLocation.lat,
+        lng: selectedLocation.lng,
+        placeName: selectedLocation.placeName,
+      };
 
-      // Add location and images data to the form data
-      const postData = { ...data, location, images };
+      const postData = {
+        ...data,
+        location: location,
+        images: capturedImages,
+      };
 
-      // Call the createPostApi function from postApi.js to create the post
+      console.log(postData);
       const createdPost = await createPostApi(postData);
       console.log('Created post:', createdPost);
-
+    
     } catch (error) {
       console.error('Failed to create post:', error);
     }
   };
 
-  const handleLocationSelect = (location) => {
+  const handleLocationChange = (location) => {
     setSelectedLocation(location);
   };
 
@@ -170,7 +185,7 @@ const CreatePost = () => {
           />
         </Box>
         <Box marginBottom="16px">
-          <LocationField onLocationSelect={handleLocationSelect} style={{ display: 'block' }} />
+          <LocationField onLocationChange={handleLocationChange}  style={{ display: 'block' }} />
         </Box>
         <Box marginBottom="16px">
           <ImageUploaderComponent style={{ display: 'block' }} setCapturedImages={setCapturedImages}/>

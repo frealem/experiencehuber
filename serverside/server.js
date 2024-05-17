@@ -6,7 +6,7 @@ const dbconnection = require('./Config/dbConnection');
 const cors=require('cors')
 
 dbconnection();
-const port = process.env.PORT || 3001
+const port = process.env.PORT || 5000
 const app = express();
 app.use(cors());
 app.use(express.json());

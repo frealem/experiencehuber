@@ -33,6 +33,7 @@ import SocialMedia from "./Dashboard/pages/SocialMedia";
 import NotificationAlert from "./Dashboard/pages/NotificationAlert";
 import SystemSecurity from "./Dashboard/pages/SystemSecurity";
 import MessagePage from "./pages/messagePage/messagepage";
+import AnimatedLanding from "./components/landingpage/animation";
 
 function App() {
   const mode = useSelector((state) => state.theme.mode);
@@ -43,13 +44,15 @@ function App() {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Routes>
+          {/* use <ProtectedRoute path="/admin" component={AdminPage} roles={['admin']} /> for protectedroute */}
             <Route element={<Layout />}>
               <Route path="/" element={<Navigate to="/feedpage" replace />} />
               <Route path="/feedpage" element={<FeedPage />} />
-              
+
               <Route path="/authpage" element={<AuthPage />} />
             </Route>
             <Route path="/eachpost" element={<EachPostPage />} />
+            <Route path="/landing" element={<AnimatedLanding />} />
             <Route element={<ProfileLayout />}>
               <Route path="/editprofile" element={<EditProfile />} />
               <Route path="/myposts" element={<MyPost />} />
@@ -61,17 +64,20 @@ function App() {
             <Route path="/createpost" element={<CreatePost />} />
             <Route path="/comment" element={<CommentModal />} />
             <Route element={<DashboardLayout />}>
-              <Route path="/overview" element={<Overview/>} />
-              <Route path="/usermanagement" element={<UserManagement/>} />
-              <Route path="/adminmanagement" element={<AdminManagement/>} />
-              <Route path="/postmanagement" element={<PostManagement/>} />
-              <Route path="/socialmedia" element={<SocialMedia/>} />
-              <Route path="/reportmanagement" element={<ReportManagement/>} />
-              <Route path="/notificationalert" element={<NotificationAlert/>} />
-              <Route path="/systemsecurity" element={<SystemSecurity/>} />
-              <Route path="/systemsetting" element={<SystemSecurity/>} />
+              <Route path="/overview" element={<Overview />} />
+              <Route path="/usermanagement" element={<UserManagement />} />
+              <Route path="/adminmanagement" element={<AdminManagement />} />
+              <Route path="/postmanagement" element={<PostManagement />} />
+              <Route path="/socialmedia" element={<SocialMedia />} />
+              <Route path="/reportmanagement" element={<ReportManagement />} />
+              <Route
+                path="/notificationalert"
+                element={<NotificationAlert />}
+              />
+              <Route path="/systemsecurity" element={<SystemSecurity />} />
+              <Route path="/systemsetting" element={<SystemSecurity />} />
             </Route>
-            <Route path="/message" element={<MessagePage/>} />
+            <Route path="/message" element={<MessagePage />} />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>
