@@ -1,9 +1,9 @@
-const asyncHanler = require('expres-async-handler');
+const asyncHanler = require('express-async-handler');
 const Post = require('../Models/Post');
 const History = require('../../SystemMonitoringModule/Models/History');
 
 //@desc get all posts created by the owner
-//@route 
+//@route GET /api/post/all/
 //@access level 2
 const getPosts = asyncHanler(async (req, res) => {
     const post = await Post.find();
@@ -13,7 +13,7 @@ const getPosts = asyncHanler(async (req, res) => {
 
 
 //@desc get all posts craeted by the owner
-//@route 
+//@route GET /api/post/owner/:id
 //@access level 1
 const getPostsByOwner = asyncHanler(async (req, res) => {
     const post = await Post.find({ownerId: req.params.id});
@@ -21,7 +21,7 @@ const getPostsByOwner = asyncHanler(async (req, res) => {
 });
 
 //@desc get a post by id
-//@route 
+//@route GET /api/post/:id
 //@access public
 const getPost = asyncHanler(async (req, res) => {
     const post = await Post.findById(req.params.id);
@@ -34,7 +34,7 @@ const getPost = asyncHanler(async (req, res) => {
 });
 
 //@desc create new post
-//@route 
+//@route POST /api/post/
 //@access level 1
 const createPost = asyncHanler(async (req, res) => {
     const {posterId, 
@@ -76,7 +76,7 @@ const createPost = asyncHanler(async (req, res) => {
 });
 
 //@desc update a post
-//@route 
+//@route UPDATE /api/post/:id
 //@access level 1
 const updatePost = asyncHanler(async (req, res) => {
     const post = await Post.findById(req.params.id);
