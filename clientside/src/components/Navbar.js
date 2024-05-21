@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   LightModeOutlined,
   DarkModeOutlined,
@@ -10,7 +10,7 @@ import {
   Notifications,
 } from "@mui/icons-material";
 import FlexBetween from "./Flexbetween";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setMode } from "./States/themeSlice";
 import profileImage from "../assets/images/chatapp.jpeg";
 import {
@@ -31,6 +31,7 @@ import { Link, useNavigate, useNavigation } from "react-router-dom";
 import SearchComponent from "./Search";
 import MessagePage from "../pages/messagePage/message";
 import MessageOutlined from "@mui/icons-material/MessageOutlined";
+import { setLogout } from "./States/authIntegration/authSlice";
 
 
 const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen}) => {
@@ -48,8 +49,17 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen}) => {
   const [activeSearch, setActiveSearch] = useState(null);
   const [messageOpen, setMessageOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState('');
+  const { loading, accessToken, error } = useSelector((state) => state.auth);
+  const handleLogout=()=>{
+    dispatch(setLogout())
+  }
+    const handleLogin=()=>{
+      navigate('/authpage')
+    }
+ 
 
-  const handleOptionChange = (event) => {
+  
+ const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
   };
   const handleActiveSearchClose=()=>{
@@ -61,6 +71,7 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen}) => {
   const handleMessageClose=()=>{
     setMessageOpen(false)
   }
+  
 
   return (
     <AppBar
@@ -141,9 +152,9 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen}) => {
                 onClose={handleClose}
                 anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
               >
-                <MenuItem onClick={handleClose}>Log Out</MenuItem>
-                <MenuItem onClick={handleClose}>Log In</MenuItem>
-                <MenuItem onClick={handleClose}>Sign Up</MenuItem>
+                <MenuItem onClick={handleLogout}>Log Out</MenuItem>
+                <MenuItem onClick={handleLogin}>Log In</MenuItem>
+                <MenuItem onClick={handleLogin}>Sign Up</MenuItem>
               </Menu>
             </Box>
           </Box>

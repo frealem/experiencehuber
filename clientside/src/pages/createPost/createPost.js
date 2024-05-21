@@ -10,10 +10,8 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import MapIcon from "@mui/icons-material/Map";
 import MapComponent from "./component/mapPost";
 import ImageUploaderComponent from "./component/uploadPostPictures";
-import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
 import AddLocationAlt from "@mui/icons-material/AddLocationAlt";
 import StyledInputWithValidation from "../../components/input";
 import MyButton from "../../components/myButton";

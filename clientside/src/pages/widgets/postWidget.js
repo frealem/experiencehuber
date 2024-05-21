@@ -64,7 +64,7 @@ const handleReportClose=()=>{
 }
 
   return (
-    <WidgetWrapper m="2rem 0">
+    <WidgetWrapper m="2rem 0" onClick={()=>{navigate("/eachPost")}}>
     <Box display="flex" gap={5} fontSize={32} >
       <Typography display="flex-start" variant="h3" fontWeight={600}>
         This is the title of the review has to be one line

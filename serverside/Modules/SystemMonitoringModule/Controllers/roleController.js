@@ -7,7 +7,7 @@ const paginate = require('../../../Common/pagination');
 //@access level 3
 const getRoles = asyncHandler(async (req, res) => {
     const page = 1;
-    const pageSize = 2;
+    const pageSize = 3;
     const filter = {};
     const role = await paginate(Role, page, pageSize, filter);
     res.status(200).json(role);

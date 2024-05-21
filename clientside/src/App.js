@@ -34,6 +34,8 @@ import NotificationAlert from "./Dashboard/pages/NotificationAlert";
 import SystemSecurity from "./Dashboard/pages/SystemSecurity";
 import MessagePage from "./pages/messagePage/messagepage";
 import AnimatedLanding from "./components/landingpage/animation";
+import ProtectedRoute from "./components/States/authIntegration/protectedRoute";
+import Unauthorised from "./components/unauthorised";
 
 function App() {
   const mode = useSelector((state) => state.theme.mode);
@@ -51,7 +53,7 @@ function App() {
 
               <Route path="/authpage" element={<AuthPage />} />
             </Route>
-            <Route path="/eachpost" element={<EachPostPage />} />
+            {/* <Route path="/eachpost" element={<EachPostPage />} /> */}
             <Route path="/landing" element={<AnimatedLanding />} />
             <Route element={<ProfileLayout />}>
               <Route path="/editprofile" element={<EditProfile />} />
@@ -61,7 +63,6 @@ function App() {
               <Route path="/security" element={<PasswordSecurity />} />
               <Route path="/setting" element={<Setting />} />
             </Route>
-            <Route path="/createpost" element={<CreatePost />} />
             <Route path="/comment" element={<CommentModal />} />
             <Route element={<DashboardLayout />}>
               <Route path="/overview" element={<Overview />} />
@@ -78,6 +79,23 @@ function App() {
               <Route path="/systemsetting" element={<SystemSecurity />} />
             </Route>
             <Route path="/message" element={<MessagePage />} />
+            <Route path="/unauthorised" element={<Unauthorised />} />
+            <Route
+          path="/eachpost"
+          element={
+            <ProtectedRoute allowedRoles={[1]}>
+              <EachPostPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/createpost"
+          element={
+            <ProtectedRoute allowedRoles={[1]}>
+              <CreatePost />
+            </ProtectedRoute>
+          }
+        />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

@@ -3,9 +3,9 @@ import { registerApi, loginApi } from "./authApi";
 
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
-  async (userData, { rejectWithValue }) => {
+  async (formData, { rejectWithValue }) => {
     try {
-      const response = await registerApi(userData);
+      const response = await registerApi(formData);
       return response;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -15,9 +15,9 @@ export const registerUser = createAsyncThunk(
 
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
-  async (userData, { rejectWithValue }) => {
+  async (credentials, { rejectWithValue }) => {
     try {
-      const response = await loginApi(userData);
+      const response = await loginApi(credentials);
       return response;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -28,14 +28,16 @@ export const loginUser = createAsyncThunk(
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    user: null,
     loading: false,
+    accessToken: null,
+    user:null,
     error: null,
   },
   reducers: {
-    setUser:(state,action)=>{
-state.user=action.payload;
-    }
+    setLogout: (state) => {
+      state.accessToken = null;
+      state.user=null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -45,7 +47,8 @@ state.user=action.payload;
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+        state.accessToken = action.payload.accessToken;
+        state.user = action.payload.user;
         state.error = null;
       })
       .addCase(registerUser.rejected, (state, action) => {
@@ -58,7 +61,8 @@ state.user=action.payload;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+        state.accessToken = action.payload.accessToken;
+        state.user = action.payload.user;
         state.error = null;
       })
       .addCase(loginUser.rejected, (state, action) => {
@@ -68,5 +72,5 @@ state.user=action.payload;
   },
 });
 
-export const { setUser } = authSlice.actions;
+export const { setLogout } = authSlice.actions;
 export default authSlice.reducer;

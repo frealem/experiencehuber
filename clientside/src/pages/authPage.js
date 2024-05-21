@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, Dialog, DialogContent, DialogTitle, IconButton, Stack, TextField, Typography } from "@mui/material";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { loginApi, registerApi } from "../components/States/authIntegration/authApi";
-import { setUser } from "../components/States/authIntegration/authSlice";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { loginUser,registerUser} from "../components/States/authIntegration/authSlice";
+import { Outlet, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 // Client-side validation schema
 const registerSchema = yup.object().shape({
@@ -36,10 +35,26 @@ const initialValuesSignup = {
 };
 
 const AuthPage = () => {
-  const [open, setOpen] = useState(true);
+ const [open, setOpen] = useState(true);
   const [signUp, setSignUp] = useState(false);
+  const { loading, accessToken, error } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-const navigate=useNavigate();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (accessToken) {
+      // User is logged in, navigate to the desired page
+      navigate('/');
+    }
+  }, [ accessToken, navigate]);
+
+  useEffect(() => {
+    if (error) {
+      // Handle the error, e.g., display a notification
+      console.error(error);
+    }
+  }, [error]);
+
   const openDialog = () => {
     setOpen(true);
   };
@@ -55,13 +70,17 @@ const navigate=useNavigate();
   const handleSignInClick = () => {
     setSignUp(false);
   };
-
   const submitLogin = async (values) => {
     try {
-      const { userName, password } = values;
-      const formData = { userName, password }; // Combine form values into a single object
-      dispatch(loginApi(formData));
-      console.log("Successful login");
+      const { email, password } = values;
+      const formData = { email, password };
+      const { payload, error } = await dispatch(loginUser(formData));
+  
+      if (payload) {
+        console.log("Successful login");
+      } else {
+        console.log(error);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -72,12 +91,11 @@ const navigate=useNavigate();
       const { email, password, fullName, userName ,phone} = values;
       const formData = { email, password, fullName, userName,phone };
       console.log(formData);
-      const registeredUser = await registerApi(formData);
+      const registeredUser = await dispatch(registerUser(formData));
       console.log("Successful registration");
 
-      // dispatch(setUser(registeredUser));
-      // console.log("Successfully logged in!");
-      // navigate("/");
+      await dispatch(loginUser(registeredUser));
+      console.log("Successfully logged in!");
     } catch (error) {
       console.log(error.message);
     }
@@ -88,7 +106,7 @@ const navigate=useNavigate();
     initialValues: signUp ? initialValuesSignup : initialValuesLogin,
     validationSchema: signUp ? registerSchema : loginSchema,
     onSubmit: (values) => {
-      signUp ? submitRegister(values) : submitLogin(values);
+     
     },
   });
   return (
@@ -107,7 +125,7 @@ const navigate=useNavigate();
         }}
       >
         <DialogTitle>
-          Sign In
+          Sign In 
           <IconButton
             color="error"
             variant="contained"
@@ -133,7 +151,7 @@ const navigate=useNavigate();
 
           <TextField
             type="text"
-            placeholder="Username"
+            placeholder="userName"
             variant="outlined"
             {...formik.getFieldProps("userName")}
             error={formik.touched.userName && formik.errors.userName}
@@ -177,11 +195,11 @@ const navigate=useNavigate();
         <React.Fragment>
         <TextField
             type="text"
-            placeholder="Username"
+            placeholder="Email"
             variant="outlined"
-            {...formik.getFieldProps("userName")}
-            error={formik.touched.userName && formik.errors.userName}
-            helperText={formik.touched.userName && formik.errors.userName}
+            {...formik.getFieldProps("email")}
+            error={formik.touched.email && formik.errors.email}
+            helperText={formik.touched.email && formik.errors.email}
           />
 
           <TextField
@@ -197,9 +215,16 @@ const navigate=useNavigate();
         </React.Fragment>
       )}
 
-      <Button type="submit" variant="contained">
-        {signUp ? "Sign Up" : "Sign In"}
-      </Button>
+      <Button
+  type="button"
+  variant="contained"
+  onClick={(e) => {
+    e.preventDefault();
+    signUp ? submitRegister(formik.values) : submitLogin(formik.values);
+  }}
+>
+  {signUp ? "Sign Up" : "Sign In"}
+</Button>
       <Box>
         {!signUp ? (
           <Typography onClick={handleSignUpClick}>

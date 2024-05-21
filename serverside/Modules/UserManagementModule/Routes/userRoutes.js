@@ -6,7 +6,7 @@ const {getCurrentUser,
        registerUser, 
        loginUser } = require('../Controllers/userController');
      
-router.get('/' ,validateTokenLevel1, getCurrentUser);
+router.get('/' , getCurrentUser);
 router.post('/register', registerUser);
 router.post('/login', loginUser);
 module.exports = router;

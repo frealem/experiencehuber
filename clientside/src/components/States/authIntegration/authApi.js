@@ -13,10 +13,10 @@ export const registerApi = async (formData) => {
   }
 };
 
-export const loginApi = async (userData) => {
+export const loginApi = async (credentials) => {
   try {
-    const response = await axios.post("http://localhost:5000/api/user/login", userData);
-    return response.data;
+    const response = await axios.post("http://localhost:5000/api/user/login", credentials);
+    return response.data; 
   } catch (error) {
     throw new Error(error.response.data);
   }
