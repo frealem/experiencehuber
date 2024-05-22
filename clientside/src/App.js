@@ -66,7 +66,7 @@ function App() {
             <Route path="/comment" element={<CommentModal />} />
             <Route element={<DashboardLayout />}>
               <Route path="/overview" element={<Overview />} />
-              <Route path="/usermanagement" element={<UserManagement />} />
+              {/* <Route path="/usermanagement" element={<UserManagement />} /> */}
               <Route path="/adminmanagement" element={<AdminManagement />} />
               <Route path="/postmanagement" element={<PostManagement />} />
               <Route path="/socialmedia" element={<SocialMedia />} />
@@ -96,6 +96,11 @@ function App() {
             </ProtectedRoute>
           }
         />
+{/* after protected */}
+
+         <Route element={<ProtectedRoute allowedRoles={[2,3]} />}>
+         <Route path="/usermanagement" element={<UserManagement />} />
+        </Route>
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

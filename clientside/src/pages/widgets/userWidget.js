@@ -8,14 +8,13 @@ import {
   import { useSelector } from "react-redux";
   import { useEffect, useState } from "react";
   import { useNavigate } from "react-router-dom";
-import WidgetWrapper from "../../components/widgetWrapper";
 import FlexBetween from "../../components/Flexbetween";
 import UserImage from "../../components/userImage";
 import image from '../../assets/images/chatapp.jpeg'
   const UserWidget = ({ userId, picturePath }) => {
     const { palette } = useTheme();
     const navigate = useNavigate();
-    const {user} = useSelector((state) => state.auth);
+    const {type,accessToken} = useSelector((state) => state.auth);
     const dark = palette.neutral.dark;
     const medium = palette.neutral.medium;
     const main = palette.neutral.main;
@@ -42,7 +41,7 @@ import image from '../../assets/images/chatapp.jpeg'
                   },
                 }}
               >
-               {user?.email}
+               role{type}
               </Typography>
               <Typography color={medium}>100 friends</Typography>
             </Box>

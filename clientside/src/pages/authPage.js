@@ -37,7 +37,7 @@ const initialValuesSignup = {
 const AuthPage = () => {
  const [open, setOpen] = useState(true);
   const [signUp, setSignUp] = useState(false);
-  const { loading, accessToken, error } = useSelector((state) => state.auth);
+  const { loading, type,accessToken, error } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -78,6 +78,7 @@ const AuthPage = () => {
   
       if (payload) {
         console.log("Successful login");
+        console.log()
       } else {
         console.log(error);
       }

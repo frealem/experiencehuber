@@ -15,9 +15,9 @@ const ProtectedRoute = ({ allowedRoles }) => {
     return <Navigate to="/authpage" />;
   }
 
-  // if (!hasRequiredRole) {
-  //   return <Navigate to="/unauthorized" />;
-  // }
+  if (!hasRequiredRole) {
+    return <Navigate to="/unauthorized" />;
+  }
 
   return <Outlet />;
 };
