@@ -40,7 +40,6 @@ const createUser = asyncHandler(async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({
         fullName,
-        phone,
         userName,
         email,
         password: hashedPassword,
@@ -102,7 +101,9 @@ const loginUser = asyncHandler(async (req, res) => {
             process.env.ACCESS_TOKEN_SECRETE,
             {expiresIn: '1hr'},
         );
-        res.status(200).json({accessToken}); 
+        const role = await Role.findOne(user.role);
+        const type = role.accessLevel;
+        res.status(200).json({type, accessToken}); 
     }else{
         res.status(401);
         throw new Error("Acces is not authorized!");
