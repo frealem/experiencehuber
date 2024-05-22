@@ -14,6 +14,31 @@ const EditProfile = () => {
     // Handle form submission logic here
     console.log(data);
   };
+  
+// //integration
+// const { register, handleSubmit, control, reset } = useForm();
+// const theme = useTheme();
+// const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+// const dispatch = useDispatch();
+// const { user } = useSelector((state) => state.user);
+
+// const onSubmit = (data) => {
+//   // Dispatch the editUser action with the form data
+//   dispatch(editUser(data));
+// };
+
+// // Populate the form fields with the user's current data
+// useEffect(() => {
+//   if (user) {
+//     reset({
+//       name: user.name,
+//       username: user.username,
+//       address: user.address,
+//       bio: user.bio,
+//     });
+//   }
+// }, [user, reset]);
+
 
   return (
     <Box

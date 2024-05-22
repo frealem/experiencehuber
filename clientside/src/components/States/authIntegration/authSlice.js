@@ -30,13 +30,13 @@ const authSlice = createSlice({
   initialState: {
     loading: false,
     accessToken: null,
-    user:null,
+    type:null,
     error: null,
   },
   reducers: {
     setLogout: (state) => {
       state.accessToken = null;
-      state.user=null;
+      state.type=null;
     },
   },
   extraReducers: (builder) => {
@@ -48,7 +48,7 @@ const authSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
         state.accessToken = action.payload.accessToken;
-        state.user = action.payload.user;
+        state.type = action.payload.user;
         state.error = null;
       })
       .addCase(registerUser.rejected, (state, action) => {
@@ -62,7 +62,7 @@ const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.accessToken = action.payload.accessToken;
-        state.user = action.payload.user;
+        state.type = action.payload.user;
         state.error = null;
       })
       .addCase(loginUser.rejected, (state, action) => {

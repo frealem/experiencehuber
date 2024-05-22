@@ -83,7 +83,7 @@ function App() {
             <Route
           path="/eachpost"
           element={
-            <ProtectedRoute allowedRoles={[1]}>
+            <ProtectedRoute allowedRoles={[1,2,3]}>
               <EachPostPage />
             </ProtectedRoute>
           }
