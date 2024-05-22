@@ -1,5 +1,4 @@
 import React,{useState} from 'react';
-import { useGetUserQuery } from "./States/Api";
 import { Box, useMediaQuery } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -10,7 +9,7 @@ import Sidebar from "./sidebar";
 const Layout = () => {
   const isNonMobile = useMediaQuery("(min-width: 600px)");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const userId = useSelector((state) => state.auth.token?.user);
+  // const userId = useSelector((state) => state.auth.token?.user);
   // const { data } = useGetUserQuery(userId);
 
   return (

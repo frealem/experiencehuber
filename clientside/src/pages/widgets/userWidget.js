@@ -13,37 +13,12 @@ import FlexBetween from "../../components/Flexbetween";
 import UserImage from "../../components/userImage";
 import image from '../../assets/images/chatapp.jpeg'
   const UserWidget = ({ userId, picturePath }) => {
-    const [user, setUser] = useState(null);
     const { palette } = useTheme();
     const navigate = useNavigate();
-    const token = useSelector((state) => state.token);
+    const {type} = useSelector((state) => state.auth);
     const dark = palette.neutral.dark;
     const medium = palette.neutral.medium;
     const main = palette.neutral.main;
-  
-    // const getUser = async () => {
-    //   const response = await fetch(`http://localhost:3001/users/${userId}`, {
-    //     method: "GET",
-    //     headers: { Authorization: `Bearer ${token}` },
-    //   });
-    //   const data = await response.json();
-    //   setUser(data);
-    // };
-  
-    // useEffect(() => {
-    //   getUser();
-    // }, []); // eslint-disable-line react-hooks/exhaustive-deps
-  
-    // if (!user) {
-    //   return null;
-    // }
-  
-    // const {
-//    fullName,
-    //   address,
-    //   phone,
-    //   friends,
-    // } = user;
   
     return (
       <Box>
@@ -67,7 +42,7 @@ import image from '../../assets/images/chatapp.jpeg'
                   },
                 }}
               >
-               Amanuel
+               This{type}
               </Typography>
               <Typography color={medium}>100 friends</Typography>
             </Box>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   LightModeOutlined,
   DarkModeOutlined,
@@ -10,7 +10,7 @@ import {
   Notifications,
 } from "@mui/icons-material";
 import FlexBetween from "./Flexbetween";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setMode } from "./States/themeSlice";
 import profileImage from "../assets/images/chatapp.jpeg";
 import {
@@ -25,12 +25,13 @@ import {
   MenuItem,
   useTheme,
   useMediaQuery,
+  Select,
 } from "@mui/material";
-import AuthPage from "../pages/authPage";
 import { Link, useNavigate, useNavigation } from "react-router-dom";
 import SearchComponent from "./Search";
 import MessagePage from "../pages/messagePage/message";
 import MessageOutlined from "@mui/icons-material/MessageOutlined";
+import { setLogout } from "./States/authIntegration/authSlice";
 
 
 const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen}) => {
@@ -47,6 +48,20 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen}) => {
   const [openSearch, setOpenSearch] = useState(null);
   const [activeSearch, setActiveSearch] = useState(null);
   const [messageOpen, setMessageOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState('');
+  const { loading, accessToken, error } = useSelector((state) => state.auth);
+  const handleLogout=()=>{
+    dispatch(setLogout())
+  }
+    const handleLogin=()=>{
+      navigate('/authpage')
+    }
+ 
+
+  
+ const handleOptionChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
   const handleActiveSearchClose=()=>{
     setActiveSearch(false)
   }
@@ -56,16 +71,7 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen}) => {
   const handleMessageClose=()=>{
     setMessageOpen(false)
   }
-  const handleAuth = () => {
-    navigate("/authpage");
-  };
-
-  // const handleOpenMessage=()=>{
-  //   setMessageOpen(true)
-  // }
-  // const handleCloseMessage=()=>{
-  //   setMessageOpen(false)
-  // }
+  
 
   return (
     <AppBar
@@ -74,47 +80,34 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen}) => {
         background: "none",
         boxShadow: "none",
       }}
-    ><Toolbar sx={{ justifyContent: "space-between" }}>
+    ><Toolbar>
       {!isMobile ? (
         <>
-        <FlexBetween gap="9rem">
-          {/* LEFT SIDE */}
-          <FlexBetween gap="3rem" padding="2rem 6%">
-            {!isSidebarOpen && (
-              <FlexBetween>
-                <Typography
-                  variant="h3"
-                  fontWeight={900}
-                  color={theme.palette.secondary[100]}
-                >
-                  ExperienceHub
-                </Typography>
-              </FlexBetween>
-            )}
-            <FlexBetween
-              backgroundColor={theme.palette.secondary[900]}
-              borderRadius={15}
-              gap="3rem"
-              p="0.1rem 1.5rem"
-              onClick={activeSearch}
-            >
-              <InputBase placeholder="Search..." />
-              <IconButton>
-                <Search />
-              </IconButton>
-              
-            </FlexBetween>
-          </FlexBetween>
-
           {/* RIGHT SIDE */}
-          <FlexBetween gap="1.3rem">
-          <IconButton onClick={()=>{navigate('/notification')}}>
-              <Notifications/>
+          <Box gap="1rem" display="flex" pl="50%" justifyContent="flex-end" sx={{ flexDirection: "row" }}>
+            <Select
+              value={selectedOption}
+              onChange={handleOptionChange}
+              displayEmpty
+              renderValue={(value) => (value === "" ? "Unread" : value)}
+            >
+              <MenuItem value="" disabled>
+                Select a status
+              </MenuItem>
+              <MenuItem value="option1">Fixed</MenuItem>
+              <MenuItem value="option2">Onprocess</MenuItem>
+              <MenuItem value="option3">Unread</MenuItem>
+            </Select>
+            <IconButton>
+              <Search />
+            </IconButton>
+            <IconButton onClick={() => navigate("/notification")}>
+              <Notifications />
             </IconButton>
             <IconButton onClick={handleMessageOpen}>
-              <MessageOutlined/>
+              <MessageOutlined />
             </IconButton>
-<MessagePage  open={messageOpen} onClose={handleMessageClose}/>
+            <MessagePage open={messageOpen} onClose={handleMessageClose} />
             <IconButton onClick={() => dispatch(setMode())}>
               {theme.palette.mode === "dark" ? (
                 <DarkModeOutlined sx={{ fontSize: "25px" }} />
@@ -126,7 +119,7 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen}) => {
               <SettingsOutlined sx={{ fontSize: "25px" }} />
             </IconButton>
 
-            <FlexBetween>
+            <Box>
               <Button
                 onClick={handleClick}
                 sx={{
@@ -146,23 +139,11 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen}) => {
                   borderRadius="50%"
                   sx={{ objectFit: "cover" }}
                 />
-                <Box textAlign="left">
-                  <Typography
-                    fontWeight="bold"
-                    fontSize="0.85rem"
-                    sx={{ color: theme.palette.secondary[100] }}
-                  >
-                    Gelila Daniel
-                  </Typography>
-                  <Typography
-                    fontSize="0.75rem"
-                    sx={{ color: theme.palette.secondary[200] }}
-                  >
-                    @username
-                  </Typography>
-                </Box>
                 <ArrowDropDownOutlined
-                  sx={{ color: theme.palette.secondary[300], fontSize: "20px" }}
+                  sx={{
+                    color: theme.palette.secondary[300],
+                    fontSize: "20px",
+                  }}
                 />
               </Button>
               <Menu
@@ -171,11 +152,12 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen}) => {
                 onClose={handleClose}
                 anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
               >
-                <MenuItem onClick={handleClose}>Log Out</MenuItem>
+                <MenuItem onClick={handleLogout}>Log Out</MenuItem>
+                <MenuItem onClick={handleLogin}>Log In</MenuItem>
+                <MenuItem onClick={handleLogin}>Sign Up</MenuItem>
               </Menu>
-            </FlexBetween>
-          </FlexBetween>
-          </FlexBetween>
+            </Box>
+          </Box>
         </>
         
       ) : (

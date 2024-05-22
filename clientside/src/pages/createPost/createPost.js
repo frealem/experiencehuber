@@ -10,19 +10,17 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import MapIcon from "@mui/icons-material/Map";
 import MapComponent from "./component/mapPost";
 import ImageUploaderComponent from "./component/uploadPostPictures";
-import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
 import AddLocationAlt from "@mui/icons-material/AddLocationAlt";
 import StyledInputWithValidation from "../../components/input";
 import MyButton from "../../components/myButton";
 import { useForm } from "react-hook-form";
-// import ImageUploader from "./ImageUploader";
+import { createPostApi } from "../../components/States/postIntegration/postApi";
 
-const LocationField = () => {
+const LocationField = ({ onLocationChange }) => {
   const [openMap, setOpenMap] = useState(false);
-  const [selectedLocation, setSelectedLocation] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState({ lat: "", lng: "", placeName: "" });
 
   const handleOpenMap = () => {
     setOpenMap(true);
@@ -33,27 +31,34 @@ const LocationField = () => {
   };
 
   const handleSelectLocation = (location) => {
-    setSelectedLocation(location);
+    setSelectedLocation({
+      lat: location.lat,
+      lng: location.lng,
+      placeName: location.placeName // Set the placeName property
+    });
+    onLocationChange(`${location.lat},${location.lng}`); // Pass the combined lat and lng as a string to the parent component
     handleCloseMap();
   };
+
   const { register, handleSubmit, control } = useForm();
+
   return (
     <div>
-      <StyledInputWithValidation
-        placeholder="Location"
-        value={selectedLocation.placeName}
-        variant="outlined"
-        control={control}
-         name="location"
-        margin="normal"
-        InputProps={{
-          endAdornment: (
-            <Button variant="text" color="secondary" onClick={handleOpenMap}>
-              <AddLocationAlt />
-            </Button>
-          ),
-        }}
-      />
+     <StyledInputWithValidation
+  placeholder="Location"
+  value={selectedLocation.placeName} // Display the placeName
+  variant="outlined"
+  control={control}
+  name="location"
+  margin="normal"
+  InputProps={{
+    endAdornment: (
+      <Button variant="text" color="secondary" onClick={handleOpenMap}>
+        <AddLocationAlt />
+      </Button>
+    ),
+  }}
+/>
 
       <Dialog open={openMap} onClose={handleCloseMap}>
         <DialogTitle>Select Location</DialogTitle>
@@ -66,17 +71,48 @@ const LocationField = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Hidden input fields to store lat and lng values */}
+      <input type="hidden" {...register("location.lat", { value: selectedLocation.lat })} />
+      <input type="hidden" {...register("location.lng", { value: selectedLocation.lng })} />
     </div>
   );
 };
 
+
 const CreatePost = () => {
-  const onSubmit = (event) => {
-    event.preventDefault();
-    // Handle form submission logic here
+  const [capturedImages, setCapturedImages] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState({lat:"",lng:"",placeName:""});
+
+  const onSubmit = async (data) => {
+    try {
+      const location = {
+        lat: selectedLocation.lat,
+        lng: selectedLocation.lng,
+        placeName: selectedLocation.placeName,
+      };
+
+      const postData = {
+        ...data,
+        location: location,
+        images: capturedImages,
+      };
+
+      console.log(postData);
+      const createdPost = await createPostApi(postData);
+      console.log('Created post:', createdPost);
+    
+    } catch (error) {
+      console.error('Failed to create post:', error);
+    }
   };
+
+  const handleLocationChange = (location) => {
+    setSelectedLocation(location);
+  };
+
   const { handleSubmit, control, setValue, watch } = useForm();
-  const theme=useTheme();
+  const theme = useTheme();
   const [inputHeight, setInputHeight] = useState('auto');
 
   const handleInputChange = (event) => {
@@ -94,7 +130,7 @@ const CreatePost = () => {
               color={theme.palette.secondary.main}
               marginBottom={3}
             >
-              Edit Profile
+              Create Post
             </Typography>
   </Box>
   <Box display="flex" justifyContent="center" marginBottom="16px">
@@ -147,10 +183,10 @@ const CreatePost = () => {
           />
         </Box>
         <Box marginBottom="16px">
-          <LocationField style={{ display: 'block' }} />
+          <LocationField onLocationChange={handleLocationChange}  style={{ display: 'block' }} />
         </Box>
         <Box marginBottom="16px">
-          <ImageUploaderComponent style={{ display: 'block' }} />
+          <ImageUploaderComponent style={{ display: 'block' }} setCapturedImages={setCapturedImages}/>
         </Box>
         <Box>
           <MyButton type="submit" variant="contained" color="primary">

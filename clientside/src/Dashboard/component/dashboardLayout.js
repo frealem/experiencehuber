@@ -197,7 +197,7 @@ const DashboardLayout = ({ text }) => {
               marginLeft={6}
               marginBottom={3}
             >
-              Poster Profile
+              ExperienceHub
             </Typography>
             <List>
               {navItems.map(({ text, icon, link }) => {
