@@ -72,7 +72,7 @@ const deleteRole = asyncHandler(async (req, res) => {
         throw new Error("Role not found");
     }
 
-    await Role.findByIdAndRemove(req.params.id);
+    await Role.findByIdAndDelete(req.params.id);
     res.status(200).json(Role);
 });
 

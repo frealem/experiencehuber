@@ -41,11 +41,29 @@ const createUser = asyncHandler(async (req, res) => {
     const user = await User.create({
         fullName,
         userName,
+        profilePictuerURL: null,
         email,
         password: hashedPassword,
         role,
     });
+    const account = await Account.create({
+        ownerId: user.id,
+    });
     res.status(200).json(user);
+});
+
+//@desc update a user
+//@route PUT api/user/changePP
+//@accesslevel 1
+const changeProfilePicture = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user.id);
+    if(!user){
+        res.status(404);
+        throw new Error("User not found");
+    }
+   user.profilePictuerURL = req.file.filename;
+   const updatedUser = await user.save();
+   res.status(200).json(updateUser);
 });
 
 //@desc update a user
@@ -119,4 +137,4 @@ const registerUser = asyncHandler(async(req, res) => {
     createUser(req, res);
 }); 
 
-module.exports = {getCurrentUser, updateUser, deleteUser, registerUser, loginUser};
+module.exports = {getCurrentUser, createUser,updateUser, deleteUser, registerUser, loginUser, changeProfilePicture};

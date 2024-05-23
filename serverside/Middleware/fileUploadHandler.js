@@ -5,10 +5,10 @@ const { callbackify } = require('util');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'Modules/PostManagmentModule/PostImages/');
+        cb(null, 'Upload');
     },
     filename: (req, file, cb) => {
-        let extension = path.extension(file.originalname);
+        let extension = path.extname(file.originalname);
         cb(null, Date.now() + extension);
     }
 });
@@ -18,7 +18,7 @@ const fileUploadHandler = multer ({
     storage: storage,
     fileFilter: (req, file, callback) => {
         if(
-            file.mimetype == "image/ong" ||
+            file.mimetype == "image/png" ||
             file.mimetype == "image/jpg" ||
             file.mimetype == "image/jpeg"
         ){

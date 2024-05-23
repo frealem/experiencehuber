@@ -6,6 +6,9 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: [true, "please enter username"],
     },
+    profilePictuerURL: {
+        type:String,
+    },
     email:{
         type: String,
         required: [true, "please enter email"],

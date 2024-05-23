@@ -6,9 +6,7 @@ const AccountSchema = mongoose.Schema({
         ref: 'User',
         required: [true, "The owner id is required!"],
     },
-    profilePictuerURL: {
-        type:String,
-    },
+    
     theme: {
         type: Number,
     },

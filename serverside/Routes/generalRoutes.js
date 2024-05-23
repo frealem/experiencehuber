@@ -9,7 +9,7 @@ router.use('/acount', require('../Modules/UserManagementModule/Routes/accountRou
 //router leading to admin router
 router.use('/admin', require('../Modules/UserManagementModule/Routes/adminRoutes'));
 //router leading to super admin router
-//router.use('/superadmin',require('../Modules/UserManagementModule/Routes/superAdminRoutes'))
+router.use('/superadmin',require('../Modules/UserManagementModule/Routes/superAdminRoutes'))
 //router leading to post router
 router.use('/post', require('../Modules/PostManagmentModule/Routes/postRoutes'));
 // routes for system monitoring
