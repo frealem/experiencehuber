@@ -1,6 +1,6 @@
 import { Box, Grid, Typography, useMediaQuery, useTheme } from '@mui/material';
 import React from 'react'
-import { Notification } from '../../pages/Profile/Notification';
+import { Notification } from '../../pages/Profile/notification';
 
 
 const NotificationAlert = () => {

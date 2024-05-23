@@ -17,7 +17,7 @@ import EachPostPage from "./pages/EachPost/eachPostPage";
 import ProfileLayout from "./pages/Profile/component/layout";
 import EditProfile from "./pages/Profile/editProfile";
 import MyPost from "./pages/Profile/component/myPost";
-import { Notification } from "./pages/Profile/Notification";
+import { Notification } from "./pages/Profile/notification";
 import FavoritePost from "./pages/Profile/favoritePost";
 import PasswordSecurity from "./pages/Profile/PasswordAndSecurity";
 import Setting from "./pages/Profile/Setting";
