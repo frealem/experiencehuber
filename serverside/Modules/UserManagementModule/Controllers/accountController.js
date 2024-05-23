@@ -63,23 +63,22 @@ const updateAccount = asyncHandler(async (req, res) => {
         res.status(404);
         throw new Error("Account not ound");
     }
-    account.profilePictuerURL = req.body.profilePictuerURL;
     account.theme = req.body.theme? req.body.theme : 0;
     if (req.body.preferedCategories) {
-        account.preferedCategories.push(...req.body.preferedCategories);
+        account.preferedCategories = req.body.preferedCategories;
     }
 
-    if (req.body.likedPosts) {
-        account.likedPosts.push(...req.body.likedPosts);
-    }
+    // if (req.body.likedPosts) {
+    //     account.likedPosts.push(...req.body.likedPosts);
+    // }
 
     if (req.body.previousPosts) {
         account.previousPosts.push(...req.body.previousPosts);
     }
 
-    if (req.body.followings) {
-        account.followings.push(...req.body.followings);
-    }
+    // if (req.body.followings) {
+    //     account.followings.push(...req.body.followings);
+    // }
     const updatedAccount = await account.save();
     res.status(200).json(updatedAccount);
 });
