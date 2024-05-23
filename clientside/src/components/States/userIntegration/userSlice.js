@@ -65,7 +65,7 @@ const userSlice = createSlice({
       })
       .addCase(getAllUsers.fulfilled, (state, action) => {
         state.loading = false;
-        state.posts.push(action.payload);
+        state.users.push(action.payload);
         state.error = null;
       })
       .addCase(getAllUsers.rejected, (state, action) => {
@@ -108,7 +108,7 @@ const userSlice = createSlice({
       })
       .addCase(getUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.users.push(action.payload);
+        state.users[action.payload.id] = action.payload;
         state.error = null;
       })
       .addCase(getUser.rejected, (state, action) => {

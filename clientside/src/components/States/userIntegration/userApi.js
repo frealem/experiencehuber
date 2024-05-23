@@ -18,7 +18,7 @@ export const editUserApi = async (userData) => {
   }
 };
 
-export const getUserApi = async (userId) => {
+export const getCurrentUserApi= async (userId) => {
   try {
     const response = await axios.get(`http://localhost:5000/api/user/${userId}`);
     return response.data;

@@ -78,7 +78,6 @@ const AuthPage = () => {
   
       if (payload) {
         console.log("Successful login");
-        console.log()
       } else {
         console.log(error);
       }

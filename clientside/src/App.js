@@ -47,12 +47,7 @@ function App() {
           <CssBaseline />
           <Routes>
           {/* use <ProtectedRoute path="/admin" component={AdminPage} roles={['admin']} /> for protectedroute */}
-            <Route element={<Layout />}>
-              <Route path="/" element={<Navigate to="/feedpage" replace />} />
-              <Route path="/feedpage" element={<FeedPage />} />
-
-              <Route path="/authpage" element={<AuthPage />} />
-            </Route>
+            
             {/* <Route path="/eachpost" element={<EachPostPage />} /> */}
             <Route path="/landing" element={<AnimatedLanding />} />
             <Route element={<ProfileLayout />}>
@@ -71,36 +66,58 @@ function App() {
               <Route path="/postmanagement" element={<PostManagement />} />
               <Route path="/socialmedia" element={<SocialMedia />} />
               <Route path="/reportmanagement" element={<ReportManagement />} />
-              <Route
-                path="/notificationalert"
-                element={<NotificationAlert />}
+              <Route path="/notificationalert" element={<NotificationAlert />}
               />
               <Route path="/systemsecurity" element={<SystemSecurity />} />
               <Route path="/systemsetting" element={<SystemSecurity />} />
             </Route>
-            <Route path="/message" element={<MessagePage />} />
+            
             <Route path="/unauthorised" element={<Unauthorised />} />
-            <Route
-          path="/eachpost"
-          element={
-            <ProtectedRoute allowedRoles={[1,2,3]}>
-              <EachPostPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/createpost"
-          element={
-            <ProtectedRoute allowedRoles={[1]}>
-              <CreatePost />
-            </ProtectedRoute>
-          }
-        />
+       
 {/* after protected */}
 
-         <Route element={<ProtectedRoute allowedRoles={[2,3]} />}>
-         <Route path="/usermanagement" element={<UserManagement />} />
-        </Route>
+{/* any user */}
+
+<Route element={<Layout />}>
+              <Route path="/" element={<Navigate to="/feedpage" replace />} />
+              <Route path="/feedpage" element={<FeedPage />} />
+              <Route path="/authpage" element={<AuthPage />} />
+            </Route>
+{/* regular user and admin */}
+
+<Route element={<ProtectedRoute allowedRoles={[1,2]} />}>
+<Route path="/createpost" element={<CreatePost />} />
+<Route path="/eachpost" element={<EachPostPage/>} />
+</Route>
+
+{/* only admin */}
+<Route element={<ProtectedRoute allowedRoles={[2]} />}>
+
+</Route>
+
+{/* the 3 users */}
+<Route element={<ProtectedRoute allowedRoles={[1,2,3]} />}>
+<Route path="/message" element={<MessagePage />} />
+</Route>
+
+{/* admin and superAdmin */}
+<Route element={<ProtectedRoute allowedRoles={[2,3]} />}>
+<Route element={<DashboardLayout />}>
+              <Route path="/overview" element={<Overview />} />
+              <Route path="/postmanagement" element={<PostManagement />} />
+              <Route path="/socialmedia" element={<SocialMedia />} />
+              <Route path="/reportmanagement" element={<ReportManagement />} />
+              <Route path="/notificationalert" element={<NotificationAlert/>}
+              />
+              <Route path="/systemsecurity" element={<SystemSecurity />} />
+              <Route path="/systemsetting" element={<SystemSecurity />} />
+            </Route>
+</Route>
+
+{/* superAdmin */}
+<Route element={<ProtectedRoute allowedRoles={[3]} />}>
+<Route path="/adminmanagement" element={<AdminManagement />} />
+</Route>
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

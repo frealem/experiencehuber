@@ -5,19 +5,25 @@ import {
     WorkOutlineOutlined,
   } from "@mui/icons-material";
   import { Box, Typography, Divider, useTheme } from "@mui/material";
-  import { useSelector } from "react-redux";
+  import { useDispatch, useSelector } from "react-redux";
   import { useEffect, useState } from "react";
   import { useNavigate } from "react-router-dom";
 import FlexBetween from "../../components/Flexbetween";
 import UserImage from "../../components/userImage";
 import image from '../../assets/images/chatapp.jpeg'
+import { getUser } from "../../components/States/userIntegration/userSlice";
   const UserWidget = ({ userId, picturePath }) => {
     const { palette } = useTheme();
     const navigate = useNavigate();
     const {type,accessToken} = useSelector((state) => state.auth);
     const dark = palette.neutral.dark;
     const medium = palette.neutral.medium;
-    const main = palette.neutral.main;
+    const main = palette.neutral.main;  
+    const user = useSelector((state) => state.user.users[userId]);
+    const dispatch=useDispatch()
+  useEffect(() => {
+    dispatch(getUser(user?.userId)); // Replace userId  with the user ID you want to fetch
+  }, [dispatch]);
   
     return (
       <Box>
@@ -25,7 +31,7 @@ import image from '../../assets/images/chatapp.jpeg'
         <FlexBetween
           gap="0.5rem"
           pb="1.1rem"
-          onClick={() => navigate(`/profile/${userId}`)}
+          onClick={() => navigate(`/editprofile/${userId}`)}
         >
           <FlexBetween gap="1rem">
             <UserImage size={50} />

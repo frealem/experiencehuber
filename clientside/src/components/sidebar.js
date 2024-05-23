@@ -27,6 +27,8 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import FlexBetween from "./Flexbetween";
 import UserWidget from "../pages/widgets/userWidget";
+import { useDispatch, useSelector } from "react-redux";
+import { getUser } from "./States/userIntegration/userSlice";
 
 const navItems = [
   {
@@ -68,7 +70,6 @@ const navItems = [
 ];
 
 const Sidebar = ({
-  user,
   drawerWidth,
   isSidebarOpen,
   setIsSidebarOpen,
@@ -78,6 +79,8 @@ const Sidebar = ({
   const [active, setActive] = useState("");
   const navigate = useNavigate();
   const theme = useTheme();
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setActive(pathname.substring(1));
@@ -122,7 +125,7 @@ const Sidebar = ({
                 )}
               </FlexBetween>
               <Box pt={5}>
-                <UserWidget />
+                <UserWidget/>
               </Box>
             </Box>
             <List>
