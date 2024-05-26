@@ -1,12 +1,13 @@
 import { Box, useMediaQuery } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useSelector , useDispatch} from "react-redux";
 import UserWidget from "../widgets/userWidget";
 import TopPostBox from "../../components/topPostBox";
 import MyButton from "../../components/myButton";
 import PostsWidget from "../widgets/postsWidget";
 import ArrowUpwardOutlinedIcon from "@mui/icons-material/ArrowUpwardOutlined";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LeftFeedWidget from "../widgets/leftFeedWidget";
+import { getUser } from "../../components/States/userIntegration/userSlice";
 
 const FeedPage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
@@ -22,6 +23,14 @@ const FeedPage = () => {
       setShowOverlay(false);
     }, 1000); // Adjust the duration as needed
   };
+  const accessToken = useSelector(state => state.auth);
+  const user = useSelector(state => state.user.user);
+  const dispatch = useDispatch()
+
+  useEffect(()=>{
+    console.log(user.email);
+    console.log(dispatch(getUser()));
+  },[dispatch])
 
   return (
     <Box>

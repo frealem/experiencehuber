@@ -9,6 +9,19 @@ const ACCESSLEVEL = require('../../../Constants/accessLevel');
 
 
 //@desc get a user by id
+//@route GET api/user/:id
+//@accesslevel 1
+const getUser = asyncHandler(async (req, res) => {
+    const tuser = await User.findOne({_id: req.params.id});
+    if(!user){
+        res.status(404);
+        throw new Error("User not found!");
+    }
+    res.status(200).json(user);
+})
+
+
+//@desc get a user by id
 //@route GET api/user/
 //@accesslevel 1
 const getCurrentUser = asyncHandler(async (req, res) => {
@@ -137,4 +150,4 @@ const registerUser = asyncHandler(async(req, res) => {
     createUser(req, res);
 }); 
 
-module.exports = {getCurrentUser, createUser,updateUser, deleteUser, registerUser, loginUser, changeProfilePicture};
+module.exports = {getCurrentUser, getUser,createUser,updateUser, deleteUser, registerUser, loginUser, changeProfilePicture};

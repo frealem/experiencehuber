@@ -1,7 +1,8 @@
 const router = require('express').Router();
 const {validateTokenLevel1, validateTokenLevel3} = require('../../../Middleware/validateTokenHandler');
 const fileUploadHandler = require('../../../Middleware/fileUploadHandler');
-const {getCurrentUser, 
+const {getCurrentUser,
+       getUser, 
        updateUser, 
        deleteUser, 
        registerUser, 
@@ -9,6 +10,7 @@ const {getCurrentUser,
        changeProfilePicture} = require('../Controllers/userController');
      
 router.get('/' ,validateTokenLevel1, getCurrentUser);
+router.get('/:id',validateTokenLevel1, getUser);
 router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.post('/changePP', validateTokenLevel3, fileUploadHandler.single('file'), changeProfilePicture);

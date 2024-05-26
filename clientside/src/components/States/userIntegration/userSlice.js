@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { deleteUserApi, editUserApi, getAllUsersApi, getUserApi } from "./userApi";
+import { deleteUserApi, editUserApi, getAllUsersApi, getCurrentUserApi } from "./userApi";
 
 
 export const deleteUser = createAsyncThunk(
@@ -30,7 +30,7 @@ export const getUser = createAsyncThunk(
   "post/getuser",
   async (userId, { rejectWithValue }) => {
     try {
-      const response = await getUserApi(userId);
+      const response = await getCurrentUserApi(userId);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -55,6 +55,7 @@ const userSlice = createSlice({
     users: [],
     loading: false,
     error: null,
+    user:null
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -108,7 +109,7 @@ const userSlice = createSlice({
       })
       .addCase(getUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.users.push(action.payload);
+        state.user=action.payload;
         state.error = null;
       })
       .addCase(getUser.rejected, (state, action) => {

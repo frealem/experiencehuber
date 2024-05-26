@@ -1,15 +1,21 @@
 import axios from 'axios';
 
-const authMiddleware = ({ getState }) => (next) => (action) => {
-  const { auth } = getState();
-  const { accessToken } = auth;
+const authMiddleware = (store) => {
+  // Set up the Axios interceptor
+  axios.interceptors.request.use((config) => {
+    const state = store.getState();
+    const token = state.auth.accessToken; // the token is stored in the 'auth' slice
 
-  if (accessToken) {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-  } else {
-    delete axios.defaults.headers.common['Authorization'];
-  }
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
 
-  return next(action);
+    return config;
+  });
+
+  return (next) => (action) => {
+    return next(action);
+  };
 };
+
 export default authMiddleware;
