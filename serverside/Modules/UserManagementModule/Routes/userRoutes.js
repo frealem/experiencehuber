@@ -13,5 +13,5 @@ router.get('/' ,validateTokenLevel1, getCurrentUser);
 router.get('/:id',validateTokenLevel1, getUser);
 router.post('/register', registerUser);
 router.post('/login', loginUser);
-router.post('/changePP', validateTokenLevel3, fileUploadHandler.single('file'), changeProfilePicture);
+router.post('/changePP', validateTokenLevel1, fileUploadHandler.single('file'), changeProfilePicture);
 module.exports = router;
