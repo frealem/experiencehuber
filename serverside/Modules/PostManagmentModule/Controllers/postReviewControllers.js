@@ -1,10 +1,11 @@
 const PostReview = require('../Models/PostReview');
 const asyncHandler = require('express-async-handler');
 const paginate = require('../../../Common/pagination');
+const Post = require('../Models/Post');
 
 
 const getPostReviewsByPost = asyncHandler(async (res, req) => {
-    const postReviews = PostReview.find({postId: req.params.id});
+    const postReviews = await PostReview.find({postId: req.params.id});
     if(!postReview){
         res.status(404);
         throw new Error("Review does not exist!");
@@ -13,7 +14,7 @@ const getPostReviewsByPost = asyncHandler(async (res, req) => {
 });
 
 const getPostPreview = asyncHandler(async (req, res) => {
-    const postReview = PostReview.findOne({_id: req.params.id});
+    const postReview = await PostReview.findOne({_id: req.params.id});
     if(!postReview){
         res.status(404);
         throw new Error("Review does not exist!");
@@ -23,6 +24,12 @@ const getPostPreview = asyncHandler(async (req, res) => {
 })
 
 const createPostReviews = asyncHandler(async (req, res) => {
+    const post = await Post.findOne({_id: req.body.psotId});
+
+    if(!post){
+        res.status(404);
+        throw new Error("Post is not found");
+    }
     const posterId = req.user.id;
     const {
         postId,
@@ -41,6 +48,11 @@ const createPostReviews = asyncHandler(async (req, res) => {
         description,
         rate,
     });
+    let aveRate = post.rate;
+    aveRate = (aveRate + rate)/2;
+
+    post.rate = aveRate;
+    const updatedPost = await post.save();
 
     res.status(200).json(createPostReviews);
 }); 
