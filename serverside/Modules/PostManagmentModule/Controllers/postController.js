@@ -37,8 +37,8 @@ const getPost = asyncHanler(async (req, res) => {
 //@route POST /api/post/
 //@access level 1
 const createPost = asyncHanler(async (req, res) => {
-    const {posterId, 
-           title, 
+    const posterId = req.user.id;
+    const {title, 
            description, 
            like, 
            dislike, 

@@ -16,4 +16,7 @@ router.use('/post', require('../Modules/PostManagmentModule/Routes/postRoutes'))
 //router leading to role router
 router.use('/role', require('../Modules/SystemMonitoringModule/Routes/roleRoutes'));
 
+//router leading to postreview controller
+router.use('/postreview', require('../Modules/PostManagmentModule/Routes/postReviewRoutes'));
+
 module.exports = router;
