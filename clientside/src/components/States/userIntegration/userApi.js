@@ -1,11 +1,12 @@
 import axios from 'axios';
+import axiosInstance from '../interceptor';
 
 export const deleteUserApi = async (userId) => {
   try {
     const response = await axios.delete(`http://localhost:5000/api/user/${userId}`);
     return response.data;
   } catch (error) {
-    throw new Error('Failed to delete post.');
+    throw new Error('Failed to delete user.');
   }
 };
 
@@ -18,28 +19,29 @@ export const editUserApi = async (userData) => {
   }
 };
 
-// export const getUserApi = async (userId) => {
-//   try {
-//     const response = await axios.get(`http://localhost:5000/api/user/${userId}`);
-//     return response.data;
-//   } catch (error) {
-//     throw new Error('Failed to get user.');
-//   }
-// };
 export const getCurrentUserApi = async () => {
   try {
-    const response = await axios.get('http://localhost:5000/api/user');
-    return response;
-  }catch (error) {
-    throw new Error('Current user non existent!');
+    const response = await axiosInstance.get('/user');
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to get current user.');
+  }
+}
+
+export const getOneUserApi = async (userId) => {
+  try {
+    const response = await axiosInstance.get(`/user/${userId}`);
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to get user.');
   }
 }
 
 export const getAllUsersApi = async () => {
-    try {
-      const response = await axios.get(`http://localhost:5000/api/user/users`);
-      return response.data;
-    } catch (error) {
-      throw new Error('Failed to get All user.');
-    }
-  };
+  try {
+    const response = await axiosInstance.get(`/user/users`);
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to get all users.');
+  }
+};

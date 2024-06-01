@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -17,6 +17,9 @@ import StyledInputWithValidation from "../../components/input";
 import MyButton from "../../components/myButton";
 import { useForm } from "react-hook-form";
 import { createPostApi } from "../../components/States/postIntegration/postApi";
+import { useDispatch, useSelector } from "react-redux";
+import { getUser} from "../../components/States/userIntegration/userSlice";
+
 
 const LocationField = ({ onLocationChange }) => {
   const [openMap, setOpenMap] = useState(false);
@@ -121,6 +124,7 @@ const CreatePost = () => {
   };
 
   const descriptionValue = watch('description', '');
+ 
   return (<Box >
   <Box>
   <Typography
@@ -130,7 +134,7 @@ const CreatePost = () => {
               color={theme.palette.secondary.main}
               marginBottom={3}
             >
-              Create Post
+            Create Post
             </Typography>
   </Box>
   <Box display="flex" justifyContent="center" marginBottom="16px">

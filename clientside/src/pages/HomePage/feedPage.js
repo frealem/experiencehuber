@@ -1,5 +1,5 @@
 import { Box, useMediaQuery } from "@mui/material";
-import { useSelector , useDispatch} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import UserWidget from "../widgets/userWidget";
 import TopPostBox from "../../components/topPostBox";
 import MyButton from "../../components/myButton";
@@ -23,15 +23,6 @@ const FeedPage = () => {
       setShowOverlay(false);
     }, 1000); // Adjust the duration as needed
   };
-  const accessToken = useSelector(state => state.auth);
-  const user = useSelector(state => state.user.user);
-  const dispatch = useDispatch()
-
-  useEffect(()=>{
-    console.log(user.email);
-    console.log(dispatch(getUser()));
-  },[dispatch])
-
   return (
     <Box>
       <Box

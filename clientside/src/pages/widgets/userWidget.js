@@ -5,20 +5,47 @@ import {
     WorkOutlineOutlined,
   } from "@mui/icons-material";
   import { Box, Typography, Divider, useTheme } from "@mui/material";
-  import { useSelector } from "react-redux";
+  import { useDispatch, useSelector } from "react-redux";
   import { useEffect, useState } from "react";
-  import { useNavigate } from "react-router-dom";
-import WidgetWrapper from "../../components/widgetWrapper";
+  import { Link, useNavigate } from "react-router-dom";
 import FlexBetween from "../../components/Flexbetween";
 import UserImage from "../../components/userImage";
 import image from '../../assets/images/chatapp.jpeg'
+import { getAllUsersApi, getCurrentUserApi, getOneUserApi } from "../../components/States/userIntegration/userApi";
+import { setLogout } from "../../components/States/authIntegration/authSlice";
   const UserWidget = ({ userId, picturePath }) => {
     const { palette } = useTheme();
     const navigate = useNavigate();
-    const {type} = useSelector((state) => state.auth);
+    // const {type,accessToken} = useSelector((state) => state.auth);
     const dark = palette.neutral.dark;
     const medium = palette.neutral.medium;
-    const main = palette.neutral.main;
+    const main = palette.neutral.main;  
+    const dispatch=useDispatch()
+    
+    const[usered,setUsered]=useState({})
+const token=localStorage.getItem("accessToken")
+    const current=async()=>{
+      setUsered(await getCurrentUserApi())
+    }
+
+    const [oneUser,setOneUser]=useState({});
+    
+    const findOneUser=async()=>{
+      setOneUser(await getOneUserApi('6657741728fc99fe5f8b4fcb'))
+    }
+    const [users,setUsers]=useState([]);
+
+    const findUsers=async()=>{
+      setOneUser(await getAllUsersApi())
+    }
+    useEffect(()=>{
+      if(token){
+      current()
+      findOneUser()
+    findUsers()
+  }
+      else{navigate('/')}
+    },[token])
   
     return (
       <Box>
@@ -26,10 +53,10 @@ import image from '../../assets/images/chatapp.jpeg'
         <FlexBetween
           gap="0.5rem"
           pb="1.1rem"
-          onClick={() => navigate(`/profile/${userId}`)}
+          onClick={() => navigate(`/editprofile/${userId}`)}
         >
           <FlexBetween gap="1rem">
-            <UserImage size={50} />
+           <Link to='/editProfile'><UserImage size={50} usered={usered} /></Link> 
             <Box>
               <Typography
                 variant="h4"
@@ -42,12 +69,12 @@ import image from '../../assets/images/chatapp.jpeg'
                   },
                 }}
               >
-               This{type}
+              {usered?.fullName}
               </Typography>
               <Typography color={medium}>100 friends</Typography>
             </Box>
           </FlexBetween>
-          <ManageAccountsOutlined />
+          <ManageAccountsOutlined onClick={setLogout}/>
         </FlexBetween>
   
         {/* SECOND ROW */}
@@ -58,7 +85,8 @@ import image from '../../assets/images/chatapp.jpeg'
           </Box>
           <Box display="flex" alignItems="center" gap="1rem">
             <WorkOutlineOutlined fontSize="large" sx={{ color: main }} />
-            <Typography color={medium}>0909090909</Typography>
+            <Typography color={medium}>{usered?.userName}</Typography>
+           {/* {users.map((user)=>{ <Box key={user?._id}>{user?.fullName}</Box>})} */}
           </Box>
         </Box>
   

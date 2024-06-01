@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/system';
 import { Avatar, InputBase, List, ListItem, ListItemAvatar, ListItemText, Typography, useTheme } from '@mui/material';
 import CircleIcon from '@mui/icons-material/Circle';
 import { Search } from '@mui/icons-material';
+import { useDispatch, useSelector } from 'react-redux';
+import { userChats } from '../../../components/States/messageIntegration/chatSlice';
 
 const usersData = [
     {
@@ -140,11 +142,40 @@ const SearchInput = styled(InputBase)(({ theme }) => ({
 const UserList = () => {
   const theme = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
-
+  const dispatch=useDispatch()
   const filteredUsers = usersData.filter((user) =>
     user.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  //chatapis========
+
+
+const user=useSelector(state=>state.user.user)
+const chats=useSelector(state=>state.chat.chats)
+
+useEffect(()=>{
+  // dispatch(userChats(user._id));
+  console.log(dispatch(userChats(user._id)));
+  
+},[user,dispatch])
+
+useEffect(()=>{
+  
+})
+
+
+//useEffect to get another users Id
+const users=useSelector(state=>state.user.users)
+
+useEffect(()=>{
+
+// const anotherUserId=data.members.find((id)=>id!==user._id);
+
+// console.log(anotherUserId)
+// dispatch(getAllUser());
+
+
+},[])
   return (
     <Container>
       <SearchInput

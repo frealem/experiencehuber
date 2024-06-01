@@ -17,7 +17,7 @@ import EachPostPage from "./pages/EachPost/eachPostPage";
 import ProfileLayout from "./pages/Profile/component/layout";
 import EditProfile from "./pages/Profile/editProfile";
 import MyPost from "./pages/Profile/component/myPost";
-import { Notification } from "./pages/Profile/notification";
+import { Notification } from "./pages/Profile/Notification";
 import FavoritePost from "./pages/Profile/favoritePost";
 import PasswordSecurity from "./pages/Profile/PasswordAndSecurity";
 import Setting from "./pages/Profile/Setting";
@@ -47,12 +47,7 @@ function App() {
           <CssBaseline />
           <Routes>
           {/* use <ProtectedRoute path="/admin" component={AdminPage} roles={['admin']} /> for protectedroute */}
-            <Route element={<Layout />}>
-              <Route path="/" element={<Navigate to="/feedpage" replace />} />
-              <Route path="/feedpage" element={<FeedPage />} />
-
-              <Route path="/authpage" element={<AuthPage />} />
-            </Route>
+            
             {/* <Route path="/eachpost" element={<EachPostPage />} /> */}
             <Route path="/landing" element={<AnimatedLanding />} />
             <Route element={<ProfileLayout />}>
@@ -64,38 +59,56 @@ function App() {
               <Route path="/setting" element={<Setting />} />
             </Route>
             <Route path="/comment" element={<CommentModal />} />
-            <Route element={<DashboardLayout />}>
+            
+            <Route path="/unauthorised" element={<Unauthorised />} />
+       
+{/* after protected */}
+
+{/* any user */}
+
+<Route element={<Layout />}>
+              <Route path="/" element={<Navigate to="/feedpage" replace />} />
+              <Route path="/feedpage" element={<FeedPage />} />
+              <Route path="/authpage" element={<AuthPage />} />
+            </Route>
+{/* regular user and admin */}
+
+<Route element={<ProtectedRoute allowedRoles={[1,2]} />}>
+<Route path="/createpost" element={<CreatePost />} />
+<Route path="/eachpost" element={<EachPostPage/>} />
+</Route>
+
+{/* only admin */}
+<Route element={<ProtectedRoute allowedRoles={[2]} />}>
+
+</Route>
+
+{/* the 3 users */}
+<Route element={<ProtectedRoute allowedRoles={[1,2,3]} />}>
+<Route path="/message" element={<MessagePage />} />
+</Route>
+
+{/* admin and superAdmin */}
+<Route element={<ProtectedRoute allowedRoles={[2]} />}>
+<Route element={<DashboardLayout />}>
               <Route path="/overview" element={<Overview />} />
               <Route path="/usermanagement" element={<UserManagement />} />
-              <Route path="/adminmanagement" element={<AdminManagement />} />
               <Route path="/postmanagement" element={<PostManagement />} />
               <Route path="/socialmedia" element={<SocialMedia />} />
               <Route path="/reportmanagement" element={<ReportManagement />} />
-              <Route
-                path="/notificationalert"
-                element={<NotificationAlert />}
+              <Route path="/notificationalert" element={<NotificationAlert/>}
               />
               <Route path="/systemsecurity" element={<SystemSecurity />} />
               <Route path="/systemsetting" element={<SystemSecurity />} />
             </Route>
-            <Route path="/message" element={<MessagePage />} />
-            <Route path="/unauthorised" element={<Unauthorised />} />
-            <Route
-          path="/eachpost"
-          element={
-            <ProtectedRoute allowedRoles={[1,2,3]}>
-              <EachPostPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/createpost"
-          element={
-            <ProtectedRoute allowedRoles={[1]}>
-              <CreatePost />
-            </ProtectedRoute>
-          }
-        />
+</Route>
+
+{/* superAdmin */}
+<Route element={<ProtectedRoute allowedRoles={[3]} />}>
+<Route element={<DashboardLayout />}>
+<Route path="/adminmanagement" element={<AdminManagement />} />
+</Route>
+</Route>
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

@@ -27,6 +27,9 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import FlexBetween from "./Flexbetween";
 import UserWidget from "../pages/widgets/userWidget";
+import { useDispatch, useSelector } from "react-redux";
+import { getUser } from "./States/userIntegration/userSlice";
+import { PeopleOutlined } from "@mui/icons-material";
 
 const navItems = [
   {
@@ -68,7 +71,6 @@ const navItems = [
 ];
 
 const Sidebar = ({
-  user,
   drawerWidth,
   isSidebarOpen,
   setIsSidebarOpen,
@@ -78,6 +80,9 @@ const Sidebar = ({
   const [active, setActive] = useState("");
   const navigate = useNavigate();
   const theme = useTheme();
+
+  const dispatch = useDispatch();
+  const token=localStorage.getItem("accessToken")
 
   useEffect(() => {
     setActive(pathname.substring(1));
@@ -121,8 +126,10 @@ const Sidebar = ({
                   </IconButton>
                 )}
               </FlexBetween>
-              <Box pt={5}>
-                <UserWidget />
+              <Box pt={5}>{token?
+                <UserWidget/>:<Box onClick={navigate('/authpage')}><IconButton><PeopleOutlined/></IconButton>add an account</Box>
+              }
+                
               </Box>
             </Box>
             <List>

@@ -1,8 +1,9 @@
 import axios from 'axios';
+import axiosInstance from '../interceptor';
 
 export const createPostApi = async (postData) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/post', postData);
+      const response = await axiosInstance.post('/post', postData);
       return response.data;
     } catch (error) {
       throw new Error('Failed to create post.');

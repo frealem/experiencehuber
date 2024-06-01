@@ -37,17 +37,16 @@ const initialValuesSignup = {
 const AuthPage = () => {
  const [open, setOpen] = useState(true);
   const [signUp, setSignUp] = useState(false);
-  const { loading, accessToken, error } = useSelector((state) => state.auth);
+  const { loading, type,error ,accessToken} = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (accessToken) {
-      // User is logged in, navigate to the desired page
+      
       navigate('/');
     }
-  }, [ accessToken, navigate]);
-
+  }, [accessToken,navigate]);
   useEffect(() => {
     if (error) {
       // Handle the error, e.g., display a notification
@@ -61,6 +60,7 @@ const AuthPage = () => {
 
   const closeDialog = () => {
     setOpen(false);
+    navigate('/')
   };
 
   const handleSignUpClick = () => {
@@ -70,37 +70,36 @@ const AuthPage = () => {
   const handleSignInClick = () => {
     setSignUp(false);
   };
-  const submitLogin = async (values) => {
-    try {
-      const { email, password } = values;
-      const formData = { email, password };
-      const { payload, error } = await dispatch(loginUser(formData));
-  
-      if (payload) {
-        console.log("Successful login");
-      } else {
-        console.log(error);
-      }
-    } catch (error) {
+ 
+const submitLogin = async (values) => {
+  try {
+    const { email, password } = values;
+    const formData = { email, password };
+    const { payload, error } = await dispatch(loginUser(formData));
+
+    if (payload) {
+      console.log("Successful login");
+    } else {
       console.log(error);
     }
-  };
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-  const submitRegister = async (values) => {
-    try {
-      const { email, password, fullName, userName ,phone} = values;
-      const formData = { email, password, fullName, userName,phone };
-      console.log(formData);
-      const registeredUser = await dispatch(registerUser(formData));
-      console.log("Successful registration");
+const submitRegister = async (values) => {
+  try {
+    const { email, password, fullName, userName, phone } = values;
+    const formData = { email, password, fullName, userName, phone };
+    const registeredUser = await dispatch(registerUser(formData));
+    console.log("Successful registration");
 
-      await dispatch(loginUser(registeredUser));
-      console.log("Successfully logged in!");
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-  
+    const { payload } = await dispatch(loginUser(formData));
+    console.log("Successful login");
+  } catch (error) {
+    console.log(error.message);
+  }
+};
   // Formik configuration
   const formik = useFormik({
     initialValues: signUp ? initialValuesSignup : initialValuesLogin,

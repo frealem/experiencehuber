@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -19,6 +19,9 @@ import { Send, AttachFile, EmojiEmotions } from "@mui/icons-material";
 import styled from "@mui/material/styles/styled";
 import EmojiPicker, { Emoji } from "emoji-picker-react";
 import ChatRoomNavbar from "./chatNav";
+import{useDispatch, useSelector} from  'react-redux'
+import { userChatsApi } from "../../../components/States/messageIntegration/chatApi";
+import { userChats } from "../../../components/States/messageIntegration/chatSlice";
 
 const Container = styled("div")`
   display: flex;
@@ -48,6 +51,7 @@ const ChatRoom = () => {
   const [openEmojiBox, setOpenEmojiBox] = useState(false);
   const theme = useTheme();
   const inputRef = useRef(null);
+  const dispatch=useDispatch()
 
   const handleSendMessage = () => {
     if (messageText.trim() !== "" || selectedEmojis.length > 0) {
@@ -93,6 +97,7 @@ const ChatRoom = () => {
     const updatedEmojis = selectedEmojis.filter((e) => e !== emoji);
     setSelectedEmojis(updatedEmojis);
   };
+
 
   return (
     <Container>

@@ -2,7 +2,11 @@ import { Avatar, Box, Typography, useMediaQuery, useTheme } from '@mui/material'
 import React from 'react'
 import TitleTwoLine from '../../components/titleTwoLine'
 import image from '../../assets/images/chatapp.jpeg'
-const UserListComponent = () => {
+const UserListComponent = ({
+  id,
+  name,
+  createdAt
+}) => {
 
     const theme=useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
