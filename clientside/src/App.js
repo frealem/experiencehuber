@@ -36,6 +36,7 @@ import MessagePage from "./pages/messagePage/messagepage";
 import AnimatedLanding from "./components/landingpage/animation";
 import ProtectedRoute from "./components/States/authIntegration/protectedRoute";
 import Unauthorised from "./components/unauthorised";
+import CategoryChoice from "./components/categoryChoice";
 
 function App() {
   const mode = useSelector((state) => state.theme.mode);
@@ -61,6 +62,7 @@ function App() {
             <Route path="/comment" element={<CommentModal />} />
             
             <Route path="/unauthorised" element={<Unauthorised />} />
+            <Route path="/choice" element={<CategoryChoice />} />
        
 {/* after protected */}
 
@@ -70,6 +72,7 @@ function App() {
               <Route path="/" element={<Navigate to="/feedpage" replace />} />
               <Route path="/feedpage" element={<FeedPage />} />
               <Route path="/authpage" element={<AuthPage />} />
+              
             </Route>
 {/* regular user and admin */}
 

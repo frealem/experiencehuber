@@ -12,8 +12,9 @@ const MyButton = ({ children, width, ...props }) => {
       backgroundColor: theme.palette.secondary.main,
       color: theme.palette.background.default,
       width: width ? width : 'auto',
-      padding: 0,
-      fontSize: 22,
+      paddingRight: 2,
+      paddingLeft: 2,
+      fontSize: 16,
       fontWeight: "600",
       '&:hover': {
         backgroundColor: theme.palette.secondary.dark,
@@ -22,6 +23,7 @@ const MyButton = ({ children, width, ...props }) => {
         backgroundColor: theme.palette.secondary.dark,
       },
     }}
+    
   >
     {children}
   </Button>
