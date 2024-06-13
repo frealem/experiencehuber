@@ -41,8 +41,7 @@ const PostSchema = mongoose.Schema({
     },
     categoryId:{
         type: mongoose.Schema.Types.ObjectId,
-        ref:'Category',
-        required: [true, "The category is not specified"],
+        ref:'Category'
     },
     location:{
         name: String,

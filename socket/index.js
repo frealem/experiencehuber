@@ -1,35 +1,47 @@
 const User = require('./models/User');
 const Account = require('./models/Account');
+const dbConnection = require('./Config/dbConnection');
+dbConnection();
 const io = require('socket.io')(8800, {
     cors: {
-        origin: ""
+        origin: "http://localhost:3000"
     }
 })
 
-let activeUsers;
+let activeUsers = [];
 
 io.on('connection', (socket)=> {
     //add new user
-    socket.on("addNewUser", (newUserId) => {
-        if(!activeUsers.some((user) => user.id === newUserId)){
+    socket.on("addNewUser", async (newUserId) => {
+        if(!activeUsers.some((user) => user.userId === newUserId)){
             activeUsers.push({
-                uesrId: newUserId,
+                userId: newUserId,
                 socketId: socket.id,
             });
         }
-        const account = Account.find({ownerId: newUserId});
-        const freinds = [...account.followings];
-        const activeFreinds = activeUsers.filter((user) => freinds.includes(user.userId));
-        io.to(socket.id).emit("getActiveUsers", activeFreinds);
+        const account = await Account.findOne({ownerId: newUserId});
+        let activeFreinds = [];
+        if(account){
+            const freinds = [...account.followings];
+            activeFreinds = activeUsers.filter((user) => freinds.includes(user.userId));
+        }
+        console.log(activeUsers)
+        io.to(socket.id).emit("getActiveUsers", activeUsers);
+        console.log("success");
     })
 
     //send message
     socket.on('sendMessage', (data) => {
         const {recieverId} = data;
-        const user = activeUsers.find((user) => user.userId === recieverId);
-        if(user){
-            io.to(user.socketId).emit('recieveMessage', data);
-        }
+        console.log(activeUsers)
+        activeUsers.forEach((user)=> {
+            console.log(user.userId);
+            console.log(recieverId);
+            if(user.userId == recieverId){
+                console.log('console')
+                io.to(user.socketId).emit('recieveMessage', data);
+            }
+        }) 
     })
 
     socket.on("disconnect", () => {

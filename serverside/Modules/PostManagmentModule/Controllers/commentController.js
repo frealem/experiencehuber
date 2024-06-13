@@ -69,7 +69,7 @@ const deleteComment = asyncHanler(async (req, res) => {
         throw new Error("Comment not found");
     }
 
-    await Comment.findByIdAndRemove(req.params.id);
+    await Comment.findOneAndDelete(req.params.id);
     res.status(200).json(Comment);
 });
 

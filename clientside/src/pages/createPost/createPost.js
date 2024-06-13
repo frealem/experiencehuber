@@ -16,9 +16,10 @@ import AddLocationAlt from "@mui/icons-material/AddLocationAlt";
 import StyledInputWithValidation from "../../components/input";
 import MyButton from "../../components/myButton";
 import { useForm } from "react-hook-form";
-import { createPostApi } from "../../components/States/postIntegration/postApi";
+import { createPostApi, uploadApi } from "../../components/States/postIntegration/postApi";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser} from "../../components/States/userIntegration/userSlice";
+import axiosInstance from "../../components/States/interceptor";
 
 
 const LocationField = ({ onLocationChange }) => {
@@ -90,20 +91,27 @@ const CreatePost = () => {
   const onSubmit = async (data) => {
     try {
       const location = {
-        lat: selectedLocation.lat,
-        lng: selectedLocation.lng,
-        placeName: selectedLocation.placeName,
+        latitude: selectedLocation.lat,
+        longitude: selectedLocation.lng,
+        name: selectedLocation.placeName,
       };
 
+      console.log(capturedImages)
+      const formdata = new FormData();
+      formdata.append("file", capturedImages);
+      console.log(formdata.entries)
+      console.log(capturedImages)
+      console.log("hello befor")
+      //const response = await axiosInstance.post('/post/uploadimages', formdata);
+      
       const postData = {
         ...data,
         location: location,
-        images: capturedImages,
+        imageURL: " "
       };
-
-      console.log(postData);
-      const createdPost = await createPostApi(postData);
-      console.log('Created post:', createdPost);
+      console.log(location)
+      //const createdPost = await createPostApi(postData);
+      //console.log('Created post:', createdPost);
     
     } catch (error) {
       console.error('Failed to create post:', error);

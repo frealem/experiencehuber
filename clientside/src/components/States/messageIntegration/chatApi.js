@@ -1,4 +1,5 @@
 import axios from 'axios';
+import axiosInstance from '../interceptor';
 
 export const createNewChatApi = async () => {
   try {
@@ -18,7 +19,7 @@ export const userChatsApi = async (id) => {
   }
 };
 
-export const getOneChatApi = async (firstId,secondId) => {
+export const getOneChatApi = async (firstId, secondId) => {
     try {
       const response = await axios.get(`http://localhost:5000/api/chat/find/${firstId}/${secondId}`,firstId,secondId);
       return response.data;
@@ -44,3 +45,31 @@ export const getOneChatApi = async (firstId,secondId) => {
       throw new Error('Failed to get all chats of currentUser');
     }
   }; 
+
+  export const getChatFreinds = async() => {
+    try{
+      const response = await axiosInstance.get(`/chatfreind`);
+      console.log(response.data);
+      return response.data;
+    } catch(error){
+      throw new Error('Failed to get user freinds');
+    }
+  }
+
+  export const getMessages = async(userId) => {
+    try{
+      const response = await axiosInstance.get(`/message/messages/${userId}`);
+      return response.data;
+    }catch(error){
+      throw new Error('Failed to fetch messages');
+    }
+  }
+
+  export const sendMessage = async(message) =>{
+    try{
+      const response = await axiosInstance.post('/message', {body: message});
+      return response.data;
+    }catch(error){
+      throw new Error(error);
+    }
+  }

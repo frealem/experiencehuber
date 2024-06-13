@@ -23,7 +23,7 @@ import { setLogout } from "../../components/States/authIntegration/authSlice";
     const dispatch=useDispatch()
     
     const[usered,setUsered]=useState({})
-const token=localStorage.getItem("accessToken")
+    const token=localStorage.getItem("accessToken")
     const current=async()=>{
       setUsered(await getCurrentUserApi())
     }
@@ -42,10 +42,10 @@ const token=localStorage.getItem("accessToken")
       if(token){
       current()
       findOneUser()
-    findUsers()
-  }
+      findUsers()
+      }
       else{navigate('/')}
-    },[token])
+    },[token, navigate])
   
     return (
       <Box>

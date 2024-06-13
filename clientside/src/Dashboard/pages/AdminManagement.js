@@ -1,11 +1,22 @@
 import { Box, Grid, IconButton, Typography, useMediaQuery, useTheme } from '@mui/material';
-import React from 'react'
+import React, {useState, useEffect } from 'react'
 import { posts } from '../../fakeData';
 import AdminListComponent from '../component/AdminListComponent';
 import AddIcon from '@mui/icons-material/Add';
+import { getAllAdminsApi } from '../../components/States/userIntegration/userApi';
 function AdminManagement() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const [users, setUsers] = useState([]);
+
+  useEffect(()=>{
+    const getAdmin = async() =>{
+      const admins = await getAllAdminsApi();
+      console.log(admins);
+      setUsers(admins);
+    }
+    getAdmin();
+  },[])
   return (
     <>
     <Box mt={10}
@@ -19,9 +30,9 @@ function AdminManagement() {
         width:"40px",
       }}><AddIcon/>
       </IconButton></Box>
-        {posts.map(
-        () => (<Box>
-          <AdminListComponent/> 
+        {users.map(
+        (user) => (<Box>
+          <AdminListComponent user={user}/> 
           </Box>
         )
       )}

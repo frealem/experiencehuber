@@ -24,7 +24,7 @@ const AccountSchema = mongoose.Schema({
     },
     followings:{
         type:[mongoose.Schema.Types.ObjectId],
-        ref: 'Account',
+        ref: 'User',
     }
 },{
     timestamps: true,

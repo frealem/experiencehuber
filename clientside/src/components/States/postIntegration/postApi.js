@@ -10,6 +10,16 @@ export const createPostApi = async (postData) => {
     }
   };
 
+  export const uploadApi = async (file) => {
+    try {
+      const formdata = FormData();
+      formdata.append(file)
+      const response = await axiosInstance.post('/post/uploadimages', formdata);
+      return response.data;
+    } catch (error) {
+      throw new Error('Failed to create post.');
+    }
+  };
 export const deletePostApi = async (postId) => {
   try {
     const response = await axios.delete(`/api/posts/${postId}`);

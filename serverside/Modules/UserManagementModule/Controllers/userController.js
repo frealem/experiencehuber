@@ -108,8 +108,8 @@ const deleteUser = asyncHandler(async (req, res) => {
         throw new Error("User not found");
     }
 
-    await User.findByIdAndRemove(req.params.id);
-    await Account.findOneAndRemove({ownerId: req.params.id});
+    await User.findOneAndDelete(req.params.id);
+    await Account.findOneAndDelete({ownerId: req.params.id});
     res.status(200).json(user);
 });
 

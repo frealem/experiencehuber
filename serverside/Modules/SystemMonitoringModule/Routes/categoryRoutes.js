@@ -6,8 +6,8 @@ const {getCategories,
        updateCategory, 
        deleteCategory} = require('../Controllers/categoryController');
 
-// //router.use(validateTokenLevel2);
-// router.route('/').get(getCategories).post(createCategory);
-// router.route('/:id').get(getCategory).put(updateCategory).delete(deleteCategory);
+router.use(validateTokenLevel2);
+router.route('/').get(getCategories).post(createCategory);
+router.route('/:id').get(getCategory).put(updateCategory).delete(deleteCategory);
 
 module.exports = router;

@@ -3,9 +3,7 @@ import React from 'react'
 import TitleTwoLine from '../../components/titleTwoLine'
 import image from '../../assets/images/chatapp.jpeg'
 const UserListComponent = ({
-  id,
-  name,
-  createdAt
+  user
 }) => {
 
     const theme=useTheme();
@@ -20,8 +18,9 @@ const UserListComponent = ({
         width: '90%',
       }}
     ><Box mr={1} gap={5} display="flex">
-    <Typography>Gelila Daniel</Typography>
-    <Typography>userId:id12345678901234</Typography>
+    <Typography>{user.userName}</Typography>
+    <Typography>{user.fullName}</Typography>
+    <Typography>userId:{user._id}</Typography>
     </Box>
     <Box display="flex" gap={3}>
     <Typography>Chat</Typography>
@@ -39,8 +38,9 @@ const UserListComponent = ({
       }}
     ><Box mr={1} display="flex" justifyContent="space-between">
     <Box display="flex" gap={2}>
-    <Typography>Gelila Daniel</Typography>
-    <Typography>id12345678901234</Typography>
+    <Typography>{user.userName}</Typography>
+    <Typography>{user.fullName}</Typography>
+    <Typography>userId:{user._id}</Typography>
     </Box>
     <Box display="flex" gap={1}>
     <Typography>Chat</Typography>

@@ -88,7 +88,7 @@ const deletePostPreview = asyncHanler(async (req, res) => {
         throw new Error("PostPreview not found");
     }
 
-    await PostPreview.findByIdAndRemove(req.params.id);
+    await PostPreview.findOneAndDelete(req.params.id);
     res.status(200).json(PostPreview);
 });
 

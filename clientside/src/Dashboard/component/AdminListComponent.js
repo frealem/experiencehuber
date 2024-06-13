@@ -2,7 +2,7 @@ import { Avatar, Box, Typography, useMediaQuery, useTheme } from '@mui/material'
 import React from 'react'
 import TitleTwoLine from '../../components/titleTwoLine'
 import image from '../../assets/images/chatapp.jpeg'
-const AdminListComponent = () => {
+const AdminListComponent = ({user}) => {
 
     const theme=useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -16,9 +16,9 @@ const AdminListComponent = () => {
         width: '90%',
       }}
     ><Box mr={1} gap={5} display="flex">
-    <Typography>Admin Name</Typography>
-    <Typography>id12345678901234</Typography>
-    <Typography>Role</Typography>
+    <Typography>{user.userName}</Typography>
+    <Typography>id: {user._id}</Typography>
+    <Typography>Role: {user.role}</Typography>
     </Box>
     <Box display="flex" gap={3}>
     <Typography>Chat</Typography>
@@ -37,9 +37,9 @@ const AdminListComponent = () => {
       }}
     ><Box mr={1} display="flex" justifyContent="space-between">
     <Box display="flex" gap={2}>
-    <Typography>Admin Name</Typography>
-    <Typography>id12345678901234</Typography>
-    <Typography>Role</Typography>
+    <Typography>{user.userName}</Typography>
+    <Typography>id: {user._id}</Typography>
+    <Typography>Role: {user.role}</Typography>
     </Box>
     <Box display="flex" gap={1}>
     <Typography>Chat</Typography>

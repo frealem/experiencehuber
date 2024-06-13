@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   LightModeOutlined,
   DarkModeOutlined,
@@ -41,10 +41,14 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
   const isOpen = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => setAnchorEl(null);
+
+  const handleClick = useCallback((event) => {
+    if (!anchorEl) {
+      setAnchorEl(event.currentTarget);
+    }
+  }, [anchorEl]);
+  
+  const handleClose = useCallback(() => setAnchorEl(null), []);
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [openSearch, setOpenSearch] = useState(null);
   const [activeSearch, setActiveSearch] = useState(null);
@@ -55,15 +59,11 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
   
   const handleLogout = () => {
     dispatch(setLogout());
-    handleClose();
     navigate('/')
   };
 
   const handleLogin = () => {
-    if (!token) {
-      navigate('/authpage')
-      handleClose();
-    }
+navigate('/authpage')
   }
 
   const handleOptionChange = (event) => {
@@ -88,8 +88,7 @@ setIsSidebarOpen(true)
 const handleNotification=()=>{
 navigate("/notification")
 }
-
-  return (
+return (
     <AppBar
       sx={{
         position: "static",
@@ -168,18 +167,15 @@ navigate("/notification")
                   onClose={handleClose}
                   anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                 >
-                  {token ? (<Box><MenuItem onClick={handleLogin}>Sign Up</MenuItem>
-                    <MenuItem onClick={handleLogout}>Log Out</MenuItem></Box>) : (<Box><MenuItem onClick={handleLogin}>Log In</MenuItem><MenuItem onClick={handleLogin}>Sign Up</MenuItem>
-                      <MenuItem onClick={handleLogout}>Log Out</MenuItem></Box>)}
-
-
+                 <Box><MenuItem onClick={handleLogin}>Log In</MenuItem>
+                 <MenuItem onClick={handleLogin}>Sign Up</MenuItem>
+                      <MenuItem onClick={handleLogout}>Log Out</MenuItem></Box>
 
                 </Menu>
               </Box>
             </Box>
           </>
-
-        ) : (
+) : (
           <Box>
             <FlexBetween gap="3rem" padding="2rem 4%">
               {!openSearch ? (

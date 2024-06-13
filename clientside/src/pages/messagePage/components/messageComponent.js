@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, FlatList } from "react";
 import {
   AppBar,
   Toolbar,
@@ -20,9 +20,11 @@ import styled from "@mui/material/styles/styled";
 import EmojiPicker, { Emoji } from "emoji-picker-react";
 import ChatRoomNavbar from "./chatNav";
 import{useDispatch, useSelector} from  'react-redux'
-import { userChatsApi } from "../../../components/States/messageIntegration/chatApi";
+import { getMessages, sendMessage, userChatsApi } from "../../../components/States/messageIntegration/chatApi";
 import { userChats } from "../../../components/States/messageIntegration/chatSlice";
-
+import {io} from "socket.io-client";
+import ReceiverMessage from "./RecieverMessage";
+import SenderMessage from "./SenderMeassage";
 const Container = styled("div")`
   display: flex;
   flex-direction: column;
@@ -44,8 +46,8 @@ const InputContainer = styled(Paper)(({ theme }) => ({
   zIndex: 1,
 }));
 
-const ChatRoom = () => {
-  const [messages, setMessages] = useState([]);
+const ChatRoom = ({currentUser, selectedUser, onlineFreinds, socket, messages, setMessages}) => {
+  //const [messages, setMessages] = useState([]);
   const [messageText, setMessageText] = useState("");
   const [selectedEmojis, setSelectedEmojis] = useState([]);
   const [openEmojiBox, setOpenEmojiBox] = useState(false);
@@ -53,20 +55,25 @@ const ChatRoom = () => {
   const inputRef = useRef(null);
   const dispatch=useDispatch()
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (messageText.trim() !== "" || selectedEmojis.length > 0) {
       const message = {
-        content: {
-          text: messageText.trim(),
-          emojis: selectedEmojis,
-        },
-        timestamp: new Date(),
-        sender: "Me",
+        content: messageText.trim(),
+        senderId: currentUser._id,
+        recieverId: selectedUser._id,
       };
-      setMessages([...messages, message]);
-      setMessageText("");
-      setSelectedEmojis([]);
-    }
+  
+      try {
+        const sentMessage = await sendMessage(message);
+        console.log(sentMessage);
+        socket.emit("sendMessage", sentMessage);
+        setMessages([sentMessage, ...messages]);
+        setMessageText("");
+        setSelectedEmojis([]);
+      } catch (error) {
+        console.error("Error sending message:", error);
+        // Add any additional error handling logic here
+      }}
   };
 
   const handleInputChange = (event) => {
@@ -97,45 +104,31 @@ const ChatRoom = () => {
     const updatedEmojis = selectedEmojis.filter((e) => e !== emoji);
     setSelectedEmojis(updatedEmojis);
   };
-
-
+  
   return (
     <Container>
-    <ChatRoomNavbar/>
-      <MessageList>
-        {messages.map((message, index) => (
-          <ListItem key={index} alignItems="flex-start">
-            <ListItemAvatar>
-              <Avatar alt="User Avatar" src="/avatar.png" />
-            </ListItemAvatar>
-            <ListItemText
-              primary={message.sender}
-              secondary={
-                <React.Fragment>
-                  {message.content.emojis.length > 0 && (
-                    <Box display="flex">
-                      {message.content.emojis.map((emoji, index) => (
-                        <Box key={index} sx={{ marginRight: 5 }}>
-                          <Typography component="span" variant="body2">
-                            <Emoji
-                              emoji={emoji}
-                              size={18}
-                              fallback={(emojiData) => (
-                                <span>{emojiData.emoji}</span>
-                              )}
-                            />
-                          </Typography>
-                        </Box>
-                      ))}
-                    </Box>
-                  )}
-                  {message.content.text}
-                </React.Fragment>
-              }
-            />
-          </ListItem>
-        ))}
-      </MessageList>
+    <ChatRoomNavbar selectedUser={selectedUser}/>
+    <MessageList>
+    {messages?
+    (<ListItem
+      style={{
+        paddingLeft: '16px',
+        display: 'flex',
+        flexDirection: 'column-reverse',
+      }}
+    >
+      {messages.map((message) => (
+        <div key={message._id}>
+          {message.senderId === currentUser._id ? (
+            <SenderMessage message={message}/>
+          ) : (
+            <ReceiverMessage message={message} />
+          )}
+        </div>
+      ))}
+    </ListItem>): "Loading.."}
+    </MessageList>
+    
       {openEmojiBox && (
         <Box
           sx={{
@@ -184,7 +177,7 @@ const ChatRoom = () => {
           inputRef={inputRef}
           fullWidth
         />
-        <IconButton onClick={handleSendMessage} color="primary">
+        <IconButton onClick={handleSendMessage} color="secondary">
           <Send />
         </IconButton>
       </InputContainer>

@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const Account = require('../Models/Account');
+const User = require('../Models/User');
 const Post = require('../../PostManagmentModule/Models/Post');
 const Category = require('../../SystemMonitoringModule/Models/Category');
 const paginate = require('../../../Common/pagination');
@@ -47,17 +48,20 @@ const getPreviousPostes = asyncHandler( async(req, res) => {
 });
 
 //@desc get user followings
-//@route GET
+//@route GET api/account/getfollowings
 //@access level 1
-const getFollwings = asyncHandler( async(req, res) => {
+const getFollowings = asyncHandler( async(req, res) => {
+    console.log("reached here")
+    console.log(req.user.id);
     const account = Account.findOne({ownerId: req.user.id});
     if(!account || !account.followings){
         res.status(404);
         throw new Error('The are no followings!');
     }
+    console.log(account)
     const followings = [...account.followings];
-    const followingAccounts = await Account.find().where('_id').in(followings).exec();
-    res.status(200).json(followingAccounts);
+    const followingUsers = await User.find().where('_id').in(followings).exec();
+    res.status(200).json(followingUsers);
 });
 
 //@desc check and like post
@@ -104,7 +108,7 @@ const isLiked = asyncHandler( async(req, res) => {
 });
 
 module.exports = {getLikedPosts, 
-                  getFollwings, 
+                  getFollowings, 
                   getPreferedCategories, 
                   getPreviousPostes,
                   like,

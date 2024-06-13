@@ -5,118 +5,120 @@ import CircleIcon from '@mui/icons-material/Circle';
 import { Search } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { userChats } from '../../../components/States/messageIntegration/chatSlice';
+import { getCurrentUserApi } from '../../../components/States/userIntegration/userApi';
+import { getChatFreinds } from '../../../components/States/messageIntegration/chatApi';
 
-const usersData = [
-    {
-      id: 1,
-      name: 'John Doe',
-      avatar: 'https://example.com/avatar1.png',
-      messageCount: 3,
-      onlineStatus: true,
-      lastSeen: '5 minutes ago',
-      lastMessage: 'Hello there!',
-    },
-    {
-      id: 2,
-      name: 'Jane Smith',
-      avatar: 'https://example.com/avatar2.png',
-      messageCount: 0,
-      onlineStatus: false,
-      lastSeen: '2 hours ago',
-      lastMessage: 'How are you?',
-    },
-    {
-      id: 10,
-      name: 'John Doe',
-      avatar: 'https://example.com/avatar1.png',
-      messageCount: 3,
-      onlineStatus: true,
-      lastSeen: '5 minutes ago',
-      lastMessage: 'Hello there!',
-    },
-    {
-      id: 20,
-      name: 'Jane Smith',
-      avatar: 'https://example.com/avatar2.png',
-      messageCount: 0,
-      onlineStatus: false,
-      lastSeen: '2 hours ago',
-      lastMessage: 'How are you?',
-    },
-    {
-      id: 100,
-      name: 'John Doe',
-      avatar: 'https://example.com/avatar1.png',
-      messageCount: 3,
-      onlineStatus: true,
-      lastSeen: '5 minutes ago',
-      lastMessage: 'Hello there!',
-    },
-    {
-      id: 200,
-      name: 'Jane Smith',
-      avatar: 'https://example.com/avatar2.png',
-      messageCount: 0,
-      onlineStatus: false,
-      lastSeen: '2 hours ago',
-      lastMessage: 'How are you?',
-    },
-    {
-      id: 1000,
-      name: 'John Doe',
-      avatar: 'https://example.com/avatar1.png',
-      messageCount: 3,
-      onlineStatus: true,
-      lastSeen: '5 minutes ago',
-      lastMessage: 'Hello there!',
-    },
-    {
-      id: 2000,
-      name: 'Jane Smith',
-      avatar: 'https://example.com/avatar2.png',
-      messageCount: 0,
-      onlineStatus: false,
-      lastSeen: '2 hours ago',
-      lastMessage: 'How are you?',
-    },
-    {
-      id: 11,
-      name: 'John Doe',
-      avatar: 'https://example.com/avatar1.png',
-      messageCount: 3,
-      onlineStatus: true,
-      lastSeen: '5 minutes ago',
-      lastMessage: 'Hello there!',
-    },
-    {
-      id: 21,
-      name: 'Jane Smith',
-      avatar: 'https://example.com/avatar2.png',
-      messageCount: 0,
-      onlineStatus: false,
-      lastSeen: '2 hours ago',
-      lastMessage: 'How are you?',
-    },
-    {
-      id: 12,
-      name: 'John Doe',
-      avatar: 'https://example.com/avatar1.png',
-      messageCount: 3,
-      onlineStatus: true,
-      lastSeen: '5 minutes ago',
-      lastMessage: 'Hello there!',
-    },
-    {
-      id: 22,
-      name: 'Jane Smith',
-      avatar: 'https://example.com/avatar2.png',
-      messageCount: 0,
-      onlineStatus: false,
-      lastSeen: '2 hours ago',
-      lastMessage: 'How are you?',
-    },
-    // Add more user data as needed
-  ];
+// const usersData = [
+//     {
+//       id: 1,
+//       name: 'John Doe',
+//       avatar: 'https://example.com/avatar1.png',
+//       messageCount: 3,
+//       onlineStatus: true,
+//       lastSeen: '5 minutes ago',
+//       lastMessage: 'Hello there!',
+//     },
+//     {
+//       id: 2,
+//       name: 'Jane Smith',
+//       avatar: 'https://example.com/avatar2.png',
+//       messageCount: 0,
+//       onlineStatus: false,
+//       lastSeen: '2 hours ago',
+//       lastMessage: 'How are you?',
+//     },
+//     {
+//       id: 10,
+//       name: 'John Doe',
+//       avatar: 'https://example.com/avatar1.png',
+//       messageCount: 3,
+//       onlineStatus: true,
+//       lastSeen: '5 minutes ago',
+//       lastMessage: 'Hello there!',
+//     },
+//     {
+//       id: 20,
+//       name: 'Jane Smith',
+//       avatar: 'https://example.com/avatar2.png',
+//       messageCount: 0,
+//       onlineStatus: false,
+//       lastSeen: '2 hours ago',
+//       lastMessage: 'How are you?',
+//     },
+//     {
+//       id: 100,
+//       name: 'John Doe',
+//       avatar: 'https://example.com/avatar1.png',
+//       messageCount: 3,
+//       onlineStatus: true,
+//       lastSeen: '5 minutes ago',
+//       lastMessage: 'Hello there!',
+//     },
+//     {
+//       id: 200,
+//       name: 'Jane Smith',
+//       avatar: 'https://example.com/avatar2.png',
+//       messageCount: 0,
+//       onlineStatus: false,
+//       lastSeen: '2 hours ago',
+//       lastMessage: 'How are you?',
+//     },
+//     {
+//       id: 1000,
+//       name: 'John Doe',
+//       avatar: 'https://example.com/avatar1.png',
+//       messageCount: 3,
+//       onlineStatus: true,
+//       lastSeen: '5 minutes ago',
+//       lastMessage: 'Hello there!',
+//     },
+//     {
+//       id: 2000,
+//       name: 'Jane Smith',
+//       avatar: 'https://example.com/avatar2.png',
+//       messageCount: 0,
+//       onlineStatus: false,
+//       lastSeen: '2 hours ago',
+//       lastMessage: 'How are you?',
+//     },
+//     {
+//       id: 11,
+//       name: 'John Doe',
+//       avatar: 'https://example.com/avatar1.png',
+//       messageCount: 3,
+//       onlineStatus: true,
+//       lastSeen: '5 minutes ago',
+//       lastMessage: 'Hello there!',
+//     },
+//     {
+//       id: 21,
+//       name: 'Jane Smith',
+//       avatar: 'https://example.com/avatar2.png',
+//       messageCount: 0,
+//       onlineStatus: false,
+//       lastSeen: '2 hours ago',
+//       lastMessage: 'How are you?',
+//     },
+//     {
+//       id: 12,
+//       name: 'John Doe',
+//       avatar: 'https://example.com/avatar1.png',
+//       messageCount: 3,
+//       onlineStatus: true,
+//       lastSeen: '5 minutes ago',
+//       lastMessage: 'Hello there!',
+//     },
+//     {
+//       id: 22,
+//       name: 'Jane Smith',
+//       avatar: 'https://example.com/avatar2.png',
+//       messageCount: 0,
+//       onlineStatus: false,
+//       lastSeen: '2 hours ago',
+//       lastMessage: 'How are you?',
+//     },
+//     // Add more user data as needed
+//   ];
 
 const Container = styled('div')(({ theme }) => ({
   backgroundColor: '#f5f5f5',
@@ -139,43 +141,47 @@ const SearchInput = styled(InputBase)(({ theme }) => ({
     zIndex: 1,
   }));
   
-const UserList = () => {
+const UserList = ({currentUser, onlineFreinds, users, handleUserSelect}) => {
   const theme = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
   const dispatch=useDispatch()
-  const filteredUsers = usersData.filter((user) =>
-    user.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
+  // const filteredUsers = usersData.filter((user) =>
+  //   user.name.toLowerCase().includes(searchQuery.toLowerCase())
+  // );
+   
+  // const [users, setUsers] = useState();
   //chatapis========
 
 
-const user=useSelector(state=>state.user.user)
-const chats=useSelector(state=>state.chat.chats)
 
-useEffect(()=>{
-  // dispatch(userChats(user._id));
-  console.log(dispatch(userChats(user._id)));
+// useEffect(()=>{
+//   // dispatch(userChats(user._id));
+//   console.log(dispatch(userChats(user._id)));
   
-},[user,dispatch])
+// },[users, dispatch])
 
-useEffect(()=>{
-  
-})
+// useEffect(()=>{
+//   const getUsers = async ()=>{
+//     const us = await getChatFreinds();
+//     handleUserSelect(us[0]);
+//     setUsers(us);
+//   }
+//   getUsers();
+// },[])
 
 
 //useEffect to get another users Id
-const users=useSelector(state=>state.user.users)
+//const users = useSelector(state=>state.user.users)
 
-useEffect(()=>{
+// useEffect(()=>{
 
-// const anotherUserId=data.members.find((id)=>id!==user._id);
+// // const anotherUserId=data.members.find((id)=>id!==user._id);
 
-// console.log(anotherUserId)
-// dispatch(getAllUser());
+// // console.log(anotherUserId)
+// // dispatch(getAllUser());
 
 
-},[])
+// },[])
   return (
     <Container>
       <SearchInput
@@ -185,16 +191,28 @@ useEffect(()=>{
         placeholder="Search users"
         startAdornment={<Search/>}
       />
+      {users && users.length > 0 ?(
       <List>
-        {filteredUsers.map((user) => (
-          <ListItem key={user.id} button sx={{ backgroundColor: theme.palette.background.default }}>
+        {users.map((user) => (
+          <ListItem
+          key={user._id}
+          button
+          onClick={() => handleUserSelect(user)}
+          //selected={selectedUser === user.id}
+          sx={{
+            backgroundColor:
+              currentUser === user.id
+                ? theme.palette.action.selected
+                : theme.palette.background.default,
+          }}
+        >
             <ListItemAvatar>
-              <Avatar src={user.avatar} alt={user.name} />
+              <Avatar src={user.profilePictuerURL} alt={user.userName} />
             </ListItemAvatar>
             <ListItemText
               primary={
                 <Typography variant="subtitle1">
-                  {user.name}
+                  {user.userName}
                   {user.onlineStatus && (
                     <span style={{ color: 'green', marginLeft: 4 }}>
                       <CircleIcon fontSize="0.2px" />
@@ -222,7 +240,10 @@ useEffect(()=>{
             />
           </ListItem>
         ))}
-      </List>
+      </List>) : (
+      <Typography variant="body1">No users found.</Typography>
+    )
+}
     </Container>
   );
 };

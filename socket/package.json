@@ -9,6 +9,8 @@
   "author": "Jafer",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.4.5",
+    "mongoose": "^8.4.1",
     "socket.io": "^4.7.5"
   },
   "devDependencies": {

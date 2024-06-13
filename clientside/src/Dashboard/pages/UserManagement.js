@@ -9,8 +9,8 @@ function UserManagement() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 const dispatch = useDispatch();
-const [users,setUsers]=useState([])
-const token=localStorage.getItem("accessToken");
+const [users, setUsers] = useState([])
+const token = localStorage.getItem("accessToken");
 // // Delete a user
 // const handleDeleteUser = (userId) => {
 //   dispatch(deleteUser(userId));
@@ -24,12 +24,12 @@ const token=localStorage.getItem("accessToken");
 
 // // Get all users
 const allUsers=async()=>{
-  setUsers(await getAllUsersApi());
+  const user = await getAllUsersApi()
+  setUsers(user);
+  console.log(user);
 }
 useEffect(() => {
-  allUsers()
-  console.log(allUsers);
-
+  allUsers();
 }, [token]);
 
 // users.map(({
@@ -47,12 +47,13 @@ useEffect(() => {
       marginLeft={!isMobile ? "300px" : "10px"}
       marginRight={isMobile ? "10px" : null}>
       <Typography  color={theme.palette.secondary.main} fontSize={18} mb={2}>User Management</Typography>
-        {posts.map(
-        () => (<Box>
-          <UserListComponent/> 
+
+      {users ? users.map(
+        (user) => (<Box>
+          <UserListComponent user={user}/> 
           </Box>
         )
-      )}
+      ): ('loading...')}
      </Box>
     </>
   )

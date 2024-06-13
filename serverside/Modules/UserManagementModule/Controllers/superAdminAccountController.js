@@ -5,6 +5,21 @@ const {createUser} = require('../Controllers/userController');
 const User = require('../Models/User');
 const Account = require('../Models/Account');
 
+
+//@desc create a new admin
+//@route GET api/superadmin/admin/
+//@access level 3
+const getAdmins = asyncHandler( async(req, res) => {
+   const role = await Role.findOne({accessLevel: 2});
+   const admins = await User.find({role: role._id});
+   if(!admins){
+      res.status(404);
+      throw new Error("There are no Admins");
+   }
+
+   res.status(200).json(admins);
+});
+
 //@desc create a new admin
 //@route POST api/superadmin/admin/
 //@access level 3
@@ -26,9 +41,9 @@ const deleteAdmin = asyncHandler( async(req, res) => {
       throw new Error("Admin not found");
    }
    console.log("user delete");
-   await User.findByIdAndDelete(userId);
+   await User.findOneAndDelete(userId);
    //await Account.findOneAndDelete({ownerId: userId});
    res.status(200).json(user);
 });
 
-module.exports = {createAdmin, deleteAdmin}
+module.exports = {createAdmin, deleteAdmin, getAdmins}

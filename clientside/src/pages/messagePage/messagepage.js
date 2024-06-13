@@ -4,7 +4,10 @@ import { Box, IconButton } from '@mui/material';
 import { MenuRounded, PeopleAlt, PeopleAltOutlined, QuestionAnswerOutlined } from '@mui/icons-material';
 import UserList from './components/userList';
 import ChatRoom from './components/messageComponent';
-
+import { useState, useEffect, useRef } from 'react';
+import {socket} from './socket';
+import { getCurrentUserApi } from '../../components/States/userIntegration/userApi';
+import { getChatFreinds, getMessages } from '../../components/States/messageIntegration/chatApi';
 
 const Container = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -45,6 +48,70 @@ const WideBox = styled(Box)(({ theme }) => ({
 }));
 
 const MessagePage = () => {
+  
+  //use states
+  const [currentUser, setCurrentUser] = useState(null);
+  const [onlineFreindsId, setOnlineFreindsId] = useState([]);
+  const [selectedUser, setSelectUser] = useState(null);
+  const [userFreinds, setUserFreinds] = useState([]);
+  const [messages, setMessages] = useState([]);
+  
+  
+  //functions 
+  const handleUserSelect = (user) => {
+    setSelectUser(user);
+    fetchMessages(user._id);
+  }
+  const fetchMessages = async(userId)=>{
+        const m = await getMessages(userId);
+        setMessages(m);
+  };
+
+
+  // use effects
+  useEffect(()=>{
+    const initializeChat = async ()=>{
+      const user = await getCurrentUserApi();
+      // socket.current = io('http://localhost:8800');
+      // socket.current.emit("addNewUser", user);
+      // socket.current.on("getActiveUsers", (freinds) => {
+      //   setOnlineFreindsId(freinds);
+      // });
+      const us = await getChatFreinds();
+      setUserFreinds(us);
+      setSelectUser(us[0]);
+      socket.emit("addNewUser", user._id);
+      socket.on("getActiveUsers", (freinds) => {
+        console.log(freinds)
+         setOnlineFreindsId(freinds);
+       });
+      setCurrentUser(user);
+    }
+    initializeChat();
+    socket.on("recieveMessage", (data) => {
+      console.log(selectedUser)
+      setMessages((prev) => {
+        return [data, ...prev]});
+    })
+  },[]);
+
+  // useEffect(() => {
+  //   const fetchMessages = async()=>{
+  //     if(!selectedUser) return;
+  //     const m = await getMessages(selectedUser._id);
+  //     setMessages(m);
+  //   };
+  //   fetchMessages();    
+  // },[selectedUser])
+
+  // useEffect(() => {
+  //   socket.on("recieveMessage", (message) => {
+  //     if(message)
+  //     setMessages((prevMessages) => [...prevMessages, message]);
+  //   })
+  // },[]);
+
+
   return (
     <Container>
       <SmallBox sx={{
@@ -67,11 +134,11 @@ const MessagePage = () => {
         <Box sx={{ height: '100%', overflowY: 'scroll' }}>
           {/* Scrollable content */}
           <Box> 
-          <UserList/>
+          <UserList currentUser = {currentUser} onlineFreinds = {onlineFreindsId} handleUserSelect = {handleUserSelect} users= {userFreinds}/>
           </Box>
         </Box>
       </ScrollableBox>
-      <WideBox><ChatRoom/></WideBox>
+      <WideBox><ChatRoom currentUser = {currentUser} onlineFreinds = {onlineFreindsId} socket = {socket} selectedUser={selectedUser} messages={messages} setMessages={setMessages}/></WideBox>
     </Container>
   );
 };

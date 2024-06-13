@@ -5,10 +5,12 @@ const { callbackify } = require('util');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
+        console.lo
         cb(null, 'Upload');
     },
     filename: (req, file, cb) => {
         let extension = path.extname(file.originalname);
+        console.log("ite was here")
         cb(null, Date.now() + extension);
     }
 });
@@ -29,7 +31,7 @@ const fileUploadHandler = multer ({
         }
     },
     limits: {
-        fileSize: 1024 * 1024 * 24,
+        fileSize: 1024 * 1024 * 1024 * 24,
     }
 })
 

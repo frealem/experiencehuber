@@ -1,4 +1,4 @@
-const asyncHanler = require('expres-async-handler');
+const asyncHanler = require('express-async-handler');
 const Report = require('../Models/Report');
 const paginate = require('../../../Common/pagination');
 
@@ -18,7 +18,7 @@ const getReports = asyncHanler(async (req, res) => {
 //@route 
 //@access public
 const getReport = asyncHanler(async (req, res) => {
-    const report = await Report.findById(req.params.id);
+    const report = await Report.find(req.params.id);
     if(!report){
         res.status(404);
         throw new Error("Report not found!");
@@ -74,7 +74,7 @@ const deleteReport = asyncHanler(async (req, res) => {
         throw new Error("Report not found");
     }
 
-    await Report.findByIdAndRemove(req.params.id);
+    await Report.findOneAndDelete(req.params.id);
     res.status(200).json(Report);
 });
 

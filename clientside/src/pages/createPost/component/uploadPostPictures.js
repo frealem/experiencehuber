@@ -28,18 +28,21 @@ const ImageUploaderComponent = ({setCapturedImages}) => {
 
   
 
+  // const handleFileInputChange = async (event) => {
+  //   const files = Array.from(event.target.files);
+  //   const fileUrls = [];
+
+  //   for (const file of files) {
+  //     const imageUrl = await readFileAsDataURL(file);
+  //     fileUrls.push(imageUrl);
+  //   }
+
+  //   setImages((prevImages) => [...prevImages, ...fileUrls]);
+  //   setCapturedImages((prevImages) => [...prevImages, ...fileUrls]);
+  // };
   const handleFileInputChange = async (event) => {
-    const files = Array.from(event.target.files);
-    const fileUrls = [];
-
-    for (const file of files) {
-      const imageUrl = await readFileAsDataURL(file);
-      fileUrls.push(imageUrl);
-    }
-
-    setImages((prevImages) => [...prevImages, ...fileUrls]);
-    setCapturedImages((prevImages) => [...prevImages, ...fileUrls]);
-  };
+    setCapturedImages(event.target.files[0]);
+  }
 
   const readFileAsDataURL = (file) => {
     return new Promise((resolve, reject) => {

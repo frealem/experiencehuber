@@ -46,19 +46,15 @@ const createPost = asyncHanler(async (req, res) => {
            special = false, 
            rating, 
            tags,
-           location,} = req.body;
+           location,
+           imageURL
+        } = req.body;
+    console.log(location);
     if(!posterId || !title || !description){
         res.status(400);
         throw new Error("Mandatory fields are not filled!");
     }
-    let imageURL = [];
-    if(req.files) {
-        let path = '';
-        req.files.forEach((file, index, arr) => {
-            path = path + file.path;
-            imageURL.push(path);
-        });        
-    }
+    
     const post = await Post.create({
            posterId, 
            title, 
@@ -104,10 +100,25 @@ const deletePost = asyncHanler(async (req, res) => {
         throw new Error("Post not found");
     }
 
-    await Post.findByIdAndRemove(req.params.id);
+    await Post.findOneAndDelete(req.params.id);
     res.status(200).json(Post);
 });
 
+const uploadPostImages = asyncHanler(async (req, res) => {
+    // let imageURL = [];
+    // if(!req.files){
+    //     res.status(400);
+    //     throw new Error("file not uploaded");
+    // } 
+    // let path = '';
+    // req.files.forEach((file, index, arr) => {
+    //         path = path + file.path;
+    //         imageURL.push(path);
+    // }); 
+    console.log(req.file.fieldname);
+    const imageUrl = req.file.filename;      
+   res.status(200).json(imageUrl);
+});
 
 
-module.exports = {getPosts, getPost, createPost, updatePost, deletePost, getPostsByOwner};
+module.exports = {getPosts, getPost, createPost, updatePost, deletePost, getPostsByOwner, uploadPostImages};

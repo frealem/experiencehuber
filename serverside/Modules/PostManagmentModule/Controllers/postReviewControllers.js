@@ -95,7 +95,7 @@ const deletePostReview = asyncHandler(async (req, res) => {
         throw new Error("Review does not exist!");
     }
 
-    await PostReview.findByIdAndDelete(req.params.id);
+    await PostReview.findOneAndDelete(req.params.id);
     res.status(200).json(postReview);
 })
 

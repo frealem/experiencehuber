@@ -93,7 +93,7 @@ const deleteAccount = asyncHandler(async (req, res) => {
         throw new Error("Account not found");
     }
 
-    await Account.findByIdAndRemove(req.params.id);
+    await Account.findOneAndDelete(req.params.id);
     res.status(200).json(Account);
 });
 

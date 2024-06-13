@@ -3,7 +3,7 @@ import { Box, Button, Dialog, DialogContent, DialogTitle, IconButton, Stack, Tex
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { loginUser,registerUser} from "../components/States/authIntegration/authSlice";
+import { loginUser, registerUser} from "../components/States/authIntegration/authSlice";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -46,13 +46,15 @@ const AuthPage = () => {
       
       navigate('/');
     }
-  }, [accessToken,navigate]);
-  useEffect(() => {
-    if (error) {
-      // Handle the error, e.g., display a notification
-      console.error(error);
-    }
-  }, [error]);
+  }, [accessToken]);
+
+
+  // useEffect(() => {
+  //   if (error) {
+  //     // Handle the error, e.g., display a notification
+  //     console.error(error);
+  //   }
+  // }, [error]);
 
   const openDialog = () => {
     setOpen(true);

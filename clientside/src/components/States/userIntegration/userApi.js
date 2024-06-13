@@ -30,7 +30,7 @@ export const getCurrentUserApi = async () => {
 
 export const getOneUserApi = async (userId) => {
   try {
-    const response = await axiosInstance.get(`/user/${userId}`);
+    const response = await axiosInstance.get(`/user`, {params: {id: userId}});
     return response.data;
   } catch (error) {
     throw new Error('Failed to get user.');
@@ -39,7 +39,16 @@ export const getOneUserApi = async (userId) => {
 
 export const getAllUsersApi = async () => {
   try {
-    const response = await axiosInstance.get(`/user/users`);
+    const response = await axiosInstance.get(`/admin/users`);
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to get all users.');
+  }
+};
+
+export const getAllAdminsApi = async () => {
+  try {
+    const response = await axiosInstance.get(`/superadmin/admin/`);
     return response.data;
   } catch (error) {
     throw new Error('Failed to get all users.');

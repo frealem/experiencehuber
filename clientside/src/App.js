@@ -66,11 +66,11 @@ function App() {
 
 {/* any user */}
 
-<Route element={<Layout />}>
+            <Route element={<Layout />}>
               <Route path="/" element={<Navigate to="/feedpage" replace />} />
               <Route path="/feedpage" element={<FeedPage />} />
               <Route path="/authpage" element={<AuthPage />} />
-            </Route>
+            </Route> 
 {/* regular user and admin */}
 
 <Route element={<ProtectedRoute allowedRoles={[1,2]} />}>
