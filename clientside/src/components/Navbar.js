@@ -59,15 +59,11 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
   
   const handleLogout = () => {
     dispatch(setLogout());
-    handleClose();
     navigate('/')
   };
 
   const handleLogin = () => {
-    if (!token) {
-      navigate('/authpage')
-      handleClose();
-    }
+navigate('/authpage')
   }
 
   const handleOptionChange = (event) => {
@@ -173,11 +169,9 @@ navigate("/notification")
                   onClose={handleClose}
                   anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                 >
-                  {token ? (<Box><MenuItem onClick={handleLogin}>Sign Up</MenuItem>
-                    <MenuItem onClick={handleLogout}>Log Out</MenuItem></Box>) : (<Box><MenuItem onClick={handleLogin}>Log In</MenuItem><MenuItem onClick={handleLogin}>Sign Up</MenuItem>
-                      <MenuItem onClick={handleLogout}>Log Out</MenuItem></Box>)}
-
-
+                 <Box><MenuItem onClick={handleLogin}>Log In</MenuItem>
+                 <MenuItem onClick={handleLogin}>Sign Up</MenuItem>
+                      <MenuItem onClick={handleLogout}>Log Out</MenuItem></Box>
 
                 </Menu>
               </Box>

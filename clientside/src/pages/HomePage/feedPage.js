@@ -37,7 +37,7 @@ const FeedPage = () => {
           mt={isNonMobileScreens ? undefined : "2rem"}
         >
           <TopPostBox />
-          <Box position="relative">
+          <Box position="relative" >
             {showOverlay && (
               <Box
                 position="fixed"
@@ -55,10 +55,12 @@ const FeedPage = () => {
               </Box>
             )}
           </Box>
+          <Box sx={{ height: '1000px', overflowY: 'auto' ,scrollbarWidth: 'none', '-ms-overflow-style': 'none'}}>
           <PostsWidget />
+          </Box>
         </Box>
         {isNonMobileScreens && (
-          <Box flexBasis="35%">
+          <Box flexBasis="35%" sx={{ height: '1000px', overflowY: 'auto' ,scrollbarWidth: 'none', '-ms-overflow-style': 'none'}}>
             <LeftFeedWidget />
           </Box>
         )}

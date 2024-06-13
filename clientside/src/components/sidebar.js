@@ -84,6 +84,10 @@ const Sidebar = ({
   const dispatch = useDispatch();
   const token=localStorage.getItem("accessToken")
 
+  const handleAccount=()=>{
+    navigate('/authpage')
+  }
+
   useEffect(() => {
     setActive(pathname.substring(1));
   }, [pathname]);
@@ -127,7 +131,7 @@ const Sidebar = ({
                 )}
               </FlexBetween>
               <Box pt={5}>{token?
-                <UserWidget/>:<Box onClick={navigate('/authpage')}><IconButton><PeopleOutlined/></IconButton>add an account</Box>
+                <UserWidget/>:<Box  onClick={handleAccount}><IconButton ><PeopleOutlined/></IconButton>add an account</Box>
               }
                 
               </Box>

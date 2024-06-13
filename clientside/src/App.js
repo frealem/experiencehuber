@@ -71,9 +71,8 @@ function App() {
 <Route element={<Layout />}>
               <Route path="/" element={<Navigate to="/feedpage" replace />} />
               <Route path="/feedpage" element={<FeedPage />} />
-              <Route path="/authpage" element={<AuthPage />} />
-              
             </Route>
+            <Route path="/authpage" element={<AuthPage />} />
 {/* regular user and admin */}
 
 <Route element={<ProtectedRoute allowedRoles={[1,2]} />}>
