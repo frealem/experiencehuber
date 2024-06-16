@@ -41,8 +41,8 @@ import { setLogout } from "../../components/States/authIntegration/authSlice";
     useEffect(()=>{
       if(token){
       current()
-      findOneUser()
-      findUsers()
+      //findOneUser()
+      //findUsers()
       }
       else{navigate('/')}
     },[token, navigate])

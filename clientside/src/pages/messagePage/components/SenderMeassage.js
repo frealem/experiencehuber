@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import {format} from 'timeago.js';
 export default function SenderMessage({ message, messageHandler }) {
   const [messageId, setMessageId] = useState('');
 
@@ -33,7 +33,7 @@ export default function SenderMessage({ message, messageHandler }) {
           alignSelf: 'flex-end',
         }}
       >
-        {message.createAt}
+        {format(message.createdAt)}
       </div>
     </div>
   );

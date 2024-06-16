@@ -21,7 +21,8 @@ const UserSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Role',
         required: [true, "the role of user is not specified"],
-    }
+    },
+    bio: String,
 },{
     timestamps: true,
 });

@@ -30,7 +30,7 @@ export const getCurrentUserApi = async () => {
 
 export const getOneUserApi = async (userId) => {
   try {
-    const response = await axiosInstance.get(`/user`, {params: {id: userId}});
+    const response = await axiosInstance.get(`/user/${userId}`);
     return response.data;
   } catch (error) {
     throw new Error('Failed to get user.');
@@ -54,3 +54,33 @@ export const getAllAdminsApi = async () => {
     throw new Error('Failed to get all users.');
   }
 };
+
+export const changePasswordApi = async(data) =>{
+  try{
+    const response = await axiosInstance.post('/user/changepassword', data);
+    console.log(Response.data)
+    return response.data;
+  }catch(error){
+    throw new Error('Failed to change password')
+  }
+}
+
+export const createAdminApi = async(data) => {
+  try{
+    const response = await axiosInstance.post('/superadmin/admin',data);
+    console.log(response.data);
+    return response.data;
+  }catch(error){
+    throw new Error('failed to create admin');
+  }
+}
+
+export const getNotificationsApi = async() => {
+  try{
+    const response = await axiosInstance.get('/notification');
+    return response.data;
+  }catch(error){
+    throw new Error('failed to fetch notifications');
+  }
+}
+

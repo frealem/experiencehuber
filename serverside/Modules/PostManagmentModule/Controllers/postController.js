@@ -1,6 +1,7 @@
 const asyncHanler = require('express-async-handler');
 const Post = require('../Models/Post');
 const History = require('../../SystemMonitoringModule/Models/History');
+const Account = require('../../UserManagementModule/Models/Account')
 
 //@desc get all posts created by the owner
 //@route GET /api/post/all/
@@ -16,9 +17,10 @@ const getPosts = asyncHanler(async (req, res) => {
 //@route GET /api/post/owner/:id
 //@access level 1
 const getPostsByOwner = asyncHanler(async (req, res) => {
-    const post = await Post.find({ownerId: req.params.id});
+    const post = await Post.find({posterId: req.params.id}).sort({createdAt: 'aesc'});
     res.status(200).json(post);
 });
+
 
 //@desc get a post by id
 //@route GET /api/post/:id
@@ -40,16 +42,16 @@ const createPost = asyncHanler(async (req, res) => {
     const posterId = req.user.id;
     const {title, 
            description, 
-           like, 
-           dislike, 
-           share ,
+           like = 0, 
+           dislike = 0, 
+           share = 0,
            special = false, 
            rating, 
            tags,
            location,
            imageURL
         } = req.body;
-    console.log(location);
+    console.log(imageURL);
     if(!posterId || !title || !description){
         res.status(400);
         throw new Error("Mandatory fields are not filled!");
@@ -68,6 +70,12 @@ const createPost = asyncHanler(async (req, res) => {
            tags,
            location,
     });
+    const account = await Account.findOne({ownerId: req.user.id});
+    const previousPosts = [...account.previousPosts];
+    previousPosts.push(post._id);
+    account.previousPosts = previousPosts;
+    const a = await account.save();
+    console.log(a)
     res.status(200).json(post);
 });
 
@@ -117,7 +125,7 @@ const uploadPostImages = asyncHanler(async (req, res) => {
     // }); 
     console.log(req.file.fieldname);
     const imageUrl = req.file.filename;      
-   res.status(200).json(imageUrl);
+    res.status(200).json(imageUrl);
 });
 
 

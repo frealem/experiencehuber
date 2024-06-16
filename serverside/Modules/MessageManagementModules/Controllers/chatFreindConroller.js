@@ -8,14 +8,18 @@ const createChatFreind = asyncHandler(async (req,res) => {
     const chatFreind = await ChatFreind.findOne({userId: req.user.id, freindId: userId});
     const chatFreind1 = await ChatFreind.findOne({freindId: req.user.id, userId: userId});
     if(chatFreind || chatFreind1){
-        res.status(200);
-        throw new Error("User freind already exists");
+        const user = await User.findOne({_id: userId})
+        console.log(user)
+        res.status(200).json(user);
     }
     const createdUserFreind = await ChatFreind.create({
         userId: req.user.id,
         freindId: userId,
     });
-    res.status(200).json(createdUserFreind);
+    
+    const user = await User.findOne({_id: createdUserFreind.freindId})
+    console.log(user)
+    res.status(200).json(user);
 })
 
 const getChatFreinds = asyncHandler(async (req, res) => {

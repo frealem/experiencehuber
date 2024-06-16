@@ -5,7 +5,6 @@ const { callbackify } = require('util');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        console.lo
         cb(null, 'Upload');
     },
     filename: (req, file, cb) => {

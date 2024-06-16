@@ -7,11 +7,14 @@ const {getCurrentUser,
        deleteUser, 
        registerUser, 
        loginUser,
-       changeProfilePicture} = require('../Controllers/userController');
+       changeProfilePicture,
+       changePassword
+} = require('../Controllers/userController');
      
 router.get('/' ,validateTokenLevel1, getCurrentUser);
 router.get('/:id',validateTokenLevel1, getUser);
 router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.post('/changePP', validateTokenLevel1, fileUploadHandler.single('file'), changeProfilePicture);
+router.post('/changepassword', validateTokenLevel1, changePassword);
 module.exports = router;

@@ -1,11 +1,19 @@
 import { Avatar, Box, Typography, useMediaQuery, useTheme } from '@mui/material'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import TitleTwoLine from '../../components/titleTwoLine'
 import image from '../../assets/images/chatapp.jpeg'
-const PostDashboardComponent = () => {
-
-    const theme=useTheme();
+import { getOneUserApi } from '../../components/States/userIntegration/userApi'
+const PostDashboardComponent = ({post}) => {
+    const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+    const [postCreater, setPostCreater] = useState(null);
+
+    useEffect(()=>{
+      const getPostCreater = async() =>{
+        setPostCreater(await getOneUserApi(post.posterId));
+      }
+      getPostCreater();
+    },[])
   return (
     <Box mb={1}>
     {isMobile ? (<Box
@@ -23,20 +31,20 @@ const PostDashboardComponent = () => {
     height="50px"
     borderRadius="10px"
       alt="User Avatar"
-      src={image}
+      src={`http://localhost:5000/uploads/${post.imageURL[0]}`}
     />
     </Box>
     <Box display="block">
       <TitleTwoLine variant="body1" gutterBottom color={theme.palette.secondary[900]}>
-       Inappropriate Contents
+         {post.title}
       </TitleTwoLine>
       
       <Box display="flex">
         <Box fontSize={10} color={theme.palette.secondary[600]} marginRight={1}>
-        id12345678901234567890
+        Id: {post._id}
         </Box>
         <Box fontSize={10} color={theme.palette.secondary[600]}>
-        Gelila Daniel
+         {postCreater? (`By:${postCreater.userName}`): "loading..."}
         </Box>
       </Box>
       
@@ -60,12 +68,12 @@ const PostDashboardComponent = () => {
     height="50px"
     style={{borderRadius:"10px"}}
       alt="User Avatar"
-      src={image}
+      src={`http://localhost:5000/uploads/${post.imageURL[0]}`}
     />
     </Box>
     <Box >
       <TitleTwoLine variant="body1" gutterBottom color={theme.palette.secondary[900]}>
-        the title of the post for the dashboard for admin,First line of the comment,the title of the post for the dashboard for admin
+        {post.title}
       </TitleTwoLine>
       
       <Box display="flex" justContent="space-around" gap={5}>
@@ -73,10 +81,10 @@ const PostDashboardComponent = () => {
           10:00 AM 5/8/2024
         </Typography>
         <Typography variant="caption" color={theme.palette.secondary[600]} marginRight={1}>
-         Id:  id12345678901234567890
+         Id: {post._id}
         </Typography>
         <Typography variant="caption" color={theme.palette.secondary[600]}>
-          By: Gelila Daniel
+        {postCreater? (`By:${postCreater.userName}`): "loading..."}
         </Typography>
       </Box>
     </Box>

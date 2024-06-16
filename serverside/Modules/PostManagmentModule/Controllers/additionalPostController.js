@@ -3,8 +3,24 @@ const PostPreview = require('../Models/PostPreview');
 const Account = require('../../UserManagementModule/Models/Account');
 const Category = require('../../SystemMonitoringModule/Models/Category');
 const paginate = require('../../../Common/pagination');
+const paginateWithNoFilter = require('../../../Common/paginationWithNoFilter');
 const asyncHandler = require('express-async-handler');
 
+
+
+
+//@desc get all posts craeted by the owner
+//@route GET /api/post/current/:id
+//@access level 1
+const getPostsByCurrentUser = asyncHandler(async (req, res) => {
+    const post = await Post.find({posterId: req.user.id}) .sort({createdAt: 'desc'});
+    console.log(post)
+    if(!post){
+        res.status(404);
+        throw new Error('posts not found')
+    }
+    res.status(200).json(post);
+});
 //@desc get posts by people prefrence
 //@route GET /api/post/preference
 //@access level 1
@@ -67,11 +83,16 @@ const getSpecialPosts = asyncHandler(async (req, res) => {
 //@route GET /api/post/special
 //@access public
 const getLatestPosts = asyncHandler(async (req, res) => {
-    const {page, pageSize} = req.query;
+    console.log(req.body);
+    //const {page, pageSize} = req.body.query;
+    const page = 1;
+    const pageSize = 20
     const filter = {};
-
-    const posts = await paginate(Post, page, pageSize, filter);
+    console.log("hello");
+    const posts = await paginateWithNoFilter(Post, page, pageSize);
+    //const posts = await Post.find();
+    console.log(posts)
     res.status(200).json(posts);
 });
 
-module.exports = {getPostsByFilter, getPostsByPreference, getPostsByQuery, getLatestPosts, getSpecialPosts}
+module.exports = {getPostsByFilter, getPostsByPreference, getPostsByQuery, getLatestPosts, getSpecialPosts, getPostsByCurrentUser}

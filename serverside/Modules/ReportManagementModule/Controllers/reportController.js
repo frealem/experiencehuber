@@ -6,11 +6,9 @@ const paginate = require('../../../Common/pagination');
 //@route 
 //@access public
 const getReports = asyncHanler(async (req, res) => {
-    const page = req.query.page;
-    const pageSize = req.query.pageSize;
-    const filter = {ownerId: req.user.id};
+    //const filter = {ownerId: req.user.id};
 
-    const reports = await paginate( Report , page, pageSize, filter); 
+    const reports = await Report.find(); 
     res.status(200).json(reports);
 });
 
@@ -30,12 +28,13 @@ const getReport = asyncHanler(async (req, res) => {
 //@route 
 //@access public
 const createReport = asyncHanler(async (req, res) => {
-    const {reporterId, postId, reportCase, reportDetail, status} = req.body;
+    const reporterId = req.user.id;
+    const { postId, reportCase, reportDetail, status = 0} = req.body;
     if(!reporterId || !postId || !reportCase){
         res.status(400);
         throw new Error("Mandatory fields are not filled!");
     }
-    const report = await Report.Create({
+    const report = await Report.create({
         reporterId, 
         postId, 
         reportCase, 

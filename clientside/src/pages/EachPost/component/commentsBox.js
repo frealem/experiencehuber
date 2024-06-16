@@ -1,48 +1,25 @@
 import { Box, Button, Divider, TextField, Typography, useTheme } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import CommentBox from "./commentBox";
+import { connect } from "formik";
+import { createComment } from "../../../components/States/postIntegration/postApi";
 
-const comments = [
-  {
-    id: 1,
-    content: "wow is it real i want to enjoy too",
-    like: 6,
-    time: "6m",
-  },
-  {
-    id: 2,
-    content: "That looks amazing! I wish I could be there.",
-    like: 10,
-    time: "12m",
-  },
-  {
-    id: 3,
-    content: "Such a beautiful place. I want to visit someday.",
-    like: 3,
-    time: "20m",
-  },
-  {
-    id: 4,
-    content: "This is unreal! I'm speechless. 😍",
-    like: 16,
-    time: "30m",
-  },
-  {
-    id: 5,
-    content: "I've always wanted to go there. It's on my bucket list!",
-    like: 8,
-    time: "45m",
-  },
-  {
-    id: 6,
-    content: "The scenery is breathtaking. Great shot!",
-    like: 5,
-    time: "1h",
-  },
-];
 
-const CommentsBox = () => {
+const CommentsBox = ({comments, setComments}) => {
     const theme=useTheme();
+    const [content, setContent] = useState(null);
+    const handleCreateCommet = async() =>{
+      if(!content) return;
+      const c = [...comments]
+      const comment = {
+        postId: c[0].postId,
+        content: content
+      }
+      const createdComment =  await createComment(comment);
+      console.log(createdComment);
+      setComments((prev)=>[ createdComment,...prev])
+      setContent('');
+    }
   return (
     <Box>
       <Box display="flex" alignItems="center" mb={5} mt={3}>
@@ -58,21 +35,23 @@ const CommentsBox = () => {
         <Divider style={{ flexGrow: 1 }} />
       </Box>
       <Box sx={{ height: '400px', overflowY: 'auto' ,scrollbarWidth: 'none', '-ms-overflow-style': 'none'}}>
-        {comments.map((comment) => (
-          <CommentBox key={comment.id} comment={comment} />
-        ))}
+        {comments? (comments.map((comment) => (
+          <CommentBox key={comment._id} comment={comment} />
+        ))): ("loading...")}
       </Box>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '20px' }}>
       <TextField
         style={{ marginRight: '10px' }}
         variant="outlined"
         borderColor='secondary'
-        
+        onChange={(e)=> setContent(e.target.value)}
       />
       <Button
         style={{ marginLeft: '10px' }}
         variant="contained"
         color='secondary'
+        value={content}
+        onClick={handleCreateCommet}
       >
         Send
       </Button>

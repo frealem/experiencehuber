@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const CommunityGuideLineSchema = mongoose.SChema({
+const CommunityGuideLineSchema = mongoose.Schema({
     name:{
         type: String,
         required: [true, "please enter CommunityGuideLine name"],
@@ -17,4 +17,4 @@ const CommunityGuideLineSchema = mongoose.SChema({
     timestamps: true,
 });
 
-modules.exports = mongoose.model('CommunityGuideLine', CommunityGuideLineSchema);
+module.exports = mongoose.model('CommunityGuideline', CommunityGuideLineSchema);

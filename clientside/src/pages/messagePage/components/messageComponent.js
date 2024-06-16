@@ -53,7 +53,8 @@ const ChatRoom = ({currentUser, selectedUser, onlineFreinds, socket, messages, s
   const [openEmojiBox, setOpenEmojiBox] = useState(false);
   const theme = useTheme();
   const inputRef = useRef(null);
-  const dispatch=useDispatch()
+  const dispatch=useDispatch();
+  const scroll = useRef(null);
 
   const handleSendMessage = async () => {
     if (messageText.trim() !== "" || selectedEmojis.length > 0) {
@@ -104,11 +105,17 @@ const ChatRoom = ({currentUser, selectedUser, onlineFreinds, socket, messages, s
     const updatedEmojis = selectedEmojis.filter((e) => e !== emoji);
     setSelectedEmojis(updatedEmojis);
   };
+  useEffect(()=>{
+    scroll.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  },[]);
   
+  useEffect(()=>{
+    scroll.current?.scrollIntoView({behavior: "smooth"});
+  },[messages])
   return (
     <Container>
     <ChatRoomNavbar selectedUser={selectedUser}/>
-    <MessageList>
+    <MessageList >
     {messages?
     (<ListItem
       style={{
@@ -118,7 +125,7 @@ const ChatRoom = ({currentUser, selectedUser, onlineFreinds, socket, messages, s
       }}
     >
       {messages.map((message) => (
-        <div key={message._id}>
+        <div key={message._id} ref={scroll}>
           {message.senderId === currentUser._id ? (
             <SenderMessage message={message}/>
           ) : (

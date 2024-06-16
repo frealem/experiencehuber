@@ -1,6 +1,6 @@
 import React from 'react';
 import 'leaflet/dist/leaflet.css';
-import { MapContainer, TileLayer } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { Box } from '@mui/system';
 import { styled } from '@mui/system';
 
@@ -12,10 +12,12 @@ const MapContainerStyled = styled(MapContainer)`
 `;
 
 const Map = ({ readonly, location }) => {
+  console.log(location)
   return (
     <Box>
+      {location.name? (
       <MapContainerStyled
-        center={[0, 0]}
+        center={[ location.latitude,location.longitude]}
         zoom={1}
         dragging={!readonly}
         touchZoom={!readonly}
@@ -26,7 +28,12 @@ const Map = ({ readonly, location }) => {
         attributionControl={false}
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-      </MapContainerStyled>
+        <Marker position={[location.latitude, location.longitude]}>
+          <Popup>
+            {location.name}
+          </Popup>
+        </Marker>
+      </MapContainerStyled>): "Location not povided"}
     </Box>
   );
 };

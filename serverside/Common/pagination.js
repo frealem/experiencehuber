@@ -27,4 +27,5 @@ const paginate = async (Model, page, pageSize, filter) => {
     return result;
 }
 
+
 module.exports = paginate;

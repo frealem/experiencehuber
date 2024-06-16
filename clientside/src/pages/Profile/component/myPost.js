@@ -1,10 +1,20 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Grid, Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import PostsWidget from '../../widgets/postsWidget';
+import { getPostByCurrentUser } from '../../../components/States/postIntegration/postApi';
 // import { posts } from "../.";
 const MyPost = () => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
+    const[posts, setPosts] = useState([]);
+
+    useEffect(()=>{
+      const getPosts = async()=>{
+        setPosts(await getPostByCurrentUser())
+      }
+      getPosts();
+    },[])
    
   return (
     <Box mt={10} marginLeft={!isMobile ? "400px":"10px"} marginRight={isMobile ? "10px":null} align="center">
@@ -17,7 +27,7 @@ const MyPost = () => {
             >
               My Posts
             </Typography>
-    <PostsWidget/>
+    <PostsWidget posts={posts}/>
     </Box>
   )
 }

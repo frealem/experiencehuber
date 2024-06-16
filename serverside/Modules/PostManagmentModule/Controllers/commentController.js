@@ -1,4 +1,4 @@
-const asyncHanler = require('expres-async-handler');
+const asyncHanler = require('express-async-handler');
 const Comment = require('../Models/Comment');
 
 
@@ -6,7 +6,7 @@ const Comment = require('../Models/Comment');
 //@route 
 //@access public
 const getComments = asyncHanler(async (req, res) => {
-    const comment = await Comment.find({postId: req.params.postId});
+    const comment = await Comment.find({postId: req.params.id});
     res.status(200).json(comment);
 });
 
@@ -26,16 +26,17 @@ const getComment = asyncHanler(async (req, res) => {
 //@route 
 //@access public
 const createComment = asyncHanler(async (req, res) => {
-    const {commeterId, content, postId, replyTo} = req.body;
-    if(!commentName || !email || !password || !role){
+    console.log("hello")
+    const commeterId = req.user.id;
+    const {content, postId} = req.body;
+    if(!commeterId || !content || !postId){
         res.status(400);
         throw new Error("Mandatory fields are not filled!");
     }
-    const comment = await Comment.Create({
+    const comment = await Comment.create({
         commeterId, 
         content, 
         postId, 
-        replyTo
     });
     res.status(200).json(comment);
 });

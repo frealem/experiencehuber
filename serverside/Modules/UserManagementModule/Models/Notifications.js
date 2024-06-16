@@ -10,9 +10,11 @@ const NotificationsSchema = mongoose.Schema({
         type:String,
         required: [true, "Title is rerquired"],
     },
-    detaile: {
+    detail: {
         type: String
     }
 },{
     timestamp: true,
 })
+
+module.exports = mongoose.model('Notification', NotificationsSchema);

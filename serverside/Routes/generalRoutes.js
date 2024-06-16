@@ -26,4 +26,14 @@ router.use('/message', require('../Modules/MessageManagementModules/Routes/messa
 router.use('/chatfreind', require('../Modules/MessageManagementModules/Routes/chatFreindRoutes')); 
 //router leading to category controller
 router.use('/category', require('../Modules/SystemMonitoringModule/Routes/categoryRoutes'));
+//router leading to addition post controllers
+router.use('/additional', require('../Modules/PostManagmentModule/Routes/additionalPostRoutes'));
+//router leading to comment routes
+router.use('/comment', require('../Modules/PostManagmentModule/Routes/commentRoutes'));
+//router leading to system summeries
+router.use('/system', require('../Modules/SystemMonitoringModule/Routes/systemRoutes'))
+//router leading to notifications controllers
+router.use('/notification', require('../Modules/UserManagementModule/Routes/notificationRoutes'))
+//router leading to community guidelines
+router.use('/guideline', require('../Modules/SystemMonitoringModule/Routes/communityGuidelineRoutes'))
 module.exports = router;

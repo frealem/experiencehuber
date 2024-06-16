@@ -5,16 +5,18 @@ const ACCESSLEVEL = require('../Constants/accessLevel');
 
 const validateTokenLevel1 = asyncHandler(async ( req, res, next) => {
     let token;
+
+    console.log(req.header.Authorization)
     let authHeader = req.headers.Authorization || req.headers.authorization;
     if(!authHeader || !authHeader.startsWith("Bearer")){
         res.status(401);
-        throw new Error("User is not authorized!");
+        throw new Error("There is no header!");
     }
     token = authHeader.split(" ")[1];
 
     if(!token){
         res.status(401);
-        throw new Error("User is not authorized!");
+        throw new Error("There is no token!");
     }
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRETE, (err,decoded) => {

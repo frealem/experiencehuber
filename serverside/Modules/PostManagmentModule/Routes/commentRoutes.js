@@ -7,7 +7,7 @@ const {getComments,
 const {validateTokenLevel1} = require('../../../Middleware/validateTokenHandler');
 
 
-router.get('/', getComments);
+router.get('/:id', getComments);
 router.post('/', validateTokenLevel1, createComment);
 router.put('/:id', validateTokenLevel1, updateComment);
 router.delete('/:id', validateTokenLevel1, deleteComment);

@@ -20,11 +20,11 @@ import { createPostApi, uploadApi } from "../../components/States/postIntegratio
 import { useDispatch, useSelector } from "react-redux";
 import { getUser} from "../../components/States/userIntegration/userSlice";
 import axiosInstance from "../../components/States/interceptor";
+import { useNavigate } from 'react-router-dom'
 
 
-const LocationField = ({ onLocationChange }) => {
+const LocationField = ({ selectedLocation, setSelectedLocation }) => {
   const [openMap, setOpenMap] = useState(false);
-  const [selectedLocation, setSelectedLocation] = useState({ lat: "", lng: "", placeName: "" });
 
   const handleOpenMap = () => {
     setOpenMap(true);
@@ -36,11 +36,11 @@ const LocationField = ({ onLocationChange }) => {
 
   const handleSelectLocation = (location) => {
     setSelectedLocation({
-      lat: location.lat,
-      lng: location.lng,
-      placeName: location.placeName // Set the placeName property
+      latitude: location.lat,
+      longitude: location.lng,
+      name: location.placeName // Set the placeName property
     });
-    onLocationChange(`${location.lat},${location.lng}`); // Pass the combined lat and lng as a string to the parent component
+    //onLocationChange(`${location.lat},${location.lng}`); // Pass the combined lat and lng as a string to the parent component
     handleCloseMap();
   };
 
@@ -50,7 +50,7 @@ const LocationField = ({ onLocationChange }) => {
     <div>
      <StyledInputWithValidation
   placeholder="Location"
-  value={selectedLocation.placeName} // Display the placeName
+  value={selectedLocation.name} // Display the placeName
   variant="outlined"
   control={control}
   name="location"
@@ -86,32 +86,40 @@ const LocationField = ({ onLocationChange }) => {
 
 const CreatePost = () => {
   const [capturedImages, setCapturedImages] = useState([]);
-  const [selectedLocation, setSelectedLocation] = useState({lat:"",lng:"",placeName:""});
+  const [selectedLocation, setSelectedLocation] = useState({ latitude: "", longitude: "", name: "" });
+  const navigate = useNavigate()
 
   const onSubmit = async (data) => {
     try {
       const location = {
-        latitude: selectedLocation.lat,
-        longitude: selectedLocation.lng,
-        name: selectedLocation.placeName,
+        latitude: selectedLocation.latitude,
+        longitude: selectedLocation.longitude,
+        name: selectedLocation.name,
       };
 
-      console.log(capturedImages)
-      const formdata = new FormData();
-      formdata.append("file", capturedImages);
-      console.log(formdata.entries)
-      console.log(capturedImages)
-      console.log("hello befor")
-      //const response = await axiosInstance.post('/post/uploadimages', formdata);
+      console.log(location)
+      let responses = [];
       
+      for(var i = 0; i<capturedImages.length; i++ ){
+        console.log(capturedImages[i])
+        const formdata = new FormData();
+        formdata.append("file", capturedImages[i]);
+        //console.log(formdata.files)
+        //console.log(capturedImages)
+        console.log("hello befor")
+        const response = await axiosInstance.post('/post/uploadimages', formdata);
+        responses.push(response.data)
+      }
+      console.log(responses)
       const postData = {
         ...data,
         location: location,
-        imageURL: " "
+        imageURL: [...responses]
       };
-      console.log(location)
-      //const createdPost = await createPostApi(postData);
-      //console.log('Created post:', createdPost);
+      console.log(postData.imageURL)
+      const createdPost = await createPostApi(postData);
+      console.log(`created post: ${createdPost}`)
+      navigate('/myposts');
     
     } catch (error) {
       console.error('Failed to create post:', error);
@@ -195,7 +203,7 @@ const CreatePost = () => {
           />
         </Box>
         <Box marginBottom="16px">
-          <LocationField onLocationChange={handleLocationChange}  style={{ display: 'block' }} />
+          <LocationField selectedLocation={selectedLocation} setSelectedLocation={setSelectedLocation}  style={{ display: 'block' }} />
         </Box>
         <Box marginBottom="16px">
           <ImageUploaderComponent style={{ display: 'block' }} setCapturedImages={setCapturedImages}/>

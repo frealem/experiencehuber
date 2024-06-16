@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 
-const PostReview = mongoose.Schema({
+const PostReviewSchema = mongoose.Schema({
     posterId:{ 
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -24,3 +24,5 @@ const PostReview = mongoose.Schema({
 },{
     timestamps: true,
 });
+
+module.exports = mongoose.model('PostReview', PostReviewSchema)

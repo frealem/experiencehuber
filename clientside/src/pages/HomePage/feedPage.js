@@ -8,11 +8,14 @@ import ArrowUpwardOutlinedIcon from "@mui/icons-material/ArrowUpwardOutlined";
 import { useEffect, useState } from "react";
 import LeftFeedWidget from "../widgets/leftFeedWidget";
 import { getUser } from "../../components/States/userIntegration/userSlice";
+import { getLatestPostApi, isLiked } from "../../components/States/postIntegration/postApi";
 
 const FeedPage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
   //   const { _id, picturePath } = useSelector((state) => state.user);
   const [showOverlay, setShowOverlay] = useState(false);
+  const [posts, setPosts] = useState([]);
+  const accesToken = localStorage.getItem('accessToken');
 
   const handleNewPost = () => {
     // Logic to handle a new post being added
@@ -23,6 +26,31 @@ const FeedPage = () => {
       setShowOverlay(false);
     }, 1000); // Adjust the duration as needed
   };
+
+  useEffect(()=>{
+    const findPost = async() => {
+      const response = await getLatestPostApi();
+      let post=[];
+      response.results.forEach(async element => {
+        const res = await isLiked(element._id)
+        const result = {
+          ...element,
+          isLiked: res.res
+        }
+        setPosts((prev)=> [...prev,result]);
+      });
+      
+    }
+    const findPostWithNoAccess = async() =>{
+      const response = await getLatestPostApi();
+      setPosts(response.results)
+    }
+    if(accesToken){
+      findPost()
+    }else{
+      findPostWithNoAccess()
+    }
+  },[]);
   return (
     <Box>
       <Box
@@ -56,7 +84,7 @@ const FeedPage = () => {
             )}
           </Box>
           <Box sx={{ height: '1000px', overflowY: 'auto' ,scrollbarWidth: 'none', '-ms-overflow-style': 'none'}}>
-          <PostsWidget />
+          <PostsWidget posts={posts} setPosts={setPosts}/>
           </Box>
         </Box>
         {isNonMobileScreens && (

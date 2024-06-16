@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Slider from "./component/slider";
-import { images } from "../../fakeData";
+//import { images } from "../../fakeData";
 import FlexBetween from "../../components/Flexbetween";
 import {
   Box,
@@ -14,11 +14,33 @@ import LeftEachPost from "./component/leftEachPost";
 import { DarkModeOutlined, LightModeOutlined } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { setMode } from "../../components/States/themeSlice";
+import {useLocation} from 'react-router-dom';
+import { getPostComments } from "../../components/States/postIntegration/postApi";
+import { getOneUserApi } from "../../components/States/userIntegration/userApi";
 
 const EachPostPage = () => {
   const theme = useTheme();
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
   const dispatch = useDispatch();
+  const location = useLocation();
+  const post = location.state;
+  const [images, setImages] = useState([]);
+  const [comments, setComments] = useState([]);
+  const [postCreater, setPostCreater] = useState(null);
+
+  useEffect(()=>{
+    const initialize = async() => {
+      const imgs = [...post.imageURL]
+      let imgsURL = [];
+      imgs.forEach((element)=> {
+        imgsURL.push(`http://localhost:5000/uploads/${element}`)
+      })
+      setImages(imgsURL);
+      setComments(await getPostComments(post._id));
+      setPostCreater(await getOneUserApi(post.posterId));
+    }
+    initialize();
+  },[])
   return (
     <>
       <FlexBetween>
@@ -40,7 +62,7 @@ const EachPostPage = () => {
         </IconButton>
         <IconButton></IconButton>
       </FlexBetween>
-      <Slider images={images} />
+      {images? (<Slider images={images} />): "loading..."}      
       <Box
         width="100%"
         padding="2rem 6%"
@@ -50,21 +72,21 @@ const EachPostPage = () => {
       >
         {!isNonMobileScreens ? (
           <Box display="block">
-            <RightEachPost />
-            <LeftEachPost />
+            <RightEachPost post={post}/>
+            <LeftEachPost comments={comments} postCreater={postCreater} setComments={setComments}/>
           </Box>
         ) : (
           <Box display="flex">
           {isNonMobileScreens && (
               <Box flexBasis="35%">
-                <LeftEachPost />
+                <LeftEachPost postCreater={postCreater}comments={comments} setComments={setComments}/>
               </Box>
             )}
             <Box
               flexBasis={isNonMobileScreens ? "60%" : undefined}
               mt={isNonMobileScreens ? undefined : "2rem"}
             >
-              <RightEachPost />
+              <RightEachPost post={post}/>
             </Box>
           </Box>
         )}

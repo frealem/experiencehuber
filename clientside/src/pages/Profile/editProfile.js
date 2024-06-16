@@ -1,44 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Grid, Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import StyledInput from "../../components/input";
 import MyButton from "../../components/myButton";
 import Profile from "./component/profilePicture";
-
+import { getCurrentUserApi } from "../../components/States/userIntegration/userApi";
 
 const EditProfile = () => {
-  const { register, handleSubmit, control } = useForm();
+  const { register, handleSubmit, control, reset } = useForm();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const [user, setUser] = useState(null);
+
+
   const onSubmit = (data) => {
-    // Handle form submission logic here
     console.log(data);
   };
-  
-// //integration
-// const { register, handleSubmit, control, reset } = useForm();
-// const theme = useTheme();
-// const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-// const dispatch = useDispatch();
-// const { user } = useSelector((state) => state.user);
 
-// const onSubmit = (data) => {
-//   // Dispatch the editUser action with the form data
-//   dispatch(editUser(data));
-// };
-
-// // Populate the form fields with the user's current data
-// useEffect(() => {
-//   if (user) {
-//     reset({
-//       name: user.name,
-//       username: user.username,
-//       address: user.address,
-//       bio: user.bio,
-//     });
-//   }
-// }, [user, reset]);
-
+  useEffect(() => {
+    const getUser = async () => {
+      const userData = await getCurrentUserApi();
+      setUser(userData);
+    };
+    getUser();
+  }, [reset]);
 
   return (
     <Box
@@ -60,7 +45,7 @@ const EditProfile = () => {
             </Typography>
             <Profile />
           </Box>
-
+          {user? (
           <form onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={2} justifyContent="center">
               <Grid item xs={12} md={6} marginTop={2} marginX={4}>
@@ -68,7 +53,8 @@ const EditProfile = () => {
                   control={control}
                   name="name"
                   placeholder="Full name"
-                  style={{ display: 'block'}}
+                  style={{ display: 'block' }}
+                  defualtValue = {user.userName}
                 />
               </Grid>
               <Grid item xs={12} md={6} marginTop={2} marginX={4}>
@@ -76,7 +62,8 @@ const EditProfile = () => {
                   control={control}
                   name="username"
                   placeholder="Username"
-                  style={{ display: 'block'}}
+
+                  style={{ display: 'block' }}
                 />
               </Grid>
               <Grid item xs={12} md={6} marginTop={2} marginX={4}>
@@ -84,7 +71,7 @@ const EditProfile = () => {
                   control={control}
                   name="address"
                   placeholder="Address"
-                  style={{ display: 'block'}}
+                  style={{ display: 'block' }}
                 />
               </Grid>
               <Grid item xs={12} md={6} marginTop={2} marginX={4}>
@@ -92,7 +79,7 @@ const EditProfile = () => {
                   control={control}
                   name="bio"
                   placeholder="Bio"
-                  style={{ display: 'block'}}
+                  style={{ display: 'block' }}
                 />
               </Grid>
               <Grid
@@ -114,6 +101,7 @@ const EditProfile = () => {
               </Grid>
             </Grid>
           </form>
+          ):"loading..."}
         </Box>
       </Box>
     </Box>

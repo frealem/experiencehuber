@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 // app.use(bodyParser.json({ limit: '40mb' })); // Increase the limit to 5MB
 // app.use(bodyParser.urlencoded({ extended: true, limit: '40mb' }));
-app.use('/uploads', express.static('Modules/PostManagmentModule/PostImages/'));
+app.use('/uploads',express.static('./Upload'));
 app.use('/api', require('./Routes/generalRoutes'));
 const server = app.listen(port, () => {
     console.log(`server listening to port ${port}`);

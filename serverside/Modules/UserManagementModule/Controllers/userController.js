@@ -12,7 +12,7 @@ const ACCESSLEVEL = require('../../../Constants/accessLevel');
 //@route GET api/user/:id
 //@accesslevel 1
 const getUser = asyncHandler(async (req, res) => {
-    const tuser = await User.findOne({_id: req.params.id});
+    const user = await User.findOne({_id: req.params.id});
     if(!user){
         res.status(404);
         throw new Error("User not found!");
@@ -38,14 +38,14 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 //@accesslevel inaccessible
 const createUser = asyncHandler(async (req, res) => {
     console.log(req.body);
-    const {fullName, phone, userName, email, password, role} = req.body;
+    const {fullName, phone, userName, email, password, role, bio} = req.body;
     if(!userName || !email || !password || !role){
-        res.status(400);
+        res.status(401);
         throw new Error("Mandatory fields are not filled!");
     }
     const userExist = await User.findOne({email});
     if(userExist){
-        res.status(400);
+        res.status(401);
         throw new Error("User with the same email exists");
     }
     
@@ -57,6 +57,7 @@ const createUser = asyncHandler(async (req, res) => {
         profilePictuerURL: null,
         email,
         password: hashedPassword,
+        bio,
         role,
     });
     const account = await Account.create({
@@ -130,7 +131,7 @@ const loginUser = asyncHandler(async (req, res) => {
                 }
             },
             process.env.ACCESS_TOKEN_SECRETE,
-            {expiresIn: '1hr'},
+            {expiresIn: '4hr'},
         );
         const role = await Role.findOne(user.role);
         const type = role.accessLevel;
@@ -142,6 +143,25 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 //@desc to register a normal user
+//@route POST api/user/changepassword
+//@accesslevel public
+const changePassword = asyncHandler(async(req, res) =>{
+    const {currentPassword, newPassword} = req.body;
+    console.log(req.body)
+    const user = await User.findOne({_id: req.user.id});
+    console.log(user);
+    if(user && (await bcrypt.compare(currentPassword, user.password))){
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        user.password = hashedPassword;
+        await user.save();
+        res.status(200).json({msg: "password changed"}); 
+    }else{
+        res.status(401);
+        throw new Error("Acces is not authorized!");
+    }
+})
+
+//@desc to register a normal user
 //@route POST api/user/register
 //@accesslevel public
 const registerUser = asyncHandler(async(req, res) => {
@@ -150,4 +170,4 @@ const registerUser = asyncHandler(async(req, res) => {
     createUser(req, res);
 }); 
 
-module.exports = {getCurrentUser, getUser,createUser,updateUser, deleteUser, registerUser, loginUser, changeProfilePicture};
+module.exports = {getCurrentUser, getUser,createUser,updateUser, deleteUser, registerUser, loginUser, changeProfilePicture, changePassword};

@@ -2,12 +2,23 @@ import { Avatar, Box, Typography, useMediaQuery, useTheme } from '@mui/material'
 import React from 'react'
 import TitleTwoLine from '../../components/titleTwoLine'
 import image from '../../assets/images/chatapp.jpeg'
+import {useNavigate} from 'react-router-dom'
+import { createChatFreindApi } from '../../components/States/messageIntegration/chatApi'
 const UserListComponent = ({
   user
 }) => {
 
     const theme=useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+    const navigate = useNavigate();
+
+    const handleChat = async()=>{
+      const chatFreindToCreate = {
+        userId: user._id,
+      }
+      const chatFreind = await createChatFreindApi(chatFreindToCreate);
+      navigate('/message',  {replaces: true, state: chatFreind})
+    }
   return (
     <Box mb={1}>
     {isMobile ? (<Box
@@ -23,7 +34,7 @@ const UserListComponent = ({
     <Typography>userId:{user._id}</Typography>
     </Box>
     <Box display="flex" gap={3}>
-    <Typography>Chat</Typography>
+    <Typography onClick={handleChat}>Chat</Typography>
     <Typography>Delete</Typography>
     <Typography>Block</Typography>
     </Box>
@@ -43,7 +54,7 @@ const UserListComponent = ({
     <Typography>userId:{user._id}</Typography>
     </Box>
     <Box display="flex" gap={1}>
-    <Typography>Chat</Typography>
+    <Typography onClick={handleChat}>Chat</Typography>
     <Typography>Delete</Typography>
     <Typography>Block</Typography>
     </Box>

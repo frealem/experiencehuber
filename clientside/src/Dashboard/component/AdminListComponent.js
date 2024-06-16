@@ -2,10 +2,23 @@ import { Avatar, Box, Typography, useMediaQuery, useTheme } from '@mui/material'
 import React from 'react'
 import TitleTwoLine from '../../components/titleTwoLine'
 import image from '../../assets/images/chatapp.jpeg'
+import { createChatFreindApi } from '../../components/States/messageIntegration/chatApi';
+import {useNavigate} from 'react-router-dom';
 const AdminListComponent = ({user}) => {
-
     const theme=useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+    const navigate = useNavigate();
+
+    const handleChat = async()=>{
+      const chatFreindToCreate = {
+        userId: user._id,
+      }
+      const chatFreind = await createChatFreindApi(chatFreindToCreate);
+      navigate('/message',  {replaces: true, state: chatFreind})
+    }
+    const handleDelete = () => {
+      
+    }
   return (
     <Box mb={1}>
     {isMobile ? (<Box
@@ -21,10 +34,8 @@ const AdminListComponent = ({user}) => {
     <Typography>Role: {user.role}</Typography>
     </Box>
     <Box display="flex" gap={3}>
-    <Typography>Chat</Typography>
-    <Typography>update</Typography>
-    <Typography>delete</Typography>
-    <Typography>Block</Typography>
+    <Typography onClick={handleChat}>Chat</Typography>
+    <Typography onClick={handleDelete}>delete</Typography>
     </Box>
     
     </Box>):(<Box
@@ -42,7 +53,7 @@ const AdminListComponent = ({user}) => {
     <Typography>Role: {user.role}</Typography>
     </Box>
     <Box display="flex" gap={1}>
-    <Typography>Chat</Typography>
+    <Typography onClick={handleChat}>Chat</Typography>
     <Typography>update</Typography>
     <Typography>delete</Typography>
     <Typography>Block</Typography>

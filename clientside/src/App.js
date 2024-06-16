@@ -36,6 +36,9 @@ import MessagePage from "./pages/messagePage/messagepage";
 import AnimatedLanding from "./components/landingpage/animation";
 import ProtectedRoute from "./components/States/authIntegration/protectedRoute";
 import Unauthorised from "./components/unauthorised";
+import CreateAdmin from "./Dashboard/pages/createAdmin";
+import CommunityGuideLineManagement from "./Dashboard/pages/CommunityGuidlineManagement";
+import CreateCommunityGuidline from "./Dashboard/pages/createCommunityGuidline";
 
 function App() {
   const mode = useSelector((state) => state.theme.mode);
@@ -96,10 +99,11 @@ function App() {
               <Route path="/postmanagement" element={<PostManagement />} />
               <Route path="/socialmedia" element={<SocialMedia />} />
               <Route path="/reportmanagement" element={<ReportManagement />} />
-              <Route path="/notificationalert" element={<NotificationAlert/>}
-              />
+              <Route path="/notificationalert" element={<NotificationAlert/>}/>
+              <Route path="/guidelinemanagement" element={<CommunityGuideLineManagement/>}/>
               <Route path="/systemsecurity" element={<SystemSecurity />} />
               <Route path="/systemsetting" element={<SystemSecurity />} />
+              <Route path="createguideline" element={<CreateCommunityGuidline/>}/>
             </Route>
 </Route>
 
@@ -107,6 +111,7 @@ function App() {
 <Route element={<ProtectedRoute allowedRoles={[3]} />}>
 <Route element={<DashboardLayout />}>
 <Route path="/adminmanagement" element={<AdminManagement />} />
+<Route path="/createadmin" element={<CreateAdmin/>} />
 </Route>
 </Route>
           </Routes>

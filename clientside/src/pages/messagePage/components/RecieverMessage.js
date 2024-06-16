@@ -1,4 +1,5 @@
 import React from 'react';
+import {format} from 'timeago.js';
 
 const ReceiverMessage = ({ message }) => {
   const date = new Date(message.dateSent);
@@ -33,7 +34,7 @@ const ReceiverMessage = ({ message }) => {
           color: '#808080',
         }}
       >
-        {hours}:{min}
+        {format(message.createdAt)}
       </p>
     </div>
   );

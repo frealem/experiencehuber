@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Typography,
   Box,
@@ -10,10 +10,19 @@ import { DownloadOutlined, GroupOutlined } from "@mui/icons-material";
 import DashBox from "../component/DashBox";
 import BarGraph from "../component/Bargraph";
 import PieGraph from "../component/Piechart";
+import { getSystemsummaryApi } from "../../components/States/adminIntegration/systemApi";
 
 const Overview = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const [data, setData] = useState(null);
+
+  useEffect(()=>{
+    const getData = async ()=>{
+      setData(await getSystemsummaryApi())
+    }
+    getData();
+  },[])
   return (
     <Box mt={10} ml={isMobile ? "10px" : "300px"} mr={isMobile ? "10px" : null}>
       <Box m="1.5rem 2.5rem" width="850px">
@@ -44,6 +53,7 @@ const Overview = () => {
       {/* main part */}
       <Box display="flex" justifyContent="space-between">
         {/* Left Half */}
+        {data?(
         <Box
           display="grid"
           gridTemplateColumns="repeat(2, 1fr)"
@@ -53,8 +63,8 @@ const Overview = () => {
           <Box>
             <DashBox
               title="Total Users"
-              value="2000"
-              increase="+14%"
+              value={data.user.userCount}
+              increase={`+${data.user.userPercent}%`}
               description="Since last week"
               icon={
                 <GroupOutlined
@@ -68,9 +78,9 @@ const Overview = () => {
           </Box>
           <Box>
             <DashBox
-              title="Total Users"
-              value="2000"
-              increase="+14%"
+              title="Total review"
+              value={data.review.reviewsCount}
+              increase={`+${data.review.reviewPercent}`}
               description="Since last week"
               icon={
                 <GroupOutlined
@@ -84,9 +94,9 @@ const Overview = () => {
           </Box>
           <Box>
             <DashBox
-              title="Total Users"
-              value="2000"
-              increase="+14%"
+              title="Total post"
+              value={data.post.postCount}
+              increase={`+${data.post.postPercent}`}
               description="Since last week"
               icon={
                 <GroupOutlined
@@ -100,9 +110,9 @@ const Overview = () => {
           </Box>
           <Box>
             <DashBox
-              title="Total Users"
-              value="2000"
-              increase="+14%"
+              title="Total Like"
+              value={data.like.likeCount}
+              increase={`+${data.like.likePercent}`}
               description="Since last week"
               icon={
                 <GroupOutlined
@@ -114,7 +124,7 @@ const Overview = () => {
               }
             />
           </Box>
-        </Box>
+        </Box>):"loading..."}
         {/* Right Half */}
         <Box
           backgroundColor={theme.palette.background.alt}
@@ -134,7 +144,8 @@ const Overview = () => {
         borderRadius="0.55rem"
         m={1}
       >
-        <BarGraph />
+        {data?(
+        <BarGraph  data={data.data}/>):"loading..."}
       </Box>
     </Box>
   );

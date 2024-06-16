@@ -11,13 +11,13 @@ const {getFollowings,
     } = require('../Controllers/normalAccountController');
 
 router.use(validateTokenLevel1);
-router.route('/').get(getAccounts).post(createAccount);
-router.route('/:id').get(getAccount).put(updateAccount).delete(deleteAccount);
+router.route('/account').get(getAccounts).post(createAccount);
+router.route('/account/:id').get(getAccount).put(updateAccount).delete(deleteAccount);
 router.route('/getPosts',getPreferedCategories);
 router.get('/getcategories',getPreferedCategories);
 router.get('/getfollowings', validateTokenLevel1, getFollowings);
-router.get('/getliked',getLikedPosts);
-router.post('/like/:id', like);
+router.get('/getliked',validateTokenLevel1, getLikedPosts);
+router.post('/like/:id', validateTokenLevel1, like);
 router.post('/follow/:id', follow);
 router.get('/isliked/:id', isLiked);
 

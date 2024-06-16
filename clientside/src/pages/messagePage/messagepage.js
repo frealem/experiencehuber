@@ -8,6 +8,7 @@ import { useState, useEffect, useRef } from 'react';
 import {socket} from './socket';
 import { getCurrentUserApi } from '../../components/States/userIntegration/userApi';
 import { getChatFreinds, getMessages } from '../../components/States/messageIntegration/chatApi';
+import {useLocation} from 'react-router-dom'
 
 const Container = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -52,64 +53,64 @@ const MessagePage = () => {
   //use states
   const [currentUser, setCurrentUser] = useState(null);
   const [onlineFreindsId, setOnlineFreindsId] = useState([]);
-  const [selectedUser, setSelectUser] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
   const [userFreinds, setUserFreinds] = useState([]);
   const [messages, setMessages] = useState([]);
+  const scroll = useRef();
+  const location = useLocation();
+  const routedUser = location.state;
   
   
-  //functions 
-  const handleUserSelect = (user) => {
-    setSelectUser(user);
-    fetchMessages(user._id);
-  }
-  const fetchMessages = async(userId)=>{
-        const m = await getMessages(userId);
-        setMessages(m);
-  };
-
-
-  // use effects
-  useEffect(()=>{
-    const initializeChat = async ()=>{
+  useEffect(() => {
+    const initializeChat = async () => {
       const user = await getCurrentUserApi();
-      // socket.current = io('http://localhost:8800');
-      // socket.current.emit("addNewUser", user);
-      // socket.current.on("getActiveUsers", (freinds) => {
-      //   setOnlineFreindsId(freinds);
-      // });
+      socket.emit('addNewUser', user._id);
+      socket.on('getActiveUsers', (freinds) => {
+        setOnlineFreindsId(freinds);
+      });
+
       const us = await getChatFreinds();
       setUserFreinds(us);
-      setSelectUser(us[0]);
-      socket.emit("addNewUser", user._id);
-      socket.on("getActiveUsers", (freinds) => {
-        console.log(freinds)
-         setOnlineFreindsId(freinds);
-       });
+      if(routedUser){
+        setSelectedUser(routedUser);
+      }else{
+        setSelectedUser(us[0]);
+      }     
+
       setCurrentUser(user);
-    }
+    };
     initializeChat();
-    socket.on("recieveMessage", (data) => {
-      console.log(selectedUser)
-      setMessages((prev) => {
-        return [data, ...prev]});
-    })
-  },[]);
 
-  // useEffect(() => {
-  //   const fetchMessages = async()=>{
-  //     if(!selectedUser) return;
-  //     const m = await getMessages(selectedUser._id);
-  //     setMessages(m);
-  //   };
-  //   fetchMessages();    
-  // },[selectedUser])
+    return () => {
+      socket.off('getActiveUsers');
+    };
+  }, []);
 
-  // useEffect(() => {
-  //   socket.on("recieveMessage", (message) => {
-  //     if(message)
-  //     setMessages((prevMessages) => [...prevMessages, message]);
-  //   })
-  // },[]);
+  useEffect(() => {
+    const fetchMessages = async () => {
+      if (!selectedUser) return;
+      const m = await getMessages(selectedUser._id);
+      setMessages(m);
+    };
+    fetchMessages();
+  }, [selectedUser]);
+
+  useEffect(() => {
+    socket.on('recieveMessage', (data) => {
+      if (selectedUser && data.senderId === selectedUser._id) {
+        setMessages((prev) => [data, ...prev]);
+      }
+    });
+
+    return () => {
+      socket.off('recieveMessage');
+    };
+  }, [selectedUser, socket]);
+
+  const handleUserSelect = (user) => {
+    setSelectedUser(user);
+  };
+  
 
 
   return (
@@ -138,7 +139,7 @@ const MessagePage = () => {
           </Box>
         </Box>
       </ScrollableBox>
-      <WideBox><ChatRoom currentUser = {currentUser} onlineFreinds = {onlineFreindsId} socket = {socket} selectedUser={selectedUser} messages={messages} setMessages={setMessages}/></WideBox>
+      <WideBox><ChatRoom currentUser = {currentUser} onlineFreinds = {onlineFreindsId} socket = {socket} selectedUser={selectedUser} messages={messages} setMessages={setMessages} scroll={scroll}/></WideBox>
     </Container>
   );
 };

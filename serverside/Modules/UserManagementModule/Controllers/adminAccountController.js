@@ -15,7 +15,6 @@ const getUsers = asyncHandler(async (req, res) => {
         res.status(404);
         throw new Error("user not found");
     }
-    console.log(users);
     res.status(200).json(users);
 });
 
@@ -23,6 +22,14 @@ const getUsers = asyncHandler(async (req, res) => {
 //@route GET api/user/system/
 //@accesslevel 2
 const getSystemSummary = asyncHandler(async (req, res) => {
+    
+});
+
+
+//@desc get all users
+//@route GET api/user/system/
+//@accesslevel 2
+const deletePost = asyncHandler(async(req, res) => {
     
 });
 

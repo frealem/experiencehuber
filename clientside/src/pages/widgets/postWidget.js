@@ -2,9 +2,11 @@ import {
   ChatBubbleOutlineOutlined,
   FavoriteBorderOutlined,
   FavoriteOutlined,
+  FormatAlignCenter,
   MoreHorizOutlined,
   MoreVertOutlined,
   ShareOutlined,
+  Favorite
 } from "@mui/icons-material";
 import { Box, Divider, IconButton, Menu, MenuItem, Tooltip, Typography, useTheme } from "@mui/material";
 // import Friend from "components/Friend";
@@ -23,7 +25,10 @@ import { useState } from "react";
 import CommentModal from "../HomePage/component/feedComment";
 import ShareButtons from "../HomePage/component/feedShare";
 import ReportComponent from "../HomePage/component/report";
-const PostWidget = ({widthPost,heightPost}) => {
+import {format} from 'timeago.js';
+import { likeApi } from "../../components/States/postIntegration/postApi";
+
+const PostWidget = ({widthPost,heightPost, post, setPosts}) => {
   const { palette } = useTheme();
   const main = palette.neutral.main;
   const primary = palette.primary.main;
@@ -63,11 +68,24 @@ const handleReportClose=()=>{
   setOpenReportComponent(false);
 }
 
+const handleLike = async()=>{
+  const {res, like} = await likeApi(post._id);
+  post.like = like;
+  post.isLiked = res;
+  setPosts((prev)=>{
+    let posts = [...prev];
+    const a = posts.indexOf((item) => item._id === post._id)
+    console.log(a)
+    posts[a] = post;
+    return posts;
+  })
+}
+
   return (
     <WidgetWrapper m="2rem 0">
     <Box display="flex" gap={5} fontSize={32} >
-      <Typography display="flex-start" variant="h3" fontWeight={600}>
-        This is the title of the review has to be one line
+      <Typography display="flex-start" variant="h3" fontWeight={600} onClick={()=>navigate('/eachPost',{replace: true, state:post})}>
+        {post.title}
       </Typography>
       <IconButton display="flex-end" onClick={handleClick}>
         <MoreHorizOutlined/>
@@ -91,22 +109,21 @@ const handleReportClose=()=>{
               />
       </Box>
       <Typography sx={{ mt: "1rem" }} variant="h6">
-        this description is for the review and experience.this description is
-        for the review and experience. this description is for the review and
-        experience. this description is for the review and experience.
+       {post.description}
       </Typography>
       <img
+        onClick={()=>navigate('/eachPost', {replaces: true, state: post})}
         width={widthPost||"100%"}
         height={heightPost||"auto"}
         alt="post"
         style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
-        src={postImage}
+        src={`http://localhost:5000/uploads/${post.imageURL[0]}`}
       />
       <Box display="flex" alignItems="center" gap="0.3rem">
         <UserImage size={40} />
         <Typography variant="body1">Gelila Girma</Typography>
         <Typography variant="body2" color="textSecondary">
-          Addis Ababa 6 hours ago
+          {format(post.createdAt)}
         </Typography>
       </Box>
       <Box marginTop={1}>
@@ -116,17 +133,17 @@ const handleReportClose=()=>{
       <FlexBetween mt="0.25rem">
         <FlexBetween gap="1rem">
           <FlexBetween gap="0.3rem">
-            <IconButton>
-              <FavoriteBorderOutlined />
+            <IconButton onClick={handleLike}>
+              {post.isLiked? (<Favorite/>):(<FavoriteBorderOutlined />)}             
             </IconButton>
-            <Typography>26</Typography>
+            <Typography>{post.like? post.like: 0}</Typography>
           </FlexBetween>
 
           <FlexBetween gap="0.3rem">
             <IconButton onClick={handleCommentIconClick}>
               <ChatBubbleOutlineOutlined />
             </IconButton>
-            <Typography>45</Typography>
+            <Typography>{post.share? post.share: 0}</Typography>
           </FlexBetween>
           <FlexBetween gap="0.3rem">
           <Tooltip title="Share">
