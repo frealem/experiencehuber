@@ -1,8 +1,12 @@
 // Followers.js
-import React from 'react';
-import { Grid, Paper, Avatar, Typography, Button } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Grid, Paper, Avatar, Typography, Button , TextField, Box} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import RatingComponent from '../../../components/Rating';
+import EditableRatingComponent from '../../../components/Rating2';
+import { createRelatedPostApi, getRelatedPostApi } from '../../../components/States/postIntegration/realtedPostApi';
+import { getOneUserApi } from '../../../components/States/userIntegration/userApi';
+import RelatedPostBox from './relatedPostBox';
 
 const UserBox = styled(Paper)({
   display: 'flex',
@@ -47,23 +51,72 @@ const followers = [
     },
     ];
 
-const RelatedPosts = () => {
+const RelatedPosts = ({post}) => {
+  const [rate, setRate] = useState(0);
+  const [relatePosts, setRelatedPost] = useState([])
+  const [content ,setContent] = useState('');
+
+  const handleRate = (e) =>{
+    console.log(e.target.value)
+    setRate(e.target.value)
+  }
+  const handleCreate = async()=>{
+    if (!content) return;
+    const related = {
+      postId: post._id,
+      description: content,
+      rate: rate
+    }
+    const created = await createRelatedPostApi(related)
+    console.log(created)
+    setRelatedPost((prev)=>
+      [created, ...prev]
+    )
+    setContent('')
+  }
+
+  useEffect(()=>{
+    const getRelatePosts = async()=>{
+      const relatedPostData = await getRelatedPostApi(post._id);
+      console.log('hello')
+      console.log(relatedPostData)
+      setRelatedPost(relatedPostData?relatedPostData:[])
+    }
+    getRelatePosts();
+  },[])
+
+  useEffect(()=>{
+    const change = ()=>
+    change()
+  },[relatePosts])
   return (
+    <>
+    <Box sx={{ height: '400px', overflowY: 'auto' ,scrollbarWidth: 'none', '-ms-overflow-style': 'none'}}>
     <Grid container spacing={2}>
-      {followers.map((follower) => (
-        <Grid item xs={12} key={follower.id}>
-          <UserBox>
-            <Avatar src={follower.avatar} />
-            <UserInfo>
-              <Typography variant="h6">{follower.name}</Typography>
-              <Typography variant="body2">{follower.description}</Typography>
-              <RatingComponent/>
-            </UserInfo>
-    
-          </UserBox>
-        </Grid>
-      ))}
+      {relatePosts?( relatePosts.map((relatedPost) =>(
+         <RelatedPostBox relatedPost={relatedPost} />
+      ))):<></>}
     </Grid>
+    </Box>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '20px' }}>
+    <TextField
+      style={{ marginRight: '10px' }}
+      variant="outlined"
+      borderColor='secondary'
+      value={content}
+      onChange={(e)=>setContent(e.target.value)}
+    />
+    <Button
+      style={{ marginLeft: '10px' }}
+      variant="contained"
+      color='secondary'
+      onClick={handleCreate}
+    >
+      Send
+    </Button>
+  </div>
+  <EditableRatingComponent onChange={(e)=>handleRate(e)} value={rate}/>
+  </>
   );
 };
 

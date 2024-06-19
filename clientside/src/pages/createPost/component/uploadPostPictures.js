@@ -69,8 +69,14 @@ const ImageUploaderComponent = ({setCapturedImages}) => {
     });
   };
   const removeImage = (index) => {
-    setImages((prevImages) => prevImages.filter((_, i) => i !== index));
-    setCapturedImages((prevImages) => prevImages.filter((_, i) => i !== index));
+    setImages((prevImages) =>{
+      const a = [...prevImages];
+      return a.filter((_, i)=> i !== index)
+    });
+    setCapturedImages((prevImages)=> {
+      const a = [...prevImages];
+      return a.filter((_, i)=> i !== index)
+    });
   };
 
   return (

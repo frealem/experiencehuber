@@ -38,7 +38,7 @@ function CommunityGuideLineManagement() {
     <Box mt={10}
       marginLeft={!isMobile ? "300px" : "10px"}
       marginRight={isMobile ? "10px" : null}><Box display="flex" justifyContent="space-between" mb={5}>
-      <Typography  color={theme.palette.secondary.main} fontSize={18} mb={2}>Admin Management</Typography>
+      <Typography  color={theme.palette.secondary.main} fontSize={18} mb={2}>Comunity guidline management</Typography>
       <IconButton 
       onClick={handleCreateAdmin}
       sx={{
@@ -53,7 +53,7 @@ function CommunityGuideLineManagement() {
       {communityguidelines?(
         communityguidelines.map(
         (guideline) => (<Box>
-            <GuidelineListComponent guideline={guideline} setGuideline={setcommunityguidelines}/>
+            <GuidelineListComponent guideline={guideline} setGuidelines={setcommunityguidelines}/>
           </Box>
         )
       )):"loading..."}

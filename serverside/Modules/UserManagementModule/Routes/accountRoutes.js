@@ -12,7 +12,8 @@ const {getFollowings,
 
 router.use(validateTokenLevel1);
 router.route('/account').get(getAccounts).post(createAccount);
-router.route('/account/:id').get(getAccount).put(updateAccount).delete(deleteAccount);
+router.route('/account/:id').get(getAccount).delete(deleteAccount);
+router.route('/update').put(updateAccount)
 router.route('/getPosts',getPreferedCategories);
 router.get('/getcategories',getPreferedCategories);
 router.get('/getfollowings', validateTokenLevel1, getFollowings);

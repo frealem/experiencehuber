@@ -39,6 +39,7 @@ import { setMode } from "../../../components/States/themeSlice";
 import { styled } from "@mui/system";
 
 const navItems = [
+  
   {
     text: "Edit Profile",
     icon: <ModeEditOutlineOutlinedIcon />,
@@ -60,15 +61,16 @@ const navItems = [
     link: "favoritelist",
   },
   {
+    text: "Drafted Posts",
+    icon: <FavoriteOutlinedIcon />,
+    link: "draftposts",
+  },
+  {
     text: "Password and Security",
     icon: <SecurityOutlinedIcon />,
     link: "security",
   },
-  {
-    text: "Setting and Privacy",
-    icon: <SettingsOutlined />,
-    link: "setting",
-  },
+  
 ];
 
 const ProfileLayout = ({ text }) => {

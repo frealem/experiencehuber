@@ -68,7 +68,7 @@ const ChatRoom = ({currentUser, selectedUser, onlineFreinds, socket, messages, s
         const sentMessage = await sendMessage(message);
         console.log(sentMessage);
         socket.emit("sendMessage", sentMessage);
-        setMessages([sentMessage, ...messages]);
+        setMessages([...messages, sentMessage, ]);
         setMessageText("");
         setSelectedEmojis([]);
       } catch (error) {
@@ -106,12 +106,12 @@ const ChatRoom = ({currentUser, selectedUser, onlineFreinds, socket, messages, s
     setSelectedEmojis(updatedEmojis);
   };
   useEffect(()=>{
-    scroll.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  },[]);
+    scroll.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  },[messages]);
   
-  useEffect(()=>{
-    scroll.current?.scrollIntoView({behavior: "smooth"});
-  },[messages])
+  // useEffect(()=>{
+  //   scroll.current?.scrollIntoView({behavior: "smooth"});
+  // },[messages])
   return (
     <Container>
     <ChatRoomNavbar selectedUser={selectedUser}/>
@@ -119,19 +119,20 @@ const ChatRoom = ({currentUser, selectedUser, onlineFreinds, socket, messages, s
     {messages?
     (<ListItem
       style={{
-        paddingLeft: '16px',
+        paddingLeft: '0px',
         display: 'flex',
-        flexDirection: 'column-reverse',
+        flexDirection: 'column',
+        
       }}
     >
       {messages.map((message) => (
-        <div key={message._id} ref={scroll}>
+        <Box sx={{width:"100%", paddingX:"20px"}} key={message._id} ref={scroll}>
           {message.senderId === currentUser._id ? (
             <SenderMessage message={message}/>
           ) : (
             <ReceiverMessage message={message} />
           )}
-        </div>
+        </Box>
       ))}
     </ListItem>): "Loading.."}
     </MessageList>

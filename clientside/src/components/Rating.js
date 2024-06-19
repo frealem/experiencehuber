@@ -9,26 +9,17 @@ const YellowRating = styled(Rating)({
   color: 'yellow',
 });
 
-const RatingComponent = () => {
-  const [value, setValue] = useState(0);
-
-  const handleRatingChange = async (event, newValue) => {
-    setValue(newValue);
-    try {
-      await axios.post('http://localhost:5000/ratings', { rating: newValue });
-    } catch (error) {
-      console.error(error);
-    }
-  };
+const RatingComponent = ({value}) => {
 
   return (
     <YellowRating
       name="customized-color"
-      value={value}
-      onChange={handleRatingChange}
+      value={value? value: 0}
       max={5}
+      precision={0.1}
       icon={<StarIcon />}
       emptyIcon={<StarBorderIcon />}
+      readOnly
     />
   );
 };

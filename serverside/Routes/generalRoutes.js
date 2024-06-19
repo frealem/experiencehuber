@@ -16,8 +16,10 @@ router.use('/post', require('../Modules/PostManagmentModule/Routes/postRoutes'))
 //router leading to role router
 router.use('/role', require('../Modules/SystemMonitoringModule/Routes/roleRoutes'));
 
-//router leading to postreview controller
+//router leading to post review controller
 router.use('/postreview', require('../Modules/PostManagmentModule/Routes/postReviewRoutes'));
+//router leading to post preview controller
+router.use('/postpreview', require('../Modules/PostManagmentModule/Routes/postPreviewRoutes'));
 //router leading to report routes
 router.use('/report', require('../Modules/ReportManagementModule/Routes/reportRoutes'));
 //router leading to messages
@@ -36,4 +38,6 @@ router.use('/system', require('../Modules/SystemMonitoringModule/Routes/systemRo
 router.use('/notification', require('../Modules/UserManagementModule/Routes/notificationRoutes'))
 //router leading to community guidelines
 router.use('/guideline', require('../Modules/SystemMonitoringModule/Routes/communityGuidelineRoutes'))
+//router leading to category page
+router.use('/category', require('../Modules/SystemMonitoringModule/Routes/categoryRoutes'))
 module.exports = router;

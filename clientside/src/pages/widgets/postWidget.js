@@ -6,13 +6,12 @@ import {
   MoreHorizOutlined,
   MoreVertOutlined,
   ShareOutlined,
-  Favorite
+  Favorite,
+  Delete,
+  Upload
 } from "@mui/icons-material";
 import { Box, Divider, IconButton, Menu, MenuItem, Tooltip, Typography, useTheme } from "@mui/material";
-// import Friend from "components/Friend";
-// import { useState } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import { setPost } from "state";
+
 import postImage from "../../assets/images/pizza1.jpg";
 import StarIcon from "@mui/icons-material/Star";
 import UserImage from "../../components/userImage";
@@ -21,19 +20,21 @@ import WidgetWrapper from "../../components/widgetWrapper";
 import BookmarkAddOutlinedIcon from "@mui/icons-material/BookmarkAddOutlined";
 import RatingComponent from "../../components/Rating";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CommentModal from "../HomePage/component/feedComment";
 import ShareButtons from "../HomePage/component/feedShare";
 import ReportComponent from "../HomePage/component/report";
 import {format} from 'timeago.js';
-import { likeApi } from "../../components/States/postIntegration/postApi";
+import { createPostApi, deletePostApi, likeApi } from "../../components/States/postIntegration/postApi";
+import { getOneUserApi } from "../../components/States/userIntegration/userApi";
 
-const PostWidget = ({widthPost,heightPost, post, setPosts}) => {
+const PostWidget = ({widthPost, heightPost, wrapperHeight, post, setPosts, type, onDelete, onPost}) => {
   const { palette } = useTheme();
   const main = palette.neutral.main;
   const primary = palette.primary.main;
   const navigate = useNavigate();
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
+  const [user, setUser] = useState(false);
 
   const handleCommentIconClick = () => {
     setIsCommentModalOpen(true);
@@ -69,23 +70,42 @@ const handleReportClose=()=>{
 }
 
 const handleLike = async()=>{
-  const {res, like} = await likeApi(post._id);
-  post.like = like;
-  post.isLiked = res;
-  setPosts((prev)=>{
-    let posts = [...prev];
-    const a = posts.indexOf((item) => item._id === post._id)
-    console.log(a)
-    posts[a] = post;
-    return posts;
-  })
+    try {
+      const {res, like} = await likeApi(post._id);
+      post.like = like;
+      post.isLiked = res;
+      setPosts((prev)=>{
+      let posts = [...prev];
+      const a = posts.indexOf((item) => item._id === post._id)
+      console.log(a)
+      posts[a] = post;
+      return posts;
+      })
+    } catch (error) {
+      
+    }
 }
+  useEffect(()=>{
+    const getOneUser = async()=>{
+      const userData = await getOneUserApi(post.posterId);
+      setUser(userData);
+    }
+    getOneUser();
+  },[])
+
+  const handlePost = async()=>{
+    onPost();
+  }
+
+  const handleDelete = ()=>{
+    onDelete()
+  }
 
   return (
-    <WidgetWrapper m="2rem 0">
+    <WidgetWrapper m="2rem 0" height={wrapperHeight || '600px'} minWidth='300px'>
     <Box display="flex" gap={5} fontSize={32} >
-      <Typography display="flex-start" variant="h3" fontWeight={600} onClick={()=>navigate('/eachPost',{replace: true, state:post})}>
-        {post.title}
+      <Typography display="flex-start" variant="h3"  maxHeight='70px' overflow='hidden' fontWeight={600} onClick={()=>navigate('/eachPost',{replace: true, state:post})}>
+        {post?.title}
       </Typography>
       <IconButton display="flex-end" onClick={handleClick}>
         <MoreHorizOutlined/>
@@ -97,37 +117,41 @@ const handleLike = async()=>{
                 anchorOrigin={{ vertical: "center", horizontal: "left" }}
               >
                 <MenuItem onClick={handleReportOpen}>Report the post</MenuItem>
-                <MenuItem onClick={handleClose}>I'm not interested</MenuItem>
-                <MenuItem onClick={handleClose}>Follow the poster</MenuItem>
-                <MenuItem onClick={handleClose}>detail of the post</MenuItem>
+                {type && type == '0'? (
+                <MenuItem onClick={handleDelete}>Delete post</MenuItem>):<></>}
+                {type && type == '1'? (<>
+                <MenuItem onClick={handlePost}>Add to post</MenuItem>
+                <MenuItem onClick={handleDelete}>Delete post</MenuItem></>):<></>}
               </Menu>
 
               {/* report component accept */}
               <ReportComponent
                 onClose={handleReportClose}
                 open={openReportComponent}
+                post={post}
               />
       </Box>
-      <Typography sx={{ mt: "1rem" }} variant="h6">
-       {post.description}
+      <Typography sx={{ mt: "1rem", height:'150px', overflow:'hidden' }} variant="h6">
+       {post?.description}
       </Typography>
       <img
         onClick={()=>navigate('/eachPost', {replaces: true, state: post})}
         width={widthPost||"100%"}
-        height={heightPost||"auto"}
+        height={heightPost||"600px"}
+   
         alt="post"
-        style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
+        style={{ borderRadius: "0.75rem", marginTop: "0.75rem" ,objectFit:"cover"}}
         src={`http://localhost:5000/uploads/${post.imageURL[0]}`}
       />
-      <Box display="flex" alignItems="center" gap="0.3rem">
-        <UserImage size={40} />
-        <Typography variant="body1">Gelila Girma</Typography>
+      <Box display="flex" alignItems="center" gap="0.3rem" onClick={()=>navigate('/othersprofile', {replace: true, state: user})}>
+        <UserImage size={40} image={user?.profilePictuerURL} />
+        <Typography variant="body1">{user?.userName}</Typography>
         <Typography variant="body2" color="textSecondary">
           {format(post.createdAt)}
         </Typography>
       </Box>
       <Box marginTop={1}>
-        <RatingComponent />
+        <RatingComponent value={post.rating} />
       </Box>
 
       <FlexBetween mt="0.25rem">
@@ -154,9 +178,7 @@ const handleLike = async()=>{
       {shareOpen && <ShareButtons />}
           </FlexBetween>
           <FlexBetween gap="0.3rem">
-            <IconButton>
-              <BookmarkAddOutlinedIcon />
-            </IconButton>
+          
           </FlexBetween>
           <CommentModal
       open={isCommentModalOpen}

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   LightModeOutlined,
   DarkModeOutlined,
@@ -6,11 +6,14 @@ import {
   Search,
   SettingsOutlined,
   ArrowDropDownOutlined,
-  NotificationAddOutlined,
   Notifications,
+  MoreOutlined,
+  MoreHorizRounded,
+  MoreVertOutlined,
+  Category,
 } from "@mui/icons-material";
 import FlexBetween from "./Flexbetween";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch} from "react-redux";
 import { setMode } from "./States/themeSlice";
 import profileImage from "../assets/images/chatapp.jpeg";
 import {
@@ -32,6 +35,7 @@ import SearchComponent from "./Search";
 import MessagePage from "../pages/messagePage/message";
 import MessageOutlined from "@mui/icons-material/MessageOutlined";
 import { setLogout } from "./States/authIntegration/authSlice";
+import Sidebar from "./sidebar";
 
 
 
@@ -50,11 +54,9 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
   
   const handleClose = useCallback(() => setAnchorEl(null), []);
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const [openSearch, setOpenSearch] = useState(null);
-  const [activeSearch, setActiveSearch] = useState(null);
   const [messageOpen, setMessageOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState('');
-  const { loading, error } = useSelector((state) => state.auth);
+
   const token = localStorage.getItem('accessToken')
   
   const handleLogout = () => {
@@ -69,22 +71,17 @@ navigate('/authpage')
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
   };
-  const handleActiveSearchClose = () => {
-    setActiveSearch(false)
-  }
+
   const handleMessageOpen = () => {
     setMessageOpen(true)
   }
   const handleMenu = () => {
-setIsSidebarOpen(true)
+setIsSidebarOpen(!isSidebarOpen)
   }
   const handleMessageClose = () => {
     setMessageOpen(false)
     navigate('/')
   }
-// const handleSearch=()=>{
-//   navigate("/notification")
-// }
 const handleNotification=()=>{
 navigate("/notification")
 }
@@ -130,37 +127,12 @@ return (
                   <LightModeOutlined sx={{ fontSize: "25px" }} />
                 )}
               </IconButton>
-              <IconButton>
-                <SettingsOutlined sx={{ fontSize: "25px" }} />
+              <IconButton onClick={()=>navigate('/categorychoice')}>
+                <Category sx={{ fontSize: "25px" }} />
               </IconButton>
-
+              <IconButton onClick={handleClick}><MoreVertOutlined color="secondary"/></IconButton>
               <Box>
-                <Button
-                  onClick={handleClick}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    textTransform: "none",
-                    gap: "1rem",
-                  }}
-                >
-                  <Box
-                    component="img"
-                    alt="profile"
-                    src={profileImage}
-                    height="32px"
-                    width="32px"
-                    borderRadius="50%"
-                    sx={{ objectFit: "cover" }}
-                  />
-                  <ArrowDropDownOutlined
-                    sx={{
-                      color: theme.palette.secondary[300],
-                      fontSize: "20px",
-                    }}
-                  />
-                </Button>
+                
                 <Menu
                   anchorEl={anchorEl}
                   open={isOpen}
@@ -175,12 +147,15 @@ return (
               </Box>
             </Box>
           </>
-) : (
+) :
+
+//for mobile users
+(
           <Box>
             <FlexBetween gap="3rem" padding="2rem 4%">
-              {!openSearch ? (
+             
                 <Box>
-                  <FlexBetween gap="1rem">
+                  <Box><Box display='flex' justifyContent='space-evenly' gap={5}>
                     <FlexBetween>
                       <IconButton onClick={handleMenu}>
                         <MenuIcon />
@@ -196,40 +171,42 @@ return (
                         ExperienceHub
                       </Typography>
                     </FlexBetween>
-                    <FlexBetween>
-                      <IconButton onClick={() => setOpenSearch(true)}>
-                        <Search />
-                      </IconButton>
+                    <FlexBetween >
+                    <IconButton onClick={handleClick}><MoreVertOutlined color="secondary" fontSize="32"/></IconButton>
                     </FlexBetween>
-                  </FlexBetween>
+                    </Box>
+                    <Box>
+                      
+                <Menu
+                  anchorEl={anchorEl}
+                  open={isOpen}
+                  onClose={handleClose}
+                  anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                >
+                 <Box>
+                  <MenuItem onClick={handleLogin}>Log In</MenuItem>
+                 <MenuItem onClick={handleLogin}>Sign Up</MenuItem>
+                  <MenuItem onClick={handleLogout}>Log Out</MenuItem>
+                  <MenuItem onClick={()=>navigate('/categorychoice')}>Category</MenuItem>
+                  <MenuItem onClick={handleLogout}><IconButton onClick={() => dispatch(setMode())}>
+                {theme.palette.mode === "dark" ? (
+                  <DarkModeOutlined sx={{ fontSize: "25px" }} />
+                ) : (
+                  <LightModeOutlined sx={{ fontSize: "25px" }} />
+                )}
+              </IconButton></MenuItem>
+                 
+                      </Box>
+
+                </Menu>
+              </Box>
+                  </Box>
                 </Box>
-              ) : (
-                <Box>
-                  <FlexBetween gap="1rem">
-                    <FlexBetween>
-                      <IconButton onClick={() => setIsSidebarOpen(true)}>
-                        <MenuIcon />
-                      </IconButton>
-                    </FlexBetween>
-                    <FlexBetween
-                      backgroundColor={theme.palette.secondary[900]}
-                      borderRadius={15}
-                      gap="3rem"
-                      p="0.1rem 1.5rem"
-                    >
-                      <InputBase placeholder="Search..." />
-                      <IconButton>
-                        <Search />
-                      </IconButton>
-                    </FlexBetween>
-                  </FlexBetween>
-                </Box>
-              )}
+              
             </FlexBetween>
           </Box>
         )
         }
-        {activeSearch ? <SearchComponent onClose={handleActiveSearchClose} /> : null}
       </Toolbar>
     </AppBar>
   );

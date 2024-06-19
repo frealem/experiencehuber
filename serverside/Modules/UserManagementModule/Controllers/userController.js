@@ -5,6 +5,7 @@ const User = require('../Models/User');
 const Account = require('../Models/Account');
 const Role = require('../../SystemMonitoringModule/Models/Role');
 const ACCESSLEVEL = require('../../../Constants/accessLevel');
+const paginate = require('../../../Common/pagination');
 
 
 
@@ -13,6 +14,7 @@ const ACCESSLEVEL = require('../../../Constants/accessLevel');
 //@accesslevel 1
 const getUser = asyncHandler(async (req, res) => {
     const user = await User.findOne({_id: req.params.id});
+    console.log(req.params.id)
     if(!user){
         res.status(404);
         throw new Error("User not found!");
@@ -40,14 +42,17 @@ const createUser = asyncHandler(async (req, res) => {
     console.log(req.body);
     const {fullName, phone, userName, email, password, role, bio} = req.body;
     if(!userName || !email || !password || !role){
-        res.status(401);
+        res.status(400);
         throw new Error("Mandatory fields are not filled!");
     }
-    const userExist = await User.findOne({email});
-    if(userExist){
-        res.status(401);
-        throw new Error("User with the same email exists");
-    }
+    try{
+        const userExist = await User.findOne({email});
+        if(userExist){
+           res.status(409);
+           throw new Error("User with the same email exists");
+        }
+   
+    
     
     //hash password
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -64,6 +69,10 @@ const createUser = asyncHandler(async (req, res) => {
         ownerId: user.id,
     });
     res.status(200).json(user);
+}catch(error){
+    console.log(error)
+    res.status(409).json({error: "user already exists"})
+}
 });
 
 //@desc update a user
@@ -137,8 +146,8 @@ const loginUser = asyncHandler(async (req, res) => {
         const type = role.accessLevel;
         res.status(200).json({type, accessToken}); 
     }else{
-        res.status(401);
-        throw new Error("Acces is not authorized!");
+        res.status(404);
+        throw new Error("User not found");
     }
 });
 
@@ -147,9 +156,7 @@ const loginUser = asyncHandler(async (req, res) => {
 //@accesslevel public
 const changePassword = asyncHandler(async(req, res) =>{
     const {currentPassword, newPassword} = req.body;
-    console.log(req.body)
     const user = await User.findOne({_id: req.user.id});
-    console.log(user);
     if(user && (await bcrypt.compare(currentPassword, user.password))){
         const hashedPassword = await bcrypt.hash(newPassword, 10);
         user.password = hashedPassword;
@@ -170,4 +177,16 @@ const registerUser = asyncHandler(async(req, res) => {
     createUser(req, res);
 }); 
 
-module.exports = {getCurrentUser, getUser,createUser,updateUser, deleteUser, registerUser, loginUser, changeProfilePicture, changePassword};
+const searchUser = asyncHandler(async(req, res)=>{
+    const { page, pageSize, query} = req.query;
+    const role = await Role.findOne({accessLevel: 1});
+    const filter = {
+       $text: { $search: query },
+       role: role._id
+    };
+
+    const users = await paginate(User , page, pageSize, filter);
+    res.status(200).json(users);
+})
+
+module.exports = {getCurrentUser, getUser,createUser,updateUser, deleteUser, registerUser, loginUser, changeProfilePicture, changePassword, searchUser};

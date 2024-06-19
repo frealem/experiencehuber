@@ -19,7 +19,7 @@ const Layout = () => {
        user={{}}
         isNonMobile={isNonMobile}
         drawerWidth="250px"
-        isSidebarOpen={isSidebarOpen}
+        isSidebarOpen={isNonMobile?isSidebarOpen:!isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
       />
       </box>

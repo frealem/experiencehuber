@@ -1,57 +1,77 @@
-import { Box, useMediaQuery } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import UserWidget from "../widgets/userWidget";
+import { Box, useMediaQuery, TextField, InputAdornment } from "@mui/material";
 import TopPostBox from "../../components/topPostBox";
 import MyButton from "../../components/myButton";
 import PostsWidget from "../widgets/postsWidget";
-import ArrowUpwardOutlinedIcon from "@mui/icons-material/ArrowUpwardOutlined";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import LeftFeedWidget from "../widgets/leftFeedWidget";
-import { getUser } from "../../components/States/userIntegration/userSlice";
-import { getLatestPostApi, isLiked } from "../../components/States/postIntegration/postApi";
+import { getLatestPostApi, getPostsByPreference, isLiked, searchPosts } from "../../components/States/postIntegration/postApi";
+import { Search } from "@mui/icons-material";
 
 const FeedPage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
-  //   const { _id, picturePath } = useSelector((state) => state.user);
   const [showOverlay, setShowOverlay] = useState(false);
   const [posts, setPosts] = useState([]);
+  const [query, setQuery] = useState("");
   const accesToken = localStorage.getItem('accessToken');
 
   const handleNewPost = () => {
-    // Logic to handle a new post being added
     setShowOverlay(true);
-
-    // Simulating a delay before hiding the overlay
     setTimeout(() => {
       setShowOverlay(false);
-    }, 1000); // Adjust the duration as needed
+    }, 1000);
+  };
+
+  const findPostWithNoAccess = async() =>{
+    const response = await getLatestPostApi();
+    setPosts(response.results)
+  }
+
+  const debouncedSearchPosts = useCallback(
+    debounce(async (query) => {
+      if (query) {
+        const page = 1;
+        const pageSize = 20;
+        const postsData = await searchPosts(query, page, pageSize);
+        setPosts(postsData.results);
+      } else {
+        findPostWithNoAccess();
+      }
+    }, 500),
+    []
+  );
+
+  const handleQueryChange = (e) => {
+    setQuery(e.target.value);
+    debouncedSearchPosts(e.target.value);
   };
 
   useEffect(()=>{
-    const findPost = async() => {
-      const response = await getLatestPostApi();
-      let post=[];
+    try{
+      const findPost = async() => {      
+      const response = await getPostsByPreference();
+      console.log(response.results)
       response.results.forEach(async element => {
-        const res = await isLiked(element._id)
-        const result = {
-          ...element,
+        try{
+          const res = await isLiked(element._id)
+          const result = {
+            ...element,
           isLiked: res.res
         }
         setPosts((prev)=> [...prev,result]);
+        }catch(error){
+
+        }
       });
-      
-    }
-    const findPostWithNoAccess = async() =>{
-      const response = await getLatestPostApi();
-      setPosts(response.results)
     }
     if(accesToken){
       findPost()
     }else{
       findPostWithNoAccess()
     }
-  },[]);
-  return (
+  }catch(error){
+  }
+  },[accesToken]);
+return (
     <Box>
       <Box
         width="100%"
@@ -65,6 +85,21 @@ const FeedPage = () => {
           mt={isNonMobileScreens ? undefined : "2rem"}
         >
           <TopPostBox />
+          {!isNonMobileScreens && <Box
+      sx={{
+        display: 'flex',
+        overflowX: 'auto',
+        overflowY: 'hidden',
+        whiteSpace: 'nowrap',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+          display: 'none',
+        },
+        '& > *': { 
+          margin:'10px',
+        },
+      }}
+    ><LeftFeedWidget/></Box>}
           <Box position="relative" >
             {showOverlay && (
               <Box
@@ -77,14 +112,27 @@ const FeedPage = () => {
                 alignItems="center"
                 justifyContent="center"
                 zIndex={999}
-                backgroundColor="rgba(0, 0, 0, 0.5)" // Adjust the overlay background color and transparency
+                backgroundColor="rgba(0, 0, 0, 0.5)"
               >
                 <MyButton onClick={handleNewPost}>New Post Overlay</MyButton>
               </Box>
             )}
           </Box>
+          <TextField
+          
+          sx={{
+            borderColor:'red',
+            margin:"10px"
+          }}
+            value={query}
+            onChange={handleQueryChange}
+            placeholder="Search posts..."
+            InputProps={{
+              startAdornment: <Search />,
+            }}
+          />
           <Box sx={{ height: '1000px', overflowY: 'auto' ,scrollbarWidth: 'none', '-ms-overflow-style': 'none'}}>
-          <PostsWidget posts={posts} setPosts={setPosts}/>
+          <PostsWidget wrapperHeight={'auto'} posts={posts} setPosts={setPosts}/>
           </Box>
         </Box>
         {isNonMobileScreens && (
@@ -98,3 +146,13 @@ const FeedPage = () => {
 };
 
 export default FeedPage;
+
+function debounce(func, delay) {
+  let timeoutId;
+  return (...args) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      func.apply(this, args);
+    }, delay);
+  };
+}

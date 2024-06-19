@@ -58,11 +58,13 @@ const createAccount = asyncHandler(async (req, res) => {
 //@route 
 //@access level 1
 const updateAccount = asyncHandler(async (req, res) => {
-    const account = await Account.findById(req.params.id);
+    console.log(req.body)
+    const account = await Account.findOne({ownerId:req.user.id});
     if(!account){
         res.status(404);
         throw new Error("Account not ound");
     }
+    console.log(req.body)
     account.theme = req.body.theme? req.body.theme : 0;
     if (req.body.preferedCategories) {
         account.preferedCategories = req.body.preferedCategories;

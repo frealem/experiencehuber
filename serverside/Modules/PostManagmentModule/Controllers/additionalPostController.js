@@ -5,6 +5,7 @@ const Category = require('../../SystemMonitoringModule/Models/Category');
 const paginate = require('../../../Common/pagination');
 const paginateWithNoFilter = require('../../../Common/paginationWithNoFilter');
 const asyncHandler = require('express-async-handler');
+const History = require('../../SystemMonitoringModule/Models/History')
 
 
 
@@ -25,18 +26,25 @@ const getPostsByCurrentUser = asyncHandler(async (req, res) => {
 //@route GET /api/post/preference
 //@access level 1
 const getPostsByPreference = asyncHandler(async (req, res) => {
-    const page = parseInt(req.query.page);
-    const pageSize = parseInt(req.query.pageSize); 
-
-    const account = await Account.findById(req.user.id);
+    // const page = parseInt(req.query.page);
+    // const pageSize = parseInt(req.query.pageSize); 
+    const page = 1;
+    const pageSize = 100;
+    const account = await Account.findOne({ownerId: req.user.id});
     const ids = [...account.preferedCategories];
-    const history = await History.find({userId: req.user.id}).limit(100);
+    const history = await History.find({userId: req.user.id}).limit(2);
     // const categories = await Category.find().where(_id).in(ids).exec();
     // const categoryIds = categories.map(category => category._id);
-    const filter = {_id: {$nin: history},categoryId: {$in : ids }, special: false};
+    let filter = {};
+    if(ids && ids.length > 0){
+        filter = {_id: {$nin: history},categoryId: {$in : ids }, special: false};
+    }else{
+        filter = {_id: {$nin: history}, special: false}
+    }
+    
 
     const posts = await paginate(Post, page, pageSize, filter);
-
+    console.log(posts);
     res.status(200).json(posts);
 });
 
@@ -44,7 +52,9 @@ const getPostsByPreference = asyncHandler(async (req, res) => {
 //@route GET /api/post/query
 //@access level 1
 const getPostsByQuery = asyncHandler(async (req, res) => {
+    console.log('res')
     const { page, pageSize, search } = req.query;
+    console.log(search)
     const filter = {
        $text: { $search: search },
     };
@@ -60,7 +70,6 @@ const getPostsByFilter = asyncHandler(async (req, res) => {
     const {page, pageSize, tags, categories, ratings} = req.query;
     const filter = {
         categoryId: {$in: categories},
-        tags: {$in: tags},
         rating: {$gte: ratings},
     };
 

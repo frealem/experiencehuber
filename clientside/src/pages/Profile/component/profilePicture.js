@@ -25,9 +25,8 @@ const ModalButton = styled(Button)(({ theme }) => ({
   marginBottom: theme.spacing(1),
 }));
 
-function Profile() {
+function Profile({profilePicture, setProfilePicture}) {
   const [open, setOpen] = useState(false);
-  const [profilePicture, setProfilePicture] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
   const handleIconClick = () => {
     setOpen(true);

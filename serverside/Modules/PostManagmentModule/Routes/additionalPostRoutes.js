@@ -10,7 +10,7 @@ const {validateTokenLevel1}= require('../../../Middleware/validateTokenHandler')
 
 router.get('/all',getPosts);
 router.get('/latest', getLatestPosts);
-router.get('/preference',getPostsByPreference);
+router.get('/preference', validateTokenLevel1, getPostsByPreference);
 router.get('/filter',getPostsByFilter);
 router.get('/query', getPostsByQuery);
 router.get('/special', getSpecialPosts);

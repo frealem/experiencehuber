@@ -45,17 +45,22 @@ const validateTokenLevel2 = asyncHandler(async(req, res,next) => {
     console.log(token);
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRETE, async (err,decoded) => {
-        if(err){
+        try {
+            if(err){
+                res.status(401);
+                throw new Error("User is not authorized!");
+            }
+            const role = await Role.findById(decoded.user.role);
+            if(role.accessLevel < 2){
+                res.status(401);
+                throw new Error("User is not authorized!");
+            }
+            req.user = decoded.user;
+            next();
+        } catch (error) {
             res.status(401);
-            throw new Error("User is not authorized!");
+            //throw new Error("User is not authorized!");
         }
-        const role = await Role.findById(decoded.user.role);
-        if(role.accessLevel < 2){
-            res.status(401);
-            throw new Error("User is not authorized!");
-        }
-        req.user = decoded.user;
-        next();
     });
 });
 
@@ -74,17 +79,21 @@ const validateTokenLevel3 = asyncHandler(async(req, res,next) => {
     }
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRETE, async (err,decoded) => {
-        if(err){
-            res.status(401);
-            throw new Error("User is not authorized!");
-        }
-        const role = await Role.findById(decoded.user.role);
-        if(role.accessLevel < 3){
-            res.status(401);
-            throw new Error("User is not authorized!");
-        }
-        req.user = decoded.user;
-        next();
+        try {
+            if(err){
+                res.status(401);
+                throw new Error("User is not authorized!");
+            }
+            const role = await Role.findById(decoded.user.role);
+            if(role.accessLevel < 3){
+                res.status(401);
+                throw new Error("User is not authorized!");
+            }
+            req.user = decoded.user;
+            next();
+        } catch (error) {
+            res.status(401)
+        }  
     });
 });
 

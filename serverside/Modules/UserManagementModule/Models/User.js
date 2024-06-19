@@ -26,5 +26,7 @@ const UserSchema = mongoose.Schema({
 },{
     timestamps: true,
 });
+// Create a text index on the "title" and "description" fields
+UserSchema.index({ userName: 'text', fullName: 'text' });
 
 module.exports = mongoose.model('User', UserSchema);

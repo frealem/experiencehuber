@@ -1,25 +1,30 @@
 import { Box, Button, Divider, TextField, Typography, useTheme } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CommentBox from "./commentBox";
 import { connect } from "formik";
 import { createComment } from "../../../components/States/postIntegration/postApi";
+import {format} from "date-fns";
 
 
-const CommentsBox = ({comments, setComments}) => {
+const CommentsBox = ({comments, setComments, post}) => {
     const theme=useTheme();
-    const [content, setContent] = useState(null);
-    const handleCreateCommet = async() =>{
-      if(!content) return;
-      const c = [...comments]
+    const [content, setContent] = useState('');
+    const handleCreateCommet = async () => {
+      if (!content) return;
+      const c = [...comments];
       const comment = {
-        postId: c[0].postId,
+        postId: post?._id,
         content: content
-      }
-      const createdComment =  await createComment(comment);
+      };
+      const createdComment = await createComment(comment);
       console.log(createdComment);
-      setComments((prev)=>[ createdComment,...prev])
-      setContent('');
-    }
+      setComments((prev) => [createdComment, ...prev]);// Reset the content state to an empty string
+      setContent('')
+    };
+    useEffect(()=>{
+      const change = ()=>
+      change()
+    },[comments])
   return (
     <Box>
       <Box display="flex" alignItems="center" mb={5} mt={3}>

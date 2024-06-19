@@ -17,15 +17,7 @@ const registerSchema = yup.object().shape({
   userName: yup.string(),
 });
 
-const loginSchema = yup.object().shape({
-  email: yup.string().email("invalid email").required("required"),
-  password: yup.string().required("required"),
-});
 
-const initialValuesLogin = {
-  email: "",
-  password: "",
-};
 
 const initialValuesSignup = {
   email: "",
@@ -36,13 +28,6 @@ const initialValuesSignup = {
 };
 
 const CreateCommunityGuidline = ({ open, onClose, setIsOpen, setcommunityguidelines}) => {
-
-  const navigate = useNavigate();
-  //const [isOpen, setIsOpen] = useState(true);
-
-  // useEffect(()=>{
-  //   navigate('/adminmanagement')
-  // },[isOpen])
 
 const submitRegister = async (values) => {
   try {

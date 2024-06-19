@@ -4,7 +4,8 @@ import TitleTwoLine from '../../components/titleTwoLine'
 import image from '../../assets/images/chatapp.jpeg'
 import { createChatFreindApi } from '../../components/States/messageIntegration/chatApi';
 import {useNavigate} from 'react-router-dom';
-const AdminListComponent = ({user}) => {
+
+const AdminListComponent = ({user, setUsers, onDelete}) => {
     const theme=useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
     const navigate = useNavigate();
@@ -16,9 +17,12 @@ const AdminListComponent = ({user}) => {
       const chatFreind = await createChatFreindApi(chatFreindToCreate);
       navigate('/message',  {replaces: true, state: chatFreind})
     }
-    const handleDelete = () => {
-      
+
+    const handleDelete = ()=>{
+      console.log('hello')
+      onDelete()
     }
+
   return (
     <Box mb={1}>
     {isMobile ? (<Box
@@ -54,9 +58,7 @@ const AdminListComponent = ({user}) => {
     </Box>
     <Box display="flex" gap={1}>
     <Typography onClick={handleChat}>Chat</Typography>
-    <Typography>update</Typography>
-    <Typography>delete</Typography>
-    <Typography>Block</Typography>
+    <Typography onClick={handleDelete}>delete</Typography>
     </Box>
     </Box>
     

@@ -4,14 +4,14 @@
 import PostWidget from "./postWidget";
 //import { posts } from "../../fakeData";
 
-const PostsWidget = ({ posts, setPosts}) => {
-  console.log(posts)
+const PostsWidget = ({wrapperHeight, posts, setPosts, type}) => {
+  const token = localStorage.getItem('accessToken');
   return (
     <>
     {posts? (
       posts.map(
         (post) => (
-          <PostWidget post={post} setPosts={setPosts}/>
+          <PostWidget wrapperHeight={wrapperHeight} post={post} setPosts={setPosts} token={token} type={type}/>
         )
       )
     ): "loading.."}

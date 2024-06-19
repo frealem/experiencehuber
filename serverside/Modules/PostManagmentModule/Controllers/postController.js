@@ -17,7 +17,7 @@ const getPosts = asyncHanler(async (req, res) => {
 //@route GET /api/post/owner/:id
 //@access level 1
 const getPostsByOwner = asyncHanler(async (req, res) => {
-    const post = await Post.find({posterId: req.params.id}).sort({createdAt: 'aesc'});
+    const post = await Post.find({posterId: req.params.id}).sort({createdAt: 'asc'});
     res.status(200).json(post);
 });
 
@@ -45,17 +45,27 @@ const createPost = asyncHanler(async (req, res) => {
            like = 0, 
            dislike = 0, 
            share = 0,
-           special = false, 
+           special, 
            rating, 
            tags,
            location,
-           imageURL
+           imageURL,
+           categoryId,
+           link
         } = req.body;
-    console.log(imageURL);
+        console.log(rating)
     if(!posterId || !title || !description){
         res.status(400);
         throw new Error("Mandatory fields are not filled!");
     }
+    const postsExists = await Post.findOne({title: title});
+    if(postsExists){
+        res.status(400);
+        throw new Error("There is a post with a similar name!");
+    }
+    // if(!special){
+    //     special = false
+    // }
     
     const post = await Post.create({
            posterId, 
@@ -69,13 +79,14 @@ const createPost = asyncHanler(async (req, res) => {
            imageURL,
            tags,
            location,
+           categoryId,
+           link
     });
     const account = await Account.findOne({ownerId: req.user.id});
     const previousPosts = [...account.previousPosts];
     previousPosts.push(post._id);
     account.previousPosts = previousPosts;
     const a = await account.save();
-    console.log(a)
     res.status(200).json(post);
 });
 
@@ -102,13 +113,13 @@ const updatePost = asyncHanler(async (req, res) => {
 //@route DELETE /api/post/:id
 //@access level 1
 const deletePost = asyncHanler(async (req, res) => {
-    const post = await Post.findById(req.params.id);
+    const post = await Post.findOne({_id: req.params.id});
     if(!post){
         res.status(404);
         throw new Error("Post not found");
     }
-
-    await Post.findOneAndDelete(req.params.id);
+    //console.log(post)
+    await Post.findOneAndDelete({_id: req.params.id});
     res.status(200).json(Post);
 });
 
@@ -123,7 +134,6 @@ const uploadPostImages = asyncHanler(async (req, res) => {
     //         path = path + file.path;
     //         imageURL.push(path);
     // }); 
-    console.log(req.file.fieldname);
     const imageUrl = req.file.filename;      
     res.status(200).json(imageUrl);
 });

@@ -29,47 +29,44 @@ import FlexBetween from "./Flexbetween";
 import UserWidget from "../pages/widgets/userWidget";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "./States/userIntegration/userSlice";
-import { PeopleOutlined } from "@mui/icons-material";
+import { PeopleOutlined, PersonOutline } from "@mui/icons-material";
+
+const type = localStorage.getItem('type')
 
 const navItems = [
-  {
-    text: "Your feeds",
-    icon: <DynamicFeedOutlinedIcon />,
-  },
+ 
   {
     text: "Menu",
     icon: null,
+    link: "null",
   },
   {
-    text: "Your Posts",
+    text: "My Posts",
     icon: <PostAddOutlinedIcon />,
+    link: "myposts",
   },
+  
   {
-    text: "Events",
-    icon: <EventOutlinedIcon />,
-  },
-  {
-    text: "Favorites",
+    text: "My Liked Post",
     icon: <FavoriteOutlinedIcon />,
+    link: "favoritelist",
   },
   {
     text: "Drafted Posts",
     icon: <DraftsOutlinedIcon />,
-  },
-  {
-    text: "Ads Manager",
-    icon: <FormatShapesOutlinedIcon />,
+    link: "draftposts",
   },
   {
     text: "Message",
     icon: <MessageOutlinedIcon />,
+    link: "message",
   },
   {
-    text: "See More",
-    icon: <ExpandMoreOutlinedIcon />,
+    text: "Dashboard",
+    icon: <PersonOutline />,
+    link: "reportmanagement",
   },
 ];
-
 const Sidebar = ({
   drawerWidth,
   isSidebarOpen,
@@ -87,8 +84,7 @@ const Sidebar = ({
   const handleAccount=()=>{
     navigate('/authpage')
   }
-
-  useEffect(() => {
+useEffect(() => {
     setActive(pathname.substring(1));
   }, [pathname]);
 return (
@@ -136,24 +132,28 @@ return (
               </Box>
             </Box>
             <List>
-              {navItems.map(({ text, icon }) => {
+              {navItems.map(({ text, icon, link }) => {
                 if (!icon) {
                   return (
-                    <Typography key={text} sx={{ m: "2.25rem 0 1rem 3rem" }}>
+                    <Typography
+                      key={text}
+                      sx={{ m: "2.25rem 0 1rem 3rem", fontWeight: "bold" }}
+                    >
                       {text}
                     </Typography>
                   );
                 }
-                const lcText = text.toLowerCase();
+                const lcText = link.toLowerCase();
 
                 return (
-                  <ListItem key={text} disablePadding>
+                  <ListItem key={link} disablePadding>
                     <ListItemButton
                       onClick={() => {
                         navigate(`/${lcText}`);
                         setActive(lcText);
                       }}
                       sx={{
+                        marginBottom: "15px",
                         backgroundColor:
                           active === lcText
                             ? theme.palette.secondary[300]
@@ -171,6 +171,7 @@ return (
                             active === lcText
                               ? theme.palette.primary[600]
                               : theme.palette.secondary[200],
+                          fontSize: "32px",
                         }}
                       >
                         {icon}
@@ -180,6 +181,11 @@ return (
                         <ChevronRightOutlined sx={{ ml: "auto" }} />
                       )}
                     </ListItemButton>
+                    {
+                      (link==="setting") ? (
+                        <Box>
+                        </Box>):null
+                    }
                   </ListItem>
                 );
               })}

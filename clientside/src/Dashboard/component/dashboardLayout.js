@@ -31,6 +31,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
   CloseOutlined,
   DarkModeOutlined,
+  Home,
   LightModeOutlined,
   MenuBookOutlined,
   MenuOpenOutlined,
@@ -58,9 +59,9 @@ const navItems = [
     link: "adminmanagement",
   },
   {
-    text: "Post Management",
+    text: "Special Post",
     icon: <PostAddOutlinedIcon />,
-    link: "postmanagement",
+    link: "specialposemanagment",
   },
   {
     text: "Report Management",
@@ -83,9 +84,9 @@ const navItems = [
     link: "systemsecurity",
   },
   {
-    text: "System Setting",
-    icon: <SettingsOutlined />,
-    link: "systemsetting",
+    text: "Feed Page",
+    icon: <Home />,
+    link: "",
   },
 ];
 
@@ -143,6 +144,7 @@ const DashboardLayout = ({ text }) => {
                 <Typography
                   color={theme.palette.secondary[300]}
                   fontWeight={400}
+                  onClick={()=>navigate('/')}
                 >
                   ExperienceHub
                 </Typography>
@@ -196,6 +198,7 @@ const DashboardLayout = ({ text }) => {
               marginTop={-5.5}
               marginLeft={6}
               marginBottom={3}
+              onClick={()=>navigate('/')}
             >
               ExperienceHub
             </Typography>

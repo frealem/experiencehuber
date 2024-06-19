@@ -9,15 +9,16 @@ const ReceiverMessage = ({ message }) => {
   return (
     <div
       style={{
-        padding: '12px 20px',
-        margin: '8px 6px',
-        marginLeft: '40px',
-        maxWidth: '60%',
-        backgroundColor: '#f0f0f0',
-        borderTopLeftRadius: '20px',
-        borderTopRightRadius: '20px',
-        borderBottomRightRadius: '20px',
-        alignSelf: 'flex-start',
+        float: "left",
+        padding: '10px',
+        minWidth: '15%',
+        maxWidth: '70%',
+        marginRight:"10px",
+        marginBottom: "5px",
+        backgroundColor: "white",
+        borderTopLeftRadius: '10px',
+        borderBottomLeftRadius: '10px',
+        borderTopRightRadius: '10px',
       }}
     >
       <p

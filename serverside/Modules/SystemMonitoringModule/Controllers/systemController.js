@@ -54,6 +54,7 @@ const getSystemSummary = asyncHandler(async (req, res)=>{
                   $lt: new Date(year, month, 1)
                 }
               });
+
               data.push({monthName, countUser , countPost, countLike, countReviews})
         }
         if(month > 0){

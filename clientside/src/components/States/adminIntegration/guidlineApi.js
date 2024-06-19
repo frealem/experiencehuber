@@ -37,3 +37,12 @@ export const deleteCommunityGuidlineApi = async(id) => {
         throw new Error('failed to create guidline')
     }
 }
+
+export const updateCommunityGuidlineApi = async(id, data) => {
+  try{
+      const response = await axiosInstance.put(`/guideline/${id}`, data);
+      return response.data;
+  }catch(error){
+      throw new Error('failed to create guidline')
+  }
+}

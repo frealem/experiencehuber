@@ -1,5 +1,6 @@
 import axios from 'axios';
 import axiosInstance from '../interceptor';
+import {toast} from 'react-toastify';
 
 export const createPostApi = async (postData) => {
     try {
@@ -22,7 +23,8 @@ export const createPostApi = async (postData) => {
   };
 export const deletePostApi = async (postId) => {
   try {
-    const response = await axiosInstance.delete(`/posts/${postId}`);
+    const response = await axiosInstance.delete(`/post/${postId}`);
+    console.log(response)
     return response.data;
   } catch (error) {
     throw new Error('Failed to delete post.');
@@ -43,7 +45,8 @@ export const getPostApi = async (postId) => {
     const response = await axiosInstance.get(`/post/${postId}`);
     return response.data;
   } catch (error) {
-    throw new Error('Failed to get post.');
+    //throw new Error('Failed to get post.');
+    toast.error("post not found")
   }
 };
 
@@ -94,7 +97,7 @@ export const isLiked = async(postId) => {
   }
 }
 
-export const getPostByCurrentUser = async(postId) => {
+export const getPostByCurrentUser = async() => {
   try{
     const response = await axiosInstance.get(`/additional/current`);
     console.log(response.data)
@@ -116,9 +119,80 @@ export const getLikedPostsApi = async() => {
 export const likeApi = async(postId) =>{
   try{
     const response = await axiosInstance.post(`/account/like/${postId}`);
-    console.log(response.data)
+    if(response.status !== 200){
+      throw new Error()
+    }
     return response.data;
   }catch(error){
-    throw new Error("failed to like post");
+    toast.error("Please login first")
+    //throw new Error("failed to like post");
+  }
+}
+
+export const getSpecialPostsApi = async() =>{
+  try{
+    const response = await axiosInstance.get(`/additional/special?page=1&pageSize=20`);
+    console.log(response.data)
+    return response.data.results;
+  }catch(error){
+    throw new Error("failed to fetch special posts");
+  }
+}
+
+export const searchPosts = async (query, page, pageSize) => {
+  try {
+    const response = await axiosInstance.get(`/additional/query?search=${query}&page=${page}&pageSize=${pageSize}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+    throw error;
+  }
+};
+
+export const getPostByUserApi = async(userId) => {
+  try{
+    const response = await axiosInstance.get(`/additional/owner/${userId}`);
+    console.log(response.data)
+    return response.data;
+  }catch(e){
+    throw new Error('failed to fetch posts')
+  }
+}
+
+export const createPostPreview = async(data) =>{
+  try{
+    const response = await axiosInstance.post(`/postpreview`, data);
+    return response.data; 
+  }catch(error){
+    throw new Error('failed to create posts preview')
+  }
+}
+
+export const getPostPreviewByCurrentUser = async() => {
+  try{
+    const response = await axiosInstance.get(`/postpreview`);
+    return response.data;
+  }catch(e){
+    throw new Error('failed to fetch posts')
+  }
+}
+
+export const getPostsByPreference = async() => {
+  try {
+    const response = await axiosInstance.get("/additional/preference")
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    toast.error('couldnnot fecth post ')
+  }
+}
+
+export const deletePostPreview = async(id) =>{
+  try {
+    const response = await axiosInstance.delete( `/postpreview/${id}`)
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    toast.error('couldnnot delete post preview')
   }
 }

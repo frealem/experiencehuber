@@ -6,12 +6,15 @@ import AddIcon from '@mui/icons-material/Add';
 import { getAllAdminsApi } from '../../components/States/userIntegration/userApi';
 import { useNavigate } from "react-router-dom";
 import CreateAdmin from './createAdmin';
+import ConfirmationDialog from '../../components/confirmationBox';
 function AdminManagement() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [users, setUsers] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const [isOpenConfirm, setOpenConfirm] = useState(false);
+  const [selectedId, SetSeleletedId] = useState('');
 
   useEffect(()=>{
     const getAdmin = async() =>{
@@ -28,6 +31,30 @@ function AdminManagement() {
   const handleCreateAdmin = () => {
     setIsOpen(true);
   }
+
+  const deleteAdmin = async() => {
+    try {
+      
+      setUsers((prev)=>{
+        const a = [...prev];
+        return a.filter((item)=> item._id !== selectedId)
+      })
+    } catch (error) {
+      console.log("error")
+    }
+  }
+
+  const handleDelete = (userId)=>{
+    setOpenConfirm(true)
+    SetSeleletedId(userId)
+    console.log("hello")
+  }
+
+
+  useEffect(()=>{
+    const change =() =>
+    change()
+  },[users])
   return (
     <>
     <Box mt={10}
@@ -47,11 +74,11 @@ function AdminManagement() {
       </Box>
         {users.map(
         (user) => (<Box>
-          <AdminListComponent user={user}/> 
+          <AdminListComponent user={user} setUsers={setUsers} onDelete={()=> handleDelete(user._id)}/> 
           </Box>
         )
       )}
-     
+     <ConfirmationDialog open={isOpenConfirm} onCancel={()=> setOpenConfirm(false)} title="Delete admin" message="This action will permanently delete an admin are you sure to continue?" onConfirm={deleteAdmin}/>
      </Box>
     </>
   )

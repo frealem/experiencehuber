@@ -1,6 +1,7 @@
 const {STATUSCODE} = require('../Constants/statusCode');
 
 const errorHandler = (err, req, res, next) => {
+    console.log(err)
     const statusCode = res.statusCode ? res.statusCode: 500;
     switch(statusCode){
         case STATUSCODE.VALIDATION_ERROR:
@@ -44,4 +45,4 @@ const errorHandler = (err, req, res, next) => {
     }
 }
 
-modules.exports = errorHandler;
+module.exports = errorHandler;

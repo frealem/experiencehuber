@@ -1,11 +1,12 @@
-const PostPreview = require('../Models/PostPreviewPreview');
+const PostPreview = require('../Models/PostPreview');
+const asyncHanler = require('express-async-handler')
 
 
 //@desc get all postpreviews created by the owner
 //@route 
 //@access level 2
 const getPostPreviews = asyncHanler(async (req, res) => {
-    const postpreview = await PostPreview.find({ownerId: req.user.id});
+    const postpreview = await PostPreview.find({posterId: req.user.id});
     res.status(200).json(postpreview);
 });
 
@@ -25,12 +26,15 @@ const getPostPreview = asyncHanler(async (req, res) => {
 //@route 
 //@access level 1
 const createPostPreview = asyncHanler(async (req, res) => {
-    const {posterId, 
-           title, 
+    const posterId = req.user.id;
+    const {title, 
            description, 
            rating,
            tags,
-           location,} = req.body;
+           location,
+           categoryId,
+           imageURL,
+        } = req.body;
     if(!posterId || !title || !description){
         res.status(400);
         throw new Error("Mandatory fields are not filled!");
@@ -38,14 +42,6 @@ const createPostPreview = asyncHanler(async (req, res) => {
     if((await PostPreview.countDocuments({posterId: req.user.id})) > 5){
         res.status(400);
         throw new Error("User cannot create Post previews more than 5!");
-    }
-    let imageURL = [];
-    if(req.files) {
-        let path = '';
-        req.files.forEach((file, index, arr) => {
-            path = path + file.path;
-            imageURL.push(path);
-        });        
     }
     const postpreview = await PostPreview.create({
            posterId, 
@@ -55,6 +51,7 @@ const createPostPreview = asyncHanler(async (req, res) => {
            imageURL,
            tags,
            location,
+           categoryId
     });
     res.status(200).json(postpreview);
 });
@@ -82,13 +79,13 @@ const updatePostPreview = asyncHanler(async (req, res) => {
 //@route 
 //@access level 1
 const deletePostPreview = asyncHanler(async (req, res) => {
-    const postpreview = await PostPreview.findById(req.params.id);
+    const postpreview = await PostPreview.findOne({_id: req.params.id});
     if(!postpreview){
         res.status(404);
         throw new Error("PostPreview not found");
     }
 
-    await PostPreview.findOneAndDelete(req.params.id);
+    await PostPreview.findOneAndDelete({_id:req.params.id});
     res.status(200).json(PostPreview);
 });
 

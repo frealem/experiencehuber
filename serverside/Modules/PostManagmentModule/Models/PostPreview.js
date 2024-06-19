@@ -22,6 +22,10 @@ const PostPreviewSchema = mongoose.Schema({
     tags:{
         type: [String],
     },
+    categoryId:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'Category'
+    },
     location:{
         name: String,
         longitude: String,

@@ -9,9 +9,9 @@ const LeftFeedWidget = () => {
     <><Box mb={3} >
     <AdvertWidget/>
     </Box>
-    <Box mt={3}>
+    {/* <Box mt={3}>
     <HighRateWidget/>
-    </Box>
+    </Box> */}
         </>
   )
 }

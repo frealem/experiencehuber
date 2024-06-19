@@ -5,16 +5,19 @@ import TitleTwoLine from '../../components/titleTwoLine';
 import { getNotificationsApi } from '../../components/States/userIntegration/userApi';
 import {format} from 'date-fns'
 import { deleteCommunityGuidlineApi } from '../../components/States/adminIntegration/guidlineApi';
+import UpdateGuideline from '../pages/updateGuideline';
 
-const GuidelineListComponent = ({guideline, setGuideline}) => {
+const GuidelineListComponent = ({guideline, setGuidelines}) => {
     const theme=useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
     const [expanded, setExpanded] = useState(false);
+    const [isOpen, setIsOpen] = useState(false)
+
     console.log(guideline)
     const handleDelete = async() => {
       const deleted = await deleteCommunityGuidlineApi(guideline._id);
       console.log(deleted)
-      setGuideline((prev)=>{
+      setGuidelines((prev)=>{
         const a = [...prev];
         const b = a.filter((item)=> item._id !== deleted._id)
         return b;
@@ -23,6 +26,9 @@ const GuidelineListComponent = ({guideline, setGuideline}) => {
     const handleExpand = () => {
         setExpanded(!expanded);
     };
+    const handleClose = () =>{
+      setIsOpen(false)
+    }
     return(
     <Box width="100%" margin={2} borderRadius={10} border={1} borderColor={theme.palette.secondary.main} p={2} marginRight={isMobile ? "10px":undefined}>
     <TitleTwoLine variant="h6" component="h2" fontWeight="bold"  color={theme.palette.secondary.main}>
@@ -39,9 +45,15 @@ const GuidelineListComponent = ({guideline, setGuideline}) => {
     <Typography variant="body2" component="p" align="right">
       {format(guideline.createdAt,  'MMM d yyyy')}
     </Typography>
-    <Typography variant="body2" component="p" align="right" style={{color: 'red', fontSize: 20, fontWeight: 'bold'}} onClick={handleDelete}>
+    <Box display='flex' justifyContent='flex-end'>
+    <Typography marginRight='10px' variant="body2" component="p" align="right" style={{color: 'green', fontSize: 15, fontWeight: 'bold'}} onClick={()=>setIsOpen(true)}>
+      Update
+    </Typography>
+    <Typography variant="body2" component="p" align="right" style={{color: 'red', fontSize: 15, fontWeight: 'bold'}} onClick={handleDelete}>
       Delete
     </Typography>
+    </Box>
+    <UpdateGuideline guideline={guideline} open={isOpen} onClose={handleClose} setIsOpen = {setIsOpen} setGuidelines={setGuidelines}/>
     </Box>
   )
 }

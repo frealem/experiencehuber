@@ -29,7 +29,10 @@ const getReport = asyncHanler(async (req, res) => {
 //@access public
 const createReport = asyncHanler(async (req, res) => {
     const reporterId = req.user.id;
+    console.log('from report')
+    console.log(req.body)
     const { postId, reportCase, reportDetail, status = 0} = req.body;
+    console.log(req.body)
     if(!reporterId || !postId || !reportCase){
         res.status(400);
         throw new Error("Mandatory fields are not filled!");

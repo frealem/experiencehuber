@@ -4,23 +4,26 @@ import UserImage from "../../../components/userImage";
 import CommentsBox from "./commentsBox";
 import TitleTwoLine from "../../../components/titleTwoLine";
 import RelatedPosts from "./relatedPost";
+import {useNavigate} from "react-router-dom";
 
 
-const LeftEachPost = ({postCreater, comments, setComments}) => {
+const LeftEachPost = ({postCreater, comments, setComments, post}) => {
+  const navigate = useNavigate();
   const theme=useTheme();
   return (
     <>
       <Box>
         {postCreater? (
         <>
-        <Box ml={10}>
-        <UserImage size={100} image={postCreater.profilePictuerURL}/>
+        <Box ml={10} onclick={()=>navigate("/othersprofile", {replace:true, state: postCreater})}>
+        <UserImage size={100} image={postCreater?.profilePictuerURL}/>
         
-        <Typography fontWeight={600}>{postCreater.userName}</Typography></Box>
-        <TitleTwoLine>{postCreater.bio}</TitleTwoLine>
+        <Typography fontWeight={600}>{postCreater?.userName}</Typography>
+        </Box>
+        <TitleTwoLine>{postCreater?.bio}</TitleTwoLine>
         </>
         ):"loading..."}
-        <CommentsBox comments={comments} setComments={setComments}/>
+        <CommentsBox comments={comments} setComments={setComments} post={post}/>
       </Box>
       <Box display="flex" alignItems="center" mb={5} mt={3}>
         <Typography
@@ -35,7 +38,7 @@ const LeftEachPost = ({postCreater, comments, setComments}) => {
         <Divider style={{ flexGrow: 1 }} />
       </Box>
       <Box>
-        <RelatedPosts/>
+        <RelatedPosts post={post}/>
       </Box>
     </>
   );

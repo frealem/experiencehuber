@@ -7,7 +7,7 @@ router.use(validateTokenLevel1);
 
 router.route('/').get(getPostPreviews);
 router.route('/:id').get(getPostPreview).put(updatePostPreview).delete(deletePostPreview);
-router.post('/', fileUploadHandler, createPostPreview)
+router.post('/', createPostPreview)
 
 module.exports = router;
 

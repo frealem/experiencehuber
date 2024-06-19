@@ -65,7 +65,7 @@ const Overview = () => {
               title="Total Users"
               value={data.user.userCount}
               increase={`+${data.user.userPercent}%`}
-              description="Since last week"
+              description="Since last month"
               icon={
                 <GroupOutlined
                   sx={{
@@ -80,8 +80,8 @@ const Overview = () => {
             <DashBox
               title="Total review"
               value={data.review.reviewsCount}
-              increase={`+${data.review.reviewPercent}`}
-              description="Since last week"
+              increase={`+${data.review.reviewPercent}%`}
+              description="Since last month"
               icon={
                 <GroupOutlined
                   sx={{
@@ -96,8 +96,8 @@ const Overview = () => {
             <DashBox
               title="Total post"
               value={data.post.postCount}
-              increase={`+${data.post.postPercent}`}
-              description="Since last week"
+              increase={`+${data.post.postPercent}%`}
+              description="Since last month"
               icon={
                 <GroupOutlined
                   sx={{
@@ -112,8 +112,8 @@ const Overview = () => {
             <DashBox
               title="Total Like"
               value={data.like.likeCount}
-              increase={`+${data.like.likePercent}`}
-              description="Since last week"
+              increase={`+${data.like.likePercent}%`}
+              description="Since last month"
               icon={
                 <GroupOutlined
                   sx={{

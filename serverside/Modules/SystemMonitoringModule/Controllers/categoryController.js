@@ -26,7 +26,7 @@ const getCategory = asyncHandler(async (req, res) => {
 //@access level 2
 const createCategory = asyncHandler(async (req, res) => {
     console.log(req.body);
-    const {name, description, accessLevel = 0} = req.body;
+    const {name, description } = req.body;
     if(!name || !description){
         res.status(400);
         throw new Error("Mandatory fields are not filled!");
@@ -34,7 +34,6 @@ const createCategory = asyncHandler(async (req, res) => {
     const category = await Category.create({
         name,
         description,
-        accessLevel,
     });
     res.status(200).json(category);
 });

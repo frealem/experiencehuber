@@ -6,12 +6,10 @@ const Post = require('../Models/Post');
 //@desc get all post reviews related to post
 //@route GET /api/postreview/post/:id
 //@access level 1
-const getPostReviewsByPost = asyncHandler(async (res, req) => {
+const getPostReviewsByPost = asyncHandler(async (req, res) => {
+    console.log('hello')
     const postReviews = await PostReview.find({postId: req.params.id});
-    if(!postReview){
-        res.status(404);
-        throw new Error("Review does not exist!");
-    }
+    console.log(postReviews)
     res.status(200).json(postReviews);
 });
 
@@ -32,12 +30,13 @@ const getPostPreview = asyncHandler(async (req, res) => {
 //@route POST /api/postreview/
 //@access level 1
 const createPostReviews = asyncHandler(async (req, res) => {
-    const post = await Post.findOne({_id: req.body.psotId});
+    const post = await Post.findOne({_id: req.body.postId});
 
     if(!post){
         res.status(404);
         throw new Error("Post is not found");
     }
+    console.log(req.body)
     const posterId = req.user.id;
     const {
         postId,
@@ -56,13 +55,13 @@ const createPostReviews = asyncHandler(async (req, res) => {
         description,
         rate,
     });
-    let aveRate = post.rate;
-    aveRate = (aveRate + rate)/2;
+    // let aveRate = post.rate;
+    // aveRate = (aveRate + rate)/2;
 
-    post.rate = aveRate;
-    const updatedPost = await post.save();
+    // post.rate = aveRate;
+    // const updatedPost = await post.save();
 
-    res.status(200).json(createPostReviews);
+    res.status(200).json(createdPostReview);
 }); 
 
 

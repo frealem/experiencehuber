@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import TitleTwoLine from '../../components/titleTwoLine'
 import image from '../../assets/images/chatapp.jpeg'
 import { getOneUserApi } from '../../components/States/userIntegration/userApi'
+import {format} from 'date-fns'
 const PostDashboardComponent = ({post}) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -77,8 +78,9 @@ const PostDashboardComponent = ({post}) => {
       </TitleTwoLine>
       
       <Box display="flex" justContent="space-around" gap={5}>
+      <Box>
         <Typography variant="caption" color={theme.palette.secondary[600]} marginRight={1} marginLeft={3}>
-          10:00 AM 5/8/2024
+          {format(post?.createdAt, 'MMM d yyy')}
         </Typography>
         <Typography variant="caption" color={theme.palette.secondary[600]} marginRight={1}>
          Id: {post._id}
@@ -86,7 +88,10 @@ const PostDashboardComponent = ({post}) => {
         <Typography variant="caption" color={theme.palette.secondary[600]}>
         {postCreater? (`By:${postCreater.userName}`): "loading..."}
         </Typography>
+        </Box>
+        <Typography color='red'>Delete</Typography>
       </Box>
+      
     </Box>
     
     </Box>)}

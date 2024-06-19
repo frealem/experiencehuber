@@ -7,6 +7,9 @@ import { getReportApi } from '../../components/States/adminIntegration/systemApi
 import {format} from 'date-fns'
 import { getPostApi } from '../../components/States/postIntegration/postApi';
 import { getOneCommunityGuidLineApi } from '../../components/States/adminIntegration/guidlineApi';
+import ExpandableRow from '../component/expandReport';
+import axiosInstance from '../../components/States/interceptor';
+import {toast} from 'react-toastify';
 
 const report = [
   {
@@ -47,29 +50,59 @@ const ReportManagement = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [selectedOption, setSelectedOption] = useState('');
-  const [expandedRows, setExpandedRows] = useState([]);
+  const [expandedRow, setExpandedRow] = useState(null);
   const [reports, setReports] = useState([])
+  const [post, setPost] = useState(null);
+  const [guideline, setGuideline] = useState(null)
+  const [expanded, setExpanded] = useState(false)
 
-
+const handleDelete= async(id)=>{
+  try {
+    const {status, data} = await axiosInstance.delete(`/admin/deletepost/${id}`);
+    // if(status !== 200){
+    //   throw new Error()
+    // }
+    setExpanded(false)
+  } catch (error) {
+    toast.error('error while deleting post')
+  }
+}
+const handleBlock=()=>{}
   useEffect(()=>{
     const getReport = async () =>{
       const a = await getReportApi();
       setReports(a)
     };
     getReport();
-  },[reports])
+  },[])
+
+  useEffect(() => {
+    const getPostAndGuideline = async () => {
+      console.log(expandedRow)
+      const postData = await getPostApi(expandedRow.postId);
+      setPost(postData);
+
+      const guidelineData = await getOneCommunityGuidLineApi(expandedRow.reportCase);
+      setGuideline(guidelineData);
+    };
+
+    if (expanded) {
+      getPostAndGuideline();
+    }
+  }, [expanded]);
 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
   };
 
-  const handleRowExpand = (id) => {
-    setExpandedRows((prevExpandedRows) => {
-      if (prevExpandedRows.includes(id)) {
-        return prevExpandedRows.filter((rowId) => rowId !== id);
-      } else {
-        return [...prevExpandedRows, id];
+  const handleRowExpand = (report) => {
+    setExpandedRow((prevExpandedRow) => {
+      if(prevExpandedRow?._id === report._id){
+        setExpanded(false)
+        return null
       }
+      setExpanded(true)
+      return report
     });
   };
 return (
@@ -83,9 +116,11 @@ return (
                 <TableRow>
                   <TableCell><Typography fontWeight={600}>Reported Posts</Typography></TableCell>
                   <TableCell><Typography fontWeight={600}>Report Type</Typography></TableCell>
+                  <TableCell><Typography fontWeight={600}>Report detail</Typography></TableCell>
                   <TableCell><Typography fontWeight={600}>Status</Typography></TableCell>
                   <TableCell><Typography fontWeight={600}>Time</Typography></TableCell>
                   <TableCell><Typography fontWeight={600}>Action</Typography></TableCell>
+                
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -93,8 +128,9 @@ return (
                 reports.map((reported) => (
                    <React.Fragment key={reported._id}>
                     <TableRow>
-                      <TableCell>postid{reported.postId}</TableCell>
-                      <TableCell>{reported.reportCase}</TableCell>
+                      <TableCell>postid{reported?.postId}</TableCell>
+                      <TableCell>{reported?.reportCase}</TableCell>
+                      <TableCell>{reported?.reportDetail}</TableCell>
                       <TableCell>
                         <Select value={selectedOption} onChange={handleOptionChange} displayEmpty
                           renderValue={(value) => (value === '' ? 'Unread' : value) } defaultValue={reported.status}>
@@ -108,42 +144,21 @@ return (
                       </TableCell>
                       <TableCell>{format(reported.createdAt, 'MMM d yyy')}</TableCell>
                       <TableCell>
-                        <IconButton onClick={() => handleRowExpand(reported._id)}>
-                          <ExpandMoreIcon />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell colSpan={5}>
-                        <Collapse in={expandedRows.includes(reported.id)} timeout="auto" unmountOnExit>
-                        <Box display="flex" gap={2}>
-  <Box flex="0.65">
-    <Typography variant="h6" fontWeight={600}>
-      
-    </Typography>
-    <Typography></Typography>
-    <Box display="flex" justifyContent="start" mt={2}>
-      <Button variant="contained" color="error" style={{ marginRight: '1rem' }}>
-        Delete
-      </Button>
-      <Button variant="contained" color="warning">
-        Block
-      </Button>
-    </Box>
-  </Box>
-  <Box
-    display="flex"
-    flexDirection="column"
-    flex="0.35"
-  >
-    <Typography variant="h6" fontWeight={600}>
-      Community Guidelines Violated
-    </Typography>
-    <Typography></Typography>
-  </Box>
-</Box>
-                        </Collapse>
-                      </TableCell>
+        <IconButton onClick={() => handleRowExpand(reported)}>
+          <ExpandMoreIcon />
+        </IconButton>
+      </TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell colSpan={5}>
+        <ExpandableRow
+          post={post}
+          guidline={guideline}
+          expanded={expandedRow?._id === reported._id}
+          onDelete={() => handleDelete(reported._id)}
+          onBlock={() => handleBlock(reported._id)}
+        />
+      </TableCell>
                     </TableRow>
                   </React.Fragment>
 ))}

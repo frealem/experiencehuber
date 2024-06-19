@@ -5,7 +5,7 @@ import image from '../../assets/images/chatapp.jpeg'
 import {useNavigate} from 'react-router-dom'
 import { createChatFreindApi } from '../../components/States/messageIntegration/chatApi'
 const UserListComponent = ({
-  user
+  user, onDelete
 }) => {
 
     const theme=useTheme();
@@ -18,6 +18,10 @@ const UserListComponent = ({
       }
       const chatFreind = await createChatFreindApi(chatFreindToCreate);
       navigate('/message',  {replaces: true, state: chatFreind})
+    }
+
+    const handleDelete = ()=>{
+      onDelete();
     }
   return (
     <Box mb={1}>
@@ -35,8 +39,7 @@ const UserListComponent = ({
     </Box>
     <Box display="flex" gap={3}>
     <Typography onClick={handleChat}>Chat</Typography>
-    <Typography>Delete</Typography>
-    <Typography>Block</Typography>
+    <Typography onClick={handleDelete}>Delete</Typography>
     </Box>
     
     </Box>):(<Box
@@ -55,8 +58,7 @@ const UserListComponent = ({
     </Box>
     <Box display="flex" gap={1}>
     <Typography onClick={handleChat}>Chat</Typography>
-    <Typography>Delete</Typography>
-    <Typography>Block</Typography>
+    <Typography onClick={handleDelete} >Delete</Typography>
     </Box>
     </Box>
     

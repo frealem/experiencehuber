@@ -39,6 +39,15 @@ import Unauthorised from "./components/unauthorised";
 import CreateAdmin from "./Dashboard/pages/createAdmin";
 import CommunityGuideLineManagement from "./Dashboard/pages/CommunityGuidlineManagement";
 import CreateCommunityGuidline from "./Dashboard/pages/createCommunityGuidline";
+import CreateCategory from "./Dashboard/pages/createCategory";
+import CategoryManagement from "./Dashboard/pages/CategoryManagment";
+import UpdateCategory from "./Dashboard/pages/updateCategories";
+import SearchUser from "./pages/HomePage/searchUser";
+import OthersProfile from "./pages/HomePage/othersProfile";
+import FilteringPage from "./pages/HomePage/filterpage";
+import SpecailPostManagement from "./Dashboard/pages/SpecialPostManagement";
+import DraftPost from "./pages/Profile/Draft";
+import CategoryChoice from "./pages/HomePage/category";
 
 function App() {
   const mode = useSelector((state) => state.theme.mode);
@@ -53,6 +62,7 @@ function App() {
             
             {/* <Route path="/eachpost" element={<EachPostPage />} /> */}
             <Route path="/landing" element={<AnimatedLanding />} />
+            <Route element={<ProtectedRoute allowedRoles={['1','2','3']} />}>
             <Route element={<ProfileLayout />}>
               <Route path="/editprofile" element={<EditProfile />} />
               <Route path="/myposts" element={<MyPost />} />
@@ -60,11 +70,13 @@ function App() {
               <Route path="/favoritelist" element={<FavoritePost />} />
               <Route path="/security" element={<PasswordSecurity />} />
               <Route path="/setting" element={<Setting />} />
+              <Route path="/mydrafts" element={<DraftPost/>}/>
+              
+              </Route>
             </Route>
-            <Route path="/comment" element={<CommentModal />} />
             
             <Route path="/unauthorised" element={<Unauthorised />} />
-       
+            <Route path="/categorychoice" element={<CategoryChoice/>}/>
 {/* after protected */}
 
 {/* any user */}
@@ -73,26 +85,23 @@ function App() {
               <Route path="/" element={<Navigate to="/feedpage" replace />} />
               <Route path="/feedpage" element={<FeedPage />} />
               <Route path="/authpage" element={<AuthPage />} />
-            </Route> 
+            </Route>
+            {/* protected route for normal user*/}
+            
+            {/* <Route path="/filter" element={<FilteringPage/>}/> */}
 {/* regular user and admin */}
 
-<Route element={<ProtectedRoute allowedRoles={[1,2]} />}>
+<Route element={<ProtectedRoute allowedRoles={['1','2','3']} />}>
 <Route path="/createpost" element={<CreatePost />} />
 <Route path="/eachpost" element={<EachPostPage/>} />
-</Route>
-
-{/* only admin */}
-<Route element={<ProtectedRoute allowedRoles={[2]} />}>
-
-</Route>
-
-{/* the 3 users */}
-<Route element={<ProtectedRoute allowedRoles={[1,2,3]} />}>
 <Route path="/message" element={<MessagePage />} />
+<Route path="/comment" element={<CommentModal />} />
+<Route path="/othersprofile" element={<OthersProfile/>}/> 
+
 </Route>
 
-{/* admin and superAdmin */}
-<Route element={<ProtectedRoute allowedRoles={[2]} />}>
+{/* admin and Admin */}
+<Route element={<ProtectedRoute allowedRoles={['2','3']} />}>
 <Route element={<DashboardLayout />}>
               <Route path="/overview" element={<Overview />} />
               <Route path="/usermanagement" element={<UserManagement />} />
@@ -103,17 +112,16 @@ function App() {
               <Route path="/guidelinemanagement" element={<CommunityGuideLineManagement/>}/>
               <Route path="/systemsecurity" element={<SystemSecurity />} />
               <Route path="/systemsetting" element={<SystemSecurity />} />
-              <Route path="createguideline" element={<CreateCommunityGuidline/>}/>
+              <Route path="/createguideline" element={<CreateCommunityGuidline/>}/>
+              <Route path="/createcategory" element={<CreateCategory/>}/>
+              <Route path="/categorymanagement" element={<CategoryManagement/>}/>
+              <Route path="/updatecategory" element={<UpdateCategory/>}/>
+              <Route path="/specialposemanagment" element={<SpecailPostManagement/>}/>
+              <Route path="/adminmanagement" element={<AdminManagement />} />
+              <Route path="/createadmin" element={<CreateAdmin/>} />
             </Route>
 </Route>
 
-{/* superAdmin */}
-<Route element={<ProtectedRoute allowedRoles={[3]} />}>
-<Route element={<DashboardLayout />}>
-<Route path="/adminmanagement" element={<AdminManagement />} />
-<Route path="/createadmin" element={<CreateAdmin/>} />
-</Route>
-</Route>
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

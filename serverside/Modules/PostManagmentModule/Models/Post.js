@@ -48,6 +48,9 @@ const PostSchema = mongoose.Schema({
         longitude: String,
         latitude: String,
         zoom: Number,
+    },
+    link:{
+        type: String
     }
 },{
     timestamps: true,

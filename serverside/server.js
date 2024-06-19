@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv').config();
 const socketio = require('socket.io');
 const bodyParser = require('body-parser')
+const errorHandler = require('./Middleware/errorHandling');
 
 const dbconnection = require('./Config/dbConnection');
 const cors=require('cors')
@@ -15,6 +16,8 @@ app.use(express.json());
 // app.use(bodyParser.urlencoded({ extended: true, limit: '40mb' }));
 app.use('/uploads',express.static('./Upload'));
 app.use('/api', require('./Routes/generalRoutes'));
+
+//app.use(errorHandler)
 const server = app.listen(port, () => {
     console.log(`server listening to port ${port}`);
 })

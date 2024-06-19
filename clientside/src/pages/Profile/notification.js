@@ -54,11 +54,11 @@ export const Notification = () => {
                 </IconButton>
               )}
               <Typography variant="body2" component="p" align="right">
-                {format(nof.createdAt, 'MMM d yyy')}
+                {format(nof?.createdAt, 'MMM d yyy')}
               </Typography>
               </Box>
             </React.Fragment>
-          ))):"No notifications"}
+          ))):<Typography>"No notifications"</Typography>}
       </Box>
     </>
   );

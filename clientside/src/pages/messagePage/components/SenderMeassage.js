@@ -7,15 +7,17 @@ export default function SenderMessage({ message, messageHandler }) {
     <div
       onClick={() => messageHandler(messageId)}
       style={{
-        padding: '12px 20px',
-        margin: '8px 6px',
-        marginLeft: '56px',
+        float: "right",
+        padding: '10px',
+        minWidth: '15%',
         maxWidth: '70%',
-        backgroundColor: '#00a7e1',
+        marginRight:"10px",
+        marginBottom: "5px",
+        backgroundColor: "purple",
         borderTopLeftRadius: '10px',
         borderBottomLeftRadius: '10px',
         borderTopRightRadius: '10px',
-        alignSelf: 'flex-end',
+        //alignSelf: 'flex-end',
       }}
     >
       <p

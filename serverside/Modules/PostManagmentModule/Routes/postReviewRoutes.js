@@ -9,7 +9,7 @@ const {getPostPreview,
 
 router.use(validateTokenLevel1);
 router.route('/').post(createPostReviews);
-router.route('/:id').get(getPostPreview).put(updatePostReview).delete(deletePostReview);
+router.route('/one/:id').get(getPostPreview).put(updatePostReview).delete(deletePostReview);
 router.route('/post/:id').get(getPostReviewsByPost);
 
 module.exports = router;

@@ -10,7 +10,8 @@ const UserImage = ({ image, size }) => {
         width={size}
         height={size}
         alt="user"
-        src={`http://localhost:5000/uploads/${image}`}
+        src={image? (`http://localhost:5000/uploads/${image}`): '../../public/user.png'}
+        
       />
     </Box>
   );

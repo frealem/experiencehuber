@@ -1,25 +1,22 @@
-import { Box, Grid, IconButton, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Box, IconButton, Typography, useMediaQuery, useTheme } from '@mui/material';
 import React, {useState, useEffect } from 'react'
-import { posts } from '../../fakeData';
-import AdminListComponent from '../component/AdminListComponent';
 import AddIcon from '@mui/icons-material/Add';
-import { getAllAdminsApi } from '../../components/States/userIntegration/userApi';
-import { useNavigate } from "react-router-dom";
-import CreateAdmin from './createAdmin';
+import { getCateogriesApi } from '../../components/States/adminIntegration/categoryApi';
+import CategoryListComponent from '../component/CategroyListComponent';
+import CreateCategory from './createCategory';
+import updateCategory from './updateCategories';
 function CategoryManagement() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const [users, setUsers] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(()=>{
-    const getAdmin = async() =>{
-      const admins = await getAllAdminsApi();
-      console.log(admins);
-      setUsers(admins);
+    const getCategories = async() =>{
+      const categoriesData = await getCateogriesApi();
+      setCategories(categoriesData);
     }
-    getAdmin();
+    getCategories();
   },[])
 
   const handleClose = () =>{
@@ -43,11 +40,12 @@ function CategoryManagement() {
         width:"40px",
       }}><AddIcon/>
       </IconButton>
-      <CreateAdmin open={isOpen} onClose={handleClose} setIsOpen = {setIsOpen} setUsers={setUsers}/>
+      < CreateCategory open={isOpen} onClose={handleClose} setIsOpen = {setIsOpen} setCategories={setCategories}/>
+      
       </Box>
-        {users.map(
-        (user) => (<Box>
-          <AdminListComponent user={user}/> 
+        {categories.map(
+        (category) => (<Box>
+          < CategoryListComponent category={category} setCategories={setCategories} /> 
           </Box>
         )
       )}
@@ -57,4 +55,4 @@ function CategoryManagement() {
   )
 }
 
-export default AdminManagement
+export default CategoryManagement

@@ -90,7 +90,9 @@ const MessagePage = () => {
     const fetchMessages = async () => {
       if (!selectedUser) return;
       const m = await getMessages(selectedUser._id);
-      setMessages(m);
+      const a = [...m];
+
+      setMessages(a.reverse());
     };
     fetchMessages();
   }, [selectedUser]);
@@ -98,7 +100,7 @@ const MessagePage = () => {
   useEffect(() => {
     socket.on('recieveMessage', (data) => {
       if (selectedUser && data.senderId === selectedUser._id) {
-        setMessages((prev) => [data, ...prev]);
+        setMessages((prev) => [...prev, data]);
       }
     });
 

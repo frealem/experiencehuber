@@ -1,5 +1,6 @@
 import axios from 'axios';
 import axiosInstance from '../interceptor';
+import { toast } from 'react-toastify';
 
 export const deleteUserApi = async (userId) => {
   try {
@@ -21,7 +22,7 @@ export const editUserApi = async (userData) => {
 
 export const getCurrentUserApi = async () => {
   try {
-    const response = await axiosInstance.get('/user');
+    const response = await axiosInstance.get('/user/current');
     return response.data;
   } catch (error) {
     throw new Error('Failed to get current user.');
@@ -30,7 +31,7 @@ export const getCurrentUserApi = async () => {
 
 export const getOneUserApi = async (userId) => {
   try {
-    const response = await axiosInstance.get(`/user/${userId}`);
+    const response = await axiosInstance.get(`/user/one/${userId}`);
     return response.data;
   } catch (error) {
     throw new Error('Failed to get user.');
@@ -83,4 +84,25 @@ export const getNotificationsApi = async() => {
     throw new Error('failed to fetch notifications');
   }
 }
+export const searchUserApi = async(query, page, pageSize)=>{
+  try {
+    const page = 1;
+    const pageSize = 20;
+    const usersData = await axiosInstance.get(`/user/search?query=${query}&page=${page}&pageSize=${pageSize}`);
+    console.log("hello")
+  return usersData.data;
+  } catch (error) {
+    throw new Error('failed to fetch users');
+  }
+  
+}
 
+
+export const updateUserAccount = async(data) =>{
+  try{
+    const response = await axiosInstance.put(`/account/update`, data)
+    return response.data;
+  }catch(error){
+    toast.error("Couldn't update account")
+  }
+}

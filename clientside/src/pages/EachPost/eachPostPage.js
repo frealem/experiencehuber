@@ -62,7 +62,7 @@ const EachPostPage = () => {
         </IconButton>
         <IconButton></IconButton>
       </FlexBetween>
-      {images? (<Slider images={images} />): "loading..."}      
+      {images? (<Slider images={images} />): "loading..."}
       <Box
         width="100%"
         padding="2rem 6%"
@@ -73,13 +73,13 @@ const EachPostPage = () => {
         {!isNonMobileScreens ? (
           <Box display="block">
             <RightEachPost post={post}/>
-            <LeftEachPost comments={comments} postCreater={postCreater} setComments={setComments}/>
+            <LeftEachPost comments={comments} postCreater={postCreater} setComments={setComments} post={post}/>
           </Box>
         ) : (
           <Box display="flex">
           {isNonMobileScreens && (
               <Box flexBasis="35%">
-                <LeftEachPost postCreater={postCreater}comments={comments} setComments={setComments}/>
+                <LeftEachPost postCreater={postCreater}comments={comments} setComments={setComments} post={post}/>
               </Box>
             )}
             <Box
